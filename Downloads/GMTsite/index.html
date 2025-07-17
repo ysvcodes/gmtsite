@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMT Acquisition - Modern Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 24L16 8L24 24L20 20L16 28L12 20L8 24Z" fill="white"/>
+                        <path d="M12 12L16 4L20 12L18 10L16 16L14 10L12 12Z" fill="white" opacity="0.7"/>
+                    </svg>
+                </div>
+                <span class="logo-text">GMT Acquisition</span>
+            </div>
+            <nav class="navigation">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#work-with-us" class="nav-button">Work With Us</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero">
+            <!-- Animated SVG Background Elements -->
+            <div class="hero-bg-elements">
+                <svg class="bg-wave" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,100 Q300,50 600,100 T1200,100" stroke="rgba(59, 130, 246, 0.1)" stroke-width="2" fill="none" class="wave-path"/>
+                </svg>
+                <svg class="bg-wave" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,80 Q400,120 800,80 T1200,80" stroke="rgba(139, 92, 246, 0.08)" stroke-width="1.5" fill="none" class="wave-path"/>
+                </svg>
+                <svg class="bg-wave" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,120 Q200,80 600,120 T1200,120" stroke="rgba(16, 185, 129, 0.06)" stroke-width="1" fill="none" class="wave-path"/>
+                </svg>
+                <div class="floating-dots">
+                    <div class="dot dot-1"></div>
+                    <div class="dot dot-2"></div>
+                    <div class="dot dot-3"></div>
+                    <div class="dot dot-4"></div>
+                    <div class="dot dot-5"></div>
+                    <div class="dot dot-6"></div>
+                    <div class="dot dot-7"></div>
+                    <div class="dot dot-8"></div>
+                    <div class="dot dot-9"></div>
+                    <div class="dot dot-10"></div>
+                </div>
+                <svg class="network-nodes" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <circle cx="150" cy="80" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <circle cx="250" cy="120" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <circle cx="350" cy="60" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <circle cx="100" cy="200" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <circle cx="300" cy="250" r="3" fill="rgba(59, 130, 246, 0.3)" class="node"/>
+                    <line x1="50" y1="50" x2="150" y2="80" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" class="connection"/>
+                    <line x1="150" y1="80" x2="250" y2="120" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" class="connection"/>
+                    <line x1="250" y1="120" x2="350" y2="60" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" class="connection"/>
+                    <line x1="100" y1="200" x2="300" y2="250" stroke="rgba(59, 130, 246, 0.2)" stroke-width="1" class="connection"/>
+                </svg>
+                <svg class="network-nodes" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="30" cy="30" r="2" fill="rgba(139, 92, 246, 0.2)" class="node"/>
+                    <circle cx="120" cy="60" r="2" fill="rgba(139, 92, 246, 0.2)" class="node"/>
+                    <circle cx="200" cy="40" r="2" fill="rgba(139, 92, 246, 0.2)" class="node"/>
+                    <circle cx="80" cy="120" r="2" fill="rgba(139, 92, 246, 0.2)" class="node"/>
+                    <circle cx="180" cy="150" r="2" fill="rgba(139, 92, 246, 0.2)" class="node"/>
+                    <line x1="30" y1="30" x2="120" y2="60" stroke="rgba(139, 92, 246, 0.15)" stroke-width="0.5" class="connection"/>
+                    <line x1="120" y1="60" x2="200" y2="40" stroke="rgba(139, 92, 246, 0.15)" stroke-width="0.5" class="connection"/>
+                    <line x1="80" y1="120" x2="180" y2="150" stroke="rgba(139, 92, 246, 0.15)" stroke-width="0.5" class="connection"/>
+                </svg>
+                <svg class="network-nodes" viewBox="0 0 250 150" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="25" cy="25" r="1.5" fill="rgba(16, 185, 129, 0.15)" class="node"/>
+                    <circle cx="100" cy="40" r="1.5" fill="rgba(16, 185, 129, 0.15)" class="node"/>
+                    <circle cx="180" cy="30" r="1.5" fill="rgba(16, 185, 129, 0.15)" class="node"/>
+                    <circle cx="60" cy="80" r="1.5" fill="rgba(16, 185, 129, 0.15)" class="node"/>
+                    <circle cx="150" cy="100" r="1.5" fill="rgba(16, 185, 129, 0.15)" class="node"/>
+                    <line x1="25" y1="25" x2="100" y2="40" stroke="rgba(16, 185, 129, 0.1)" stroke-width="0.3" class="connection"/>
+                    <line x1="100" y1="40" x2="180" y2="30" stroke="rgba(16, 185, 129, 0.1)" stroke-width="0.3" class="connection"/>
+                    <line x1="60" y1="80" x2="150" y2="100" stroke="rgba(16, 185, 129, 0.1)" stroke-width="0.3" class="connection"/>
+                </svg>
+            </div>
+            
+            <div class="container">
+                <div class="social-proof">
+                    <div class="avatars">
+                        <div class="avatar avatar-1"></div>
+                        <div class="avatar avatar-2"></div>
+                        <div class="avatar avatar-3"></div>
+                        <div class="avatar avatar-4"></div>
+                    </div>
+                    <p class="social-text">Join <strong>17+</strong> other happy customers</p>
+                </div>
+                
+                <h1 class="hero-headline">
+                    Empowering Businesses with<br>
+                    <span class="hero-partner">AI Systems That Scale With You
+
+                    </span>
+                </h1>
+                
+                <p class="hero-subtitle">Build faster. Automate smarter. Focus on what matters.
+
+                </p>
+                
+                <p class="hero-description">
+                    We build and deploy a dedicated digital workforce for your business. We transform your operations by engineering custom AI solutions that eliminate repetitive tasks, integrate your entire tech stack, and unlock your team to drive growth.
+                </p>
+                <div class="description-divider"></div>
+                
+                <div class="cta-buttons">
+                    <a href="#get-started" class="cta-button primary">Get Started Today</a>
+                    <a href="#demo" class="cta-button secondary">Book Your Free Demo</a>
+                </div>
+                
+                <!-- Process Panel -->
+                <div class="process-panel">
+                    <div class="process-header">
+                        <h2 class="process-title">Build. Integrate. Chill.</h2>
+                        <div class="process-subtitle">Your journey to automated excellence</div>
+                    </div>
+                    
+                    <div class="process-steps">
+                        <div class="step">
+                            <div class="step-number">01</div>
+                            <div class="step-content">
+                                <h3 class="step-title">We Build</h3>
+                                <p class="step-description">We create a tailored automation system designed around how your business really works — replacing repetitive tasks, closing gaps, and setting up processes that scale with you. No plug-and-play shortcuts — just a system that feels like it was built in-house, without the in-house headaches.</p>
+                            </div>
+                            <div class="step-icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M24 4L30 18H42L32 28L36 40L24 34L12 40L16 28L6 18H18L24 4Z" fill="url(#buildGradient)"/>
+                                    <defs>
+                                        <linearGradient id="buildGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#3B82F6"/>
+                                            <stop offset="100%" style="stop-color:#1D4ED8"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">02</div>
+                            <div class="step-content">
+                                <h3 class="step-title">We Integrate</h3>
+                                <p class="step-description">We bring everything together — your tools, data, and workflows — into one seamless, automated ecosystem. No more scattered platforms or manual handoffs. You get complete visibility and control, without ever touching the backend.</p>
+                            </div>
+                            <div class="step-icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="24" cy="24" r="20" stroke="url(#integrateGradient)" stroke-width="3" fill="none"/>
+                                    <path d="M16 24L22 30L32 18" stroke="url(#integrateGradient)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <defs>
+                                        <linearGradient id="integrateGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#10B981"/>
+                                            <stop offset="100%" style="stop-color:#059669"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">03</div>
+                            <div class="step-content">
+                                <h3 class="step-title">You Chill</h3>
+                                <p class="step-description">While the system handles the routine, you focus on what matters: growing the business, leading your team, and unlocking new opportunities. Imagine waking up to clean pipelines, followed-up leads, and updates already handled — all before your first coffee.</p>
+                            </div>
+                            <div class="step-icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Zzz sleeping icon, purple gradient, no background -->
+                                    <text x="13" y="32" font-size="28" fill="url(#chillGradient)" font-family="Inter, Arial, sans-serif" font-weight="bold">Z</text>
+                                    <text x="27" y="40" font-size="20" fill="url(#chillGradient)" font-family="Inter, Arial, sans-serif" font-weight="bold">z</text>
+                                    <text x="36" y="46" font-size="14" fill="url(#chillGradient)" font-family="Inter, Arial, sans-serif" font-weight="bold">z</text>
+                                    <defs>
+                                        <linearGradient id="chillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#8B5CF6"/>
+                                            <stop offset="100%" style="stop-color:#A855F7"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Why We Do This Section -->
+                <div class="why-section">
+                                        <div class="why-header">
+                        <h2 class="why-title">Why Choose Us</h2>
+                        <p class="why-subtitle">So Why choouse us to let Us automate for You?</p>
+                    </div>
+                    
+                    <div class="why-grid">
+                        <!-- Keep Smart Automations card -->
+                        <div class="why-card">
+                            <div class="why-icon why-icon-clock">
+                                <svg width="80" height="80" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Single clock outline and hands -->
+                                    <circle cx="10" cy="10" r="8" stroke="url(#timeGradient)" stroke-width="1" fill="none"/>
+                                    <path d="M11 9h4a1 1 0 0 1 0 2h-5a1 1 0 0 1-1-1V4a1 1 0 1 1 2 0v5z" stroke="url(#timeGradient)" stroke-width="0.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <defs>
+                                        <linearGradient id="timeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#3B82F6"/>
+                                            <stop offset="50%" style="stop-color:#60A5FA"/>
+                                            <stop offset="100%" style="stop-color:#1D4ED8"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title why-card-content-lower">Smart Automations and Effeicient Systems</h3>
+                            <p class="why-card-description why-card-content-lower">Cut manual work and reclaim <span class="metric">10–40urs per week</span>, so your team can focus on high-impact, revenue-driving tasks.</p>
+                        </div>
+
+                        <!-- Immediate responses card -->
+                        <div class="why-card">
+                            <div class="why-icon">
+                                <svg width="110" height="110" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Single, smaller Phosphor lightning bolt -->
+                                    <path d="M69.01953,131.05859l47.19385,17.69776a11.99972,11.99972,0,0,1,7.55371,13.58935l-7.71533,38.5752,70.92871-75.99512L139.78662,107.228a11.99973,11.99973,0,0,1-7.55371-13.58936l7.71533-38.57519Z" stroke="url(#responseGradient)" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <defs>
+                                        <linearGradient id="responseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#F59E0B"/>
+                                            <stop offset="50%" style="stop-color:#FBBF24"/>
+                                            <stop offset="100%" style="stop-color:#D97706"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title">Automated responses with Speedy Replies</h3>
+                            <p class="why-card-description">Achieve <span class="metric">93% follow-up coverage</span> and launch multi-channel campaigns in minutes, without adding extra workload.</p>
+                        </div>
+
+                        <!-- Keep Client growth and retention card -->
+                        <div class="why-card">
+                            <div class="why-icon">
+                                <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Person silhouette -->
+                                    <circle cx="55" cy="38" r="18" stroke="url(#growthGradient)" stroke-width="4" fill="none"/>
+                                    <path d="M32 80c0-13 11-24 23-24s23 11 23 24" stroke="url(#growthGradient)" stroke-width="4" fill="none"/>
+                                    <!-- Star overlapping, moved up and right -->
+                                    <g>
+                                        <polygon points="75,58 79,66 88,67 81,73 83,82 75,78 67,82 69,76 62,67 71,66" fill="url(#growthGradient)" stroke="url(#growthGradient)" stroke-width="2"/>
+                                    </g>
+                                    <defs>
+                                        <linearGradient id="growthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#8B5CF6"/>
+                                            <stop offset="50%" style="stop-color:#A78BFA"/>
+                                            <stop offset="100%" style="stop-color:#A855F7"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <h3 class="why-card-title">Client growth and retention</h3>
+                            <p class="why-card-description">Keep clients engaged and coming back — with automations that strengthen relationships, improve every touchpoint, and <span class="metric">boost retention by up to 30%.</span></p>
+                        </div>
+
+                        <!-- Add summary paragraph after the last card -->
+                        <div class="why-summary-wrap">
+                            <p class="why-summary">
+                                Automating with GMT isn't just about saving time, it's about transforming how your business runs. Our systems connect your tools, eliminate repetitive tasks, and speed up key processes like onboarding and follow ups. Teams report smoother operations, higher client retention, and faster decision-making all without added technical complexity. With improvements often seen within weeks and a free trial you can get a feel of your new AI System.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonials Panel -->
+                <div class="testimonials-panel">
+                    <div class="testimonials-header">
+                        <h2 class="testimonials-title">Real Results for Real People</h2>
+                        <p class="testimonials-subtitle">Testimonial stories from the businesses we've helped. See how GMT Automations has delivered measurable results and transformed operations for clients across various industries.</p>
+                    </div>
+                    <div class="testimonials-carousel">
+                        <div class="testimonial-card active">
+                            <div class="testimonial-content">
+                                <div class="testimonial-stars">
+                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                </div>
+                                <p class="testimonial-text">"Before working with GMT Automations, we were spending 8 to 10 hours a week just managing player emails , pulling lists, drafting updates, sending everything manually. Now, it all runs in the background. We're sending out personalized campaigns to thousands of users in minutes, without lifting a finger. It's been a total game changer for us with more player engagement, less backend stress, and more time to actually focus on making Eminence better."</p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar"></div>
+                                    <div class="author-info">
+                                        <h4 class="author-name">Kelvin</h4>
+                                        <p class="author-title">Founder of Eminence (The Game)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="testimonial-stars">
+                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                </div>
+                                <p class="testimonial-text">"The automation system they built for us is incredible. It feels like we have an extra team member working 24/7."</p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar"></div>
+                                    <div class="author-info">
+                                        <h4 class="author-name">Michael Chen</h4>
+                                        <p class="author-title">Founder, GrowthLab</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial-timer-bar"><div class="testimonial-timer-fill"></div></div>
+                        <div class="testimonial-dots">
+                            <button class="testimonial-dot active" data-index="0"></button>
+                            <button class="testimonial-dot" data-index="1"></button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                // Carousel with timer bar (10 seconds) and dots
+                const testimonials = document.querySelectorAll('.testimonial-card');
+                const timerFill = document.querySelector('.testimonial-timer-fill');
+                const dots = document.querySelectorAll('.testimonial-dot');
+                const testimonialsPanel = document.querySelector('.testimonials-panel');
+                let current = 0;
+                let interval, progress;
+                let isPaused = false;
+                let currentProgress = 0;
+                
+                function showTestimonial(idx) {
+                  testimonials.forEach((t, i) => {
+                    t.classList.toggle('active', i === idx);
+                  });
+                  dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === idx);
+                  });
+                }
+                
+                function startTimer() {
+                  if (isPaused) return;
+                  currentProgress = 0;
+                  timerFill.style.width = '0%';
+                  clearInterval(progress);
+                  progress = setInterval(() => {
+                    if (isPaused) return;
+                    currentProgress += 1;
+                    timerFill.style.width = currentProgress + '%';
+                    if (currentProgress >= 100) {
+                      clearInterval(progress);
+                    }
+                  }, 100);
+                }
+                
+                function pauseTimer() {
+                  isPaused = true;
+                  clearInterval(progress);
+                }
+                
+                function resumeTimer() {
+                  isPaused = false;
+                  if (currentProgress < 100) {
+                    progress = setInterval(() => {
+                      if (isPaused) return;
+                      currentProgress += 1;
+                      timerFill.style.width = currentProgress + '%';
+                      if (currentProgress >= 100) {
+                        clearInterval(progress);
+                      }
+                    }, 100);
+                  }
+                }
+                
+                function nextTestimonial() {
+                  testimonials[current].classList.remove('active');
+                  current = (current + 1) % testimonials.length;
+                  testimonials[current].classList.add('active');
+                  startTimer();
+                }
+                
+                function goToTestimonial(idx) {
+                  current = idx;
+                  showTestimonial(current);
+                  startTimer();
+                  resetAuto();
+                }
+                
+                function autoSwipe() {
+                  interval = setInterval(() => {
+                    if (!isPaused) {
+                      nextTestimonial();
+                    }
+                  }, 10000);
+                }
+                
+                function resetAuto() {
+                  clearInterval(interval);
+                  autoSwipe();
+                }
+                
+                // Add click listeners to dots
+                dots.forEach((dot, i) => {
+                  dot.addEventListener('click', () => {
+                    goToTestimonial(i);
+                  });
+                });
+                
+                // Add hover listeners to pause/resume timer
+                testimonials.forEach(card => {
+                  card.addEventListener('mouseenter', pauseTimer);
+                  card.addEventListener('mouseleave', resumeTimer);
+                });
+                
+                showTestimonial(current);
+                startTimer();
+                autoSwipe();
+                // Reset timer bar on each auto swipe
+                testimonials.forEach(card => {
+                  card.addEventListener('transitionend', startTimer);
+                });
+                </script>
+
+                <!-- Animated Automation Features Section -->
+                <div class="automation-features">
+                    <div class="features-container">
+                        <!-- Top row scrolling left -->
+                        <div class="features-row top-row">
+                            <div class="features-track">
+                                <span class="feature-tag">Lead Scoring with AI</span>
+                                <span class="feature-tag">Auto-Send Email Sequences</span>
+                                <span class="feature-tag">Slack Notifications</span>
+                                <span class="feature-tag">Smart CRM Updates</span>
+                                <span class="feature-tag">Calendar Auto-Scheduling</span>
+                                <span class="feature-tag">Instant Client Onboarding</span>
+                                <span class="feature-tag">Auto Payment Reminders</span>
+                                <span class="feature-tag">Real-Time KPI Tracking</span>
+                                <span class="feature-tag">Automated Reporting</span>
+                                <span class="feature-tag">Social Media Post Scheduling</span>
+                                <span class="feature-tag">Multi-Channel Campaigns</span>
+                                <span class="feature-tag">Personalized Follow-Ups</span>
+                                <span class="feature-tag">Smart Lead Routing</span>
+                                <span class="feature-tag">Customer Feedback Loops</span>
+                                <span class="feature-tag">Automated Proposal Generation</span>
+                                <span class="feature-tag">Invoice Creation & Send-Out</span>
+                                <span class="feature-tag">AI Chatbot Responses</span>
+                                <span class="feature-tag">Data Sync Across Platforms</span>
+                                <span class="feature-tag">AI-Powered Lead Qualification</span>
+                                <span class="feature-tag">Auto File Generation</span>
+                                <span class="feature-tag">Contract E-Sign Automation</span>
+                                <span class="feature-tag">Customer Retention Workflows</span>
+                                <span class="feature-tag">Task Assignment Automation</span>
+                                <span class="feature-tag">Abandoned Cart Follow-Ups</span>
+                                <span class="feature-tag">Sales Pipeline Updates</span>
+                                <span class="feature-tag">Cross-Platform Messaging</span>
+                                <span class="feature-tag">Automated Alerts & Escalations</span>
+                                <span class="feature-tag">Referral System Tracking</span>
+                                <span class="feature-tag">Weekly Summary Emails</span>
+                                <span class="feature-tag">AI-Powered Recommendations</span>
+                                <!-- Duplicate for seamless loop -->
+                                <span class="feature-tag">Lead Scoring with AI</span>
+                                <span class="feature-tag">Auto-Send Email Sequences</span>
+                                <span class="feature-tag">Slack Notifications</span>
+                                <span class="feature-tag">Smart CRM Updates</span>
+                                <span class="feature-tag">Calendar Auto-Scheduling</span>
+                                <span class="feature-tag">Instant Client Onboarding</span>
+                                <span class="feature-tag">Auto Payment Reminders</span>
+                                <span class="feature-tag">Real-Time KPI Tracking</span>
+                                <span class="feature-tag">Automated Reporting</span>
+                                <span class="feature-tag">Social Media Post Scheduling</span>
+                                <span class="feature-tag">Multi-Channel Campaigns</span>
+                                <span class="feature-tag">Personalized Follow-Ups</span>
+                                <span class="feature-tag">Smart Lead Routing</span>
+                                <span class="feature-tag">Customer Feedback Loops</span>
+                                <span class="feature-tag">Automated Proposal Generation</span>
+                                <span class="feature-tag">Invoice Creation & Send-Out</span>
+                                <span class="feature-tag">AI Chatbot Responses</span>
+                                <span class="feature-tag">Data Sync Across Platforms</span>
+                                <span class="feature-tag">AI-Powered Lead Qualification</span>
+                                <span class="feature-tag">Auto File Generation</span>
+                                <span class="feature-tag">Contract E-Sign Automation</span>
+                                <span class="feature-tag">Customer Retention Workflows</span>
+                                <span class="feature-tag">Task Assignment Automation</span>
+                                <span class="feature-tag">Abandoned Cart Follow-Ups</span>
+                                <span class="feature-tag">Sales Pipeline Updates</span>
+                                <span class="feature-tag">Cross-Platform Messaging</span>
+                                <span class="feature-tag">Automated Alerts & Escalations</span>
+                                <span class="feature-tag">Referral System Tracking</span>
+                                <span class="feature-tag">Weekly Summary Emails</span>
+                                <span class="feature-tag">AI-Powered Recommendations</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bottom row scrolling right -->
+                        <div class="features-row bottom-row">
+                            <div class="features-track">
+                                <span class="feature-tag">AI-Powered Recommendations</span>
+                                <span class="feature-tag">Weekly Summary Emails</span>
+                                <span class="feature-tag">Referral System Tracking</span>
+                                <span class="feature-tag">Automated Alerts & Escalations</span>
+                                <span class="feature-tag">Cross-Platform Messaging</span>
+                                <span class="feature-tag">Sales Pipeline Updates</span>
+                                <span class="feature-tag">Abandoned Cart Follow-Ups</span>
+                                <span class="feature-tag">Task Assignment Automation</span>
+                                <span class="feature-tag">Customer Retention Workflows</span>
+                                <span class="feature-tag">Contract E-Sign Automation</span>
+                                <span class="feature-tag">Auto File Generation</span>
+                                <span class="feature-tag">AI-Powered Lead Qualification</span>
+                                <span class="feature-tag">Data Sync Across Platforms</span>
+                                <span class="feature-tag">AI Chatbot Responses</span>
+                                <span class="feature-tag">Invoice Creation & Send-Out</span>
+                                <span class="feature-tag">Automated Proposal Generation</span>
+                                <span class="feature-tag">Customer Feedback Loops</span>
+                                <span class="feature-tag">Smart Lead Routing</span>
+                                <span class="feature-tag">Personalized Follow-Ups</span>
+                                <span class="feature-tag">Multi-Channel Campaigns</span>
+                                <span class="feature-tag">Social Media Post Scheduling</span>
+                                <span class="feature-tag">Automated Reporting</span>
+                                <span class="feature-tag">Real-Time KPI Tracking</span>
+                                <span class="feature-tag">Auto Payment Reminders</span>
+                                <span class="feature-tag">Instant Client Onboarding</span>
+                                <span class="feature-tag">Calendar Auto-Scheduling</span>
+                                <span class="feature-tag">Smart CRM Updates</span>
+                                <span class="feature-tag">Slack Notifications</span>
+                                <span class="feature-tag">Auto-Send Email Sequences</span>
+                                <span class="feature-tag">Lead Scoring with AI</span>
+                                <!-- Duplicate for seamless loop -->
+                                <span class="feature-tag">AI-Powered Recommendations</span>
+                                <span class="feature-tag">Weekly Summary Emails</span>
+                                <span class="feature-tag">Referral System Tracking</span>
+                                <span class="feature-tag">Automated Alerts & Escalations</span>
+                                <span class="feature-tag">Cross-Platform Messaging</span>
+                                <span class="feature-tag">Sales Pipeline Updates</span>
+                                <span class="feature-tag">Abandoned Cart Follow-Ups</span>
+                                <span class="feature-tag">Task Assignment Automation</span>
+                                <span class="feature-tag">Customer Retention Workflows</span>
+                                <span class="feature-tag">Contract E-Sign Automation</span>
+                                <span class="feature-tag">Auto File Generation</span>
+                                <span class="feature-tag">AI-Powered Lead Qualification</span>
+                                <span class="feature-tag">Data Sync Across Platforms</span>
+                                <span class="feature-tag">AI Chatbot Responses</span>
+                                <span class="feature-tag">Invoice Creation & Send-Out</span>
+                                <span class="feature-tag">Automated Proposal Generation</span>
+                                <span class="feature-tag">Customer Feedback Loops</span>
+                                <span class="feature-tag">Smart Lead Routing</span>
+                                <span class="feature-tag">Personalized Follow-Ups</span>
+                                <span class="feature-tag">Multi-Channel Campaigns</span>
+                                <span class="feature-tag">Social Media Post Scheduling</span>
+                                <span class="feature-tag">Automated Reporting</span>
+                                <span class="feature-tag">Real-Time KPI Tracking</span>
+                                <span class="feature-tag">Auto Payment Reminders</span>
+                                <span class="feature-tag">Instant Client Onboarding</span>
+                                <span class="feature-tag">Calendar Auto-Scheduling</span>
+                                <span class="feature-tag">Smart CRM Updates</span>
+                                <span class="feature-tag">Slack Notifications</span>
+                                <span class="feature-tag">Auto-Send Email Sequences</span>
+                                <span class="feature-tag">Lead Scoring with AI</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automation Call to Action Section -->
+                <div class="automation-cta">
+                    <div class="automation-header">
+                        <h2 class="automation-title">
+                            <span class="dim-text">Stop Falling Behind</span>
+                            <span class="arrow">—></span>
+                            <span class="highlight-text">Start Automating Ahead.</span>
+                        </h2>
+                        <p class="automation-subtitle">AI isn't the future — it's the now.</p>
+                        <div class="automation-content">
+                            <p class="automation-description">While competitors rely on human error and delays, your AI systems work smarter — analyzing data, predicting needs, and making decisions that humans can't match.</p>
+                            <p class="automation-future">The gap between AI-powered and manual operations is widening. Companies that automate now will dominate. Those who wait will struggle to compete.</p>
+                        </div>
+                        
+                        <!-- Stats Badges -->
+                        <div class="automation-stats">
+                            <div class="stat-badge">
+                                <span class="stat-number">98%</span>
+                                <span class="stat-label">Lead Response Rate</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number">&lt;2min</span>
+                                <span class="stat-label">Avg Response Time</span>
+                            </div>
+                            <div class="stat-badge">
+                                <span class="stat-number">24/7</span>
+                                <span class="stat-label">Operation</span>
+                            </div>
+                        </div>
+                        
+                        <!-- CTA Block -->
+                        <div class="automation-cta-block">
+                            <p class="cta-text">Book your free strategy call today and see how we can transform your operations — risk-free.</p>
+                            <button class="cta-button">Schedule Free Consultation</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 GMT Acquisition. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html> 
