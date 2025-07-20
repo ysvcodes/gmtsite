@@ -337,10 +337,26 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <div class="testimonial-stars">
+                                    <span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span><span class="star">&#9733;</span>
+                                </div>
+                                <p class="testimonial-text">"The AI outreach system built by GMT has completely transformed how we connect with potential clients on LinkedIn. It's incredibly time-efficient, delivering personalized messages that actually lead to real conversations. We've already seen multiple business opportunities come directly from the workflow. Highly recommend it to any team serious about smart, scalable lead generation."</p>
+                                <div class="testimonial-author">
+                                    <div class="author-avatar"></div>
+                                    <div class="author-info">
+                                        <h4 class="author-name">Abiola Alafia</h4>
+                                        <p class="author-title">Founder of Alafia</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="testimonial-timer-bar"><div class="testimonial-timer-fill"></div></div>
                         <div class="testimonial-dots">
                             <button class="testimonial-dot active" data-index="0"></button>
                             <button class="testimonial-dot" data-index="1"></button>
+                            <button class="testimonial-dot" data-index="2"></button>
                         </div>
                     </div>
                 </div>
@@ -806,9 +822,7 @@
                                 </div>
                             </div>
                             
-                            <div class="modal-notice">
-                                <p><strong>📞 Important:</strong> Your personalized automation blueprint will be delivered after our first strategy call, ensuring it's tailored specifically to your business needs.</p>
-                            </div>
+
                             
                             <div class="modal-benefits">
                                 <h3>What You'll Get:</h3>
@@ -821,35 +835,74 @@
                             </div>
                         </div>
                         
-                        <!-- Right Side - Simple Booking -->
+                        <!-- Right Side - Cal.com Booking -->
                         <div class="modal-right">
                             <h3 class="calendar-title">Book Your Strategy Call</h3>
-                            <p class="calendar-subtitle">We'll contact you to schedule a convenient time</p>
+                            <p class="calendar-subtitle">Schedule your free AI automation blueprint session</p>
                             
-                            <div class="simple-booking">
-                                <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px;">
-                                    Fill out the form on the left and click the button below to submit your booking request.
-                                </p>
+                            <div class="cal-booking-container">
+                                <!-- Cal element-click embed code begins -->
+                                <script type="text/javascript">
+                                  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+                                Cal("init", "ai-system-blueprint-call", {origin:"https://app.cal.com"});
+
+                                  Cal.ns["ai-system-blueprint-call"]("ui", {
+                                    "cssVarsPerTheme":{
+                                      "light":{"cal-brand":"#1a1f2e"},
+                                      "dark":{"cal-brand":"#0f172a"}
+                                    },
+                                    "hideEventTypeDetails":false,
+                                    "layout":"month_view"
+                                  });
+                                  
+                                  // Listen for Cal.com button click to start timer
+                                  document.addEventListener('click', function(e) {
+                                    if (e.target.closest('[data-cal-link]')) {
+                                      // Start 20-second timer
+                                      setTimeout(() => {
+                                        showBookingConfirmation();
+                                      }, 20000);
+                                    }
+                                  });
+                                  </script>
+                                  <!-- Cal element-click embed code ends -->
                                 
-                                <button class="confirm-booking" onclick="confirmBooking()" style="
-                                    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-                                    color: white;
-                                    border: none;
-                                    padding: 15px 30px;
-                                    font-size: 1.1rem;
-                                    font-weight: 600;
-                                    border-radius: 12px;
-                                    cursor: pointer;
-                                    transition: all 0.3s ease;
-                                    width: 100%;
-                                    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-                                ">
-                                    Confirm Booking Request
-                                </button>
+                                <div class="cal-trigger-container">
+                                    <button class="cal-trigger-button" 
+                                            id="calTriggerButton"
+                                            data-cal-link="atirola-adesanya-dclc3s/ai-system-blueprint-call"
+                                            data-cal-namespace="ai-system-blueprint-call"
+                                            data-cal-config='{"layout":"month_view"}'
+                                            disabled
+                                            style="
+                                                background: linear-gradient(135deg, #FFE5B4 0%, #FFDAB9 50%, #FFE4B5 100%);
+                                                color: #666;
+                                                border: 2px solid rgba(255, 215, 0, 0.2);
+                                                padding: 15px 30px;
+                                                font-size: 1.1rem;
+                                                font-weight: 700;
+                                                border-radius: 12px;
+                                                cursor: not-allowed;
+                                                transition: all 0.3s ease;
+                                                width: 100%;
+                                                box-shadow: 0 4px 15px rgba(255, 215, 0, 0.1);
+                                                margin-top: 20px;
+                                                opacity: 0.6;
+                                            ">
+                                        📅 Schedule Your Call
+                                    </button>
+                                    
+
+                                </div>
                                 
                                 <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-top: 15px; text-align: center;">
-                                    We'll get back to you within 24 hours to schedule your strategy call.
+                                    Please fill out all fields on the left to enable booking.
                                 </p>
+                            </div>
+                            
+                            <!-- Important Notice moved here -->
+                            <div class="modal-notice" style="margin-top: 30px; padding: 15px; border: 2px solid rgba(255, 0, 0, 0.5); border-radius: 8px; background: rgba(255, 0, 0, 0.15); box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); animation: redPulse 2s ease-in-out infinite;">
+                                <p style="color: white;"><strong>📞 Important:</strong> Your personalized automation blueprint will be delivered after our first strategy call, ensuring it's tailored specifically to your business needs.</p>
                             </div>
                         </div>
                     </div>
@@ -896,6 +949,9 @@
         function closeModal() {
             modalOverlay.classList.remove('modal-active');
             document.body.style.overflow = 'auto';
+            
+            // Re-enable pointer events for the overlay
+            modalOverlay.style.pointerEvents = 'auto';
         }
         
         // Add click listeners to all buttons
@@ -1007,7 +1063,136 @@
             });
         });
         
-        // Simple booking confirmation
+        // Form validation and Cal.com integration
+        const modalName = document.getElementById('modalName');
+        const modalEmail = document.getElementById('modalEmail');
+        const modalPhone = document.getElementById('modalPhone');
+        const modalCompany = document.getElementById('modalCompany');
+        const calTriggerButton = document.getElementById('calTriggerButton');
+        
+        // Function to check if all required fields are filled
+        function checkFormCompletion() {
+            const name = modalName.value.trim();
+            const email = modalEmail.value.trim();
+            const phone = modalPhone.value.trim();
+            const company = modalCompany.value.trim();
+            
+            if (name && email && phone && company) {
+                // Enable button
+                calTriggerButton.disabled = false;
+                calTriggerButton.style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)';
+                calTriggerButton.style.color = 'white';
+                calTriggerButton.style.cursor = 'pointer';
+                calTriggerButton.style.opacity = '1';
+                calTriggerButton.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.3)';
+                calTriggerButton.style.border = '2px solid rgba(255, 215, 0, 0.3)';
+            } else {
+                // Disable button
+                calTriggerButton.disabled = true;
+                calTriggerButton.style.background = 'linear-gradient(135deg, #FFE5B4 0%, #FFDAB9 50%, #FFE4B5 100%)';
+                calTriggerButton.style.color = '#666';
+                calTriggerButton.style.cursor = 'not-allowed';
+                calTriggerButton.style.opacity = '0.6';
+                calTriggerButton.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.1)';
+                calTriggerButton.style.border = '2px solid rgba(255, 215, 0, 0.2)';
+            }
+        }
+        
+        // Add event listeners to form fields
+        if (modalName) modalName.addEventListener('input', checkFormCompletion);
+        if (modalEmail) modalEmail.addEventListener('input', checkFormCompletion);
+        if (modalPhone) modalPhone.addEventListener('input', checkFormCompletion);
+        if (modalCompany) modalCompany.addEventListener('input', checkFormCompletion);
+        
+        // Simple function to show booking confirmation
+        function showBookingConfirmation() {
+            const modalContent = document.querySelector('.modal-content');
+            modalContent.innerHTML = `
+                <div class="modal-header" style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                ">
+                    <h2 style="
+                        font-size: 1.5rem;
+                        color: #FFD700;
+                        margin: 0;
+                    ">Booking Confirmation</h2>
+                    <button class="modal-close" onclick="closeModal()" style="
+                        background: none;
+                        border: none;
+                        color: #ff4444;
+                        font-size: 1.5rem;
+                        cursor: pointer;
+                        padding: 5px;
+                        border-radius: 50%;
+                        width: 35px;
+                        height: 35px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: all 0.3s ease;
+                    " onmouseover="this.style.color='#ff6666'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='#ff4444'; this.style.transform='scale(1)'">&times;</button>
+                </div>
+                <div class="booking-success" style="
+                    text-align: center;
+                    padding: 20px 0;
+                    color: white;
+                ">
+                    <div class="success-icon" style="
+                        font-size: 4rem;
+                        margin-bottom: 20px;
+                        animation: bounce 0.6s ease-in-out;
+                    ">✅</div>
+                    <h2 style="
+                        font-size: 2rem;
+                        margin-bottom: 20px;
+                        color: #FFD700;
+                    ">Booking Confirmed!</h2>
+                    <p style="
+                        font-size: 1.1rem;
+                        margin-bottom: 15px;
+                        color: rgba(255, 255, 255, 0.9);
+                    ">Your AI automation blueprint strategy call has been scheduled successfully!</p>
+                    <p style="
+                        font-size: 1rem;
+                        margin-bottom: 15px;
+                        color: rgba(255, 255, 255, 0.8);
+                    "><strong>📧 Check your email</strong> for the confirmation with meeting details and calendar invite.</p>
+                    <p style="
+                        font-size: 0.95rem;
+                        margin-bottom: 25px;
+                        color: rgba(255, 255, 255, 0.7);
+                        line-height: 1.5;
+                    ">Need to reschedule? Simply click the reschedule link in your confirmation email or visit <a href="https://cal.com/atirola-adesanya-dclc3s/ai-system-blueprint-call" target="_blank" style="color: #FFD700; text-decoration: underline;">cal.com</a> to book a new time.</p>
+                    <button class="close-modal" onclick="closeModal()" style="
+                        background: linear-gradient(135deg, #ff4444 0%, #cc3333 100%);
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+                    " onmouseover="this.style.background='linear-gradient(135deg, #ff6666 0%, #dd4444 100%)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(255, 68, 68, 0.4)'" onmouseout="this.style.background='linear-gradient(135deg, #ff4444 0%, #cc3333 100%)'; this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(255, 68, 68, 0.3)'">Close</button>
+                </div>
+            `;
+            
+            // Disable clicking outside to close for confirmation modal
+            const modalOverlay = document.getElementById('modalOverlay');
+            modalOverlay.style.pointerEvents = 'none';
+            
+            // Re-enable pointer events for the modal content
+            const modalContainer = document.querySelector('.modal-container');
+            modalContainer.style.pointerEvents = 'auto';
+        }
+        
+        // Simple booking confirmation (legacy function)
         function confirmBooking() {
             const name = document.getElementById('modalName').value;
             const email = document.getElementById('modalEmail').value;
@@ -1037,4 +1222,5 @@
         }
     </script>
 </body>
+</html> 
 </html> 
