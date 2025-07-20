@@ -6,6 +6,8 @@
     <title>GMT Acquisition - Modern Solutions</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Supabase Client Library -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header class="header">
@@ -780,7 +782,7 @@
                         <span class="button-text">Free AI System Blueprint</span>
                         <span class="button-arrow">→</span>
                     </button>
-                </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -858,10 +860,10 @@
                                   // Listen for Cal.com button click to start timer
                                   document.addEventListener('click', function(e) {
                                     if (e.target.closest('[data-cal-link]')) {
-                                      // Start 20-second timer
+                                      // Start 10-second timer
                                       setTimeout(() => {
                                         showBookingConfirmation();
-                                      }, 20000);
+                                      }, 10000);
                                     }
                                   });
                                   </script>
@@ -898,6 +900,8 @@
                                 <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.9rem; margin-top: 15px; text-align: center;">
                                     Please fill out all fields on the left to enable booking.
                                 </p>
+                                
+
                             </div>
                             
                             <!-- Important Notice moved here -->
@@ -933,6 +937,96 @@
 
     
     <script>
+        // Supabase Configuration
+        const supabaseUrl = 'https://mdxcytltlftuqxmlczam.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keGN5dGx0bGZ0dXF4bWxjemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMzg0MzMsImV4cCI6MjA2ODYxNDQzM30.wRVqK3H1lptqWsSzQy0yuYaggRA584Jbf6Bq-5MDLWQ';
+        
+        // Wait for Supabase to load
+        let supabase;
+        
+        // Function to initialize Supabase
+        function initSupabase() {
+            if (window.supabase) {
+                supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+                console.log('Supabase client initialized successfully');
+                return true;
+            } else {
+                console.error('Supabase library not loaded');
+                return false;
+            }
+        }
+        
+        // Try to initialize immediately
+        if (!initSupabase()) {
+            // If not loaded yet, wait a bit and try again
+            setTimeout(() => {
+                if (!initSupabase()) {
+                    console.error('Failed to load Supabase after retry');
+                }
+            }, 1000);
+        }
+
+
+
+        // Function to save lead data to Supabase
+        async function saveLeadToDatabase() {
+            console.log('saveLeadToDatabase called');
+            
+            // Check if Supabase is available
+            if (!supabase) {
+                console.error('Supabase client not initialized');
+                console.log('Supabase object:', supabase);
+                console.log('Window supabase:', window.supabase);
+                return false;
+            }
+            
+            const name = document.getElementById('modalName').value.trim();
+            const email = document.getElementById('modalEmail').value.trim();
+            const phone = document.getElementById('modalPhone').value.trim();
+            
+            console.log('Form values:', { name, email, phone });
+            
+            if (!name || !email || !phone) {
+                console.error('Required fields missing');
+                return false;
+            }
+
+            const leadData = {
+                full_name: name,
+                email: email,
+                phone: phone
+            };
+            
+            console.log('Attempting to save lead data:', leadData);
+
+            try {
+                console.log('Calling supabase.from("leads").insert()...');
+                const { data, error } = await supabase
+                    .from('leads')
+                    .insert([leadData]);
+
+                console.log('Supabase response:', { data, error });
+
+                if (error) {
+                    console.error('Supabase error:', error);
+                    console.error('Error details:', {
+                        message: error.message,
+                        details: error.details,
+                        hint: error.hint,
+                        code: error.code
+                    });
+                    return false;
+                }
+
+                console.log('Lead saved successfully:', data);
+                return true;
+            } catch (error) {
+                console.error('Exception caught:', error);
+                console.error('Error stack:', error.stack);
+                return false;
+            }
+        }
+
         const modalOverlay = document.getElementById('modalOverlay');
         const modalClose = document.getElementById('modalClose');
         
@@ -993,14 +1087,17 @@
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetId = link.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                
-                if (targetSection) {
-                    targetSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                const href = link.getAttribute('href');
+                if (href) {
+                    const targetId = href.substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             });
         });
@@ -1047,14 +1144,17 @@
                 }
                 
                 // Handle regular navigation links
-                const targetId = link.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetId);
-                
-                if (targetSection) {
-                    targetSection.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                const href = link.getAttribute('href');
+                if (href) {
+                    const targetId = href.substring(1);
+                    const targetSection = document.getElementById(targetId);
+                    
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
                 
                 // Close mobile menu after clicking link
@@ -1097,6 +1197,52 @@
                 calTriggerButton.style.border = '2px solid rgba(255, 215, 0, 0.2)';
             }
         }
+        
+        // Save data when form is completed (when button is enabled)
+        let dataSaved = false;
+        
+        // Override the checkFormCompletion function to save data when form is complete
+        const originalCheckFormCompletion = checkFormCompletion;
+        checkFormCompletion = function() {
+            const name = modalName.value.trim();
+            const email = modalEmail.value.trim();
+            const phone = modalPhone.value.trim();
+            const company = modalCompany.value.trim();
+            
+            if (name && email && phone && company) {
+                // Enable button
+                calTriggerButton.disabled = false;
+                calTriggerButton.style.background = 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%)';
+                calTriggerButton.style.color = 'white';
+                calTriggerButton.style.cursor = 'pointer';
+                calTriggerButton.style.opacity = '1';
+                calTriggerButton.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.3)';
+                calTriggerButton.style.border = '2px solid rgba(255, 215, 0, 0.3)';
+                
+                // Save data to database when form is complete (only once)
+                if (!dataSaved) {
+                    dataSaved = true;
+                    console.log('Form completed, saving to database...');
+                    saveLeadToDatabase().then(saved => {
+                        if (saved) {
+                            console.log('Lead saved successfully to database');
+                        } else {
+                            console.error('Failed to save lead data');
+                            dataSaved = false; // Reset flag so it can try again
+                        }
+                    });
+                }
+            } else {
+                // Disable button
+                calTriggerButton.disabled = true;
+                calTriggerButton.style.background = 'linear-gradient(135deg, #FFE5B4 0%, #FFDAB9 50%, #FFE4B5 100%)';
+                calTriggerButton.style.color = '#666';
+                calTriggerButton.style.cursor = 'not-allowed';
+                calTriggerButton.style.opacity = '0.6';
+                calTriggerButton.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.1)';
+                calTriggerButton.style.border = '2px solid rgba(255, 215, 0, 0.2)';
+            }
+        };
         
         // Add event listeners to form fields
         if (modalName) modalName.addEventListener('input', checkFormCompletion);
