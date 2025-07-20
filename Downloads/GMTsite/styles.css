@@ -29,7 +29,7 @@ body {
     background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    padding: 1rem 0;
+    padding: 0.5rem 0;
     position: fixed;
     top: 0;
     left: 0;
@@ -56,6 +56,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 /* Logo Styles */
@@ -139,6 +140,46 @@ body {
     width: 100%;
 }
 
+.book-call-btn {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+.book-call-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.book-call-btn:hover {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.book-call-btn:hover::before {
+    left: 100%;
+}
+
+.book-call-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
 .nav-button {
     background: linear-gradient(135deg, #2c5aa0 0%, #1e3a8a 100%);
     color: white;
@@ -178,18 +219,18 @@ body {
 
 /* Main Content Styles */
 .main-content {
-    min-height: calc(100vh - 80px);
-    padding-top: 80px;
+    min-height: 100vh;
+    padding-top: 0;
 }
 
 .hero {
     background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 50%, #0d1117 100%);
     color: white;
-    padding: 6rem 0 120rem 0;
+    padding: 6rem 0 4rem 0;
     text-align: center;
     position: relative;
     overflow: hidden;
-    min-height: 600vh;
+    min-height: auto;
 }
 
 .hero .container {
@@ -453,6 +494,15 @@ body {
     margin: 0 auto 1rem;
     line-height: 1.6;
     font-weight: 400;
+}
+
+/* Desktop text display for hero description */
+.hero-description .desktop-text {
+    display: inline;
+}
+
+.hero-description .mobile-text {
+    display: none;
 }
 
 .description-divider {
@@ -1295,7 +1345,7 @@ body {
     }
     
     .step-title {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
     }
     
     .step-description {
@@ -1326,6 +1376,7 @@ body {
     
     .step {
         padding: 1.5rem;
+        gap: 1rem;
     }
     
     .step-title {
@@ -1333,7 +1384,7 @@ body {
     }
     
     .step-description {
-        font-size: 0.9rem;
+        font-size: 1rem;
     }
     
     .step-icon svg {
@@ -1545,6 +1596,27 @@ body {
     animation: subtitle-fade 2s ease-in-out infinite;
 }
 
+.process-intro {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    font-weight: 400;
+    margin-top: 1.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* Desktop text display for process intro */
+.process-intro .desktop-text {
+    display: inline;
+}
+
+.process-intro .mobile-text {
+    display: none;
+}
+
 .process-steps {
     display: flex;
     flex-direction: column;
@@ -1553,20 +1625,20 @@ body {
     z-index: 1;
 }
 
-.step {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 2.5rem;
-    align-items: center;
-    padding: 2.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-}
+    .step {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 2.5rem;
+        align-items: center;
+        padding: 2.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+    }
 
 .step::before {
     content: '';
@@ -1608,39 +1680,48 @@ body {
         0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.step-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #3B82F6, #8B5CF6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    min-width: 70px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    animation: number-pulse 2s ease-in-out infinite;
-}
+    .step-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        min-width: 70px;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        animation: number-pulse 2s ease-in-out infinite;
+    }
 
-.step-content {
-    position: relative;
-    z-index: 1;
-}
+    .step-content {
+        position: relative;
+        z-index: 1;
+    }
 
-.step-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: white;
-    margin-bottom: 1rem;
-    transition: color 0.3s ease;
-}
+    .step-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 1rem;
+        transition: color 0.3s ease;
+    }
 
-.step-description {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1rem;
-    line-height: 1.7;
-    transition: color 0.3s ease;
-}
+    .step-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        line-height: 1.7;
+        transition: color 0.3s ease;
+    }
+
+    /* Desktop text display */
+    .desktop-text {
+        display: inline;
+    }
+    
+    .mobile-text {
+        display: none;
+    }
 
 .step:hover .step-title {
     color: rgba(255, 255, 255, 0.95);
@@ -1650,15 +1731,15 @@ body {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.step-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 70px;
-    position: relative;
-    z-index: 1;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
+    .step-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 70px;
+        position: relative;
+        z-index: 1;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
 .step-icon::before {
     content: '';
@@ -2223,7 +2304,7 @@ body {
 /* Automation Call to Action Section */
 .automation-cta {
     text-align: center;
-    padding: 4rem 0;
+    padding: 2rem 0;
     position: relative;
     z-index: 1;
 }
@@ -2417,6 +2498,11 @@ body {
     .automation-benefit,
     .automation-future {
         font-size: 1.1rem;
+    }
+
+    /* Hide "while competitors rely" paragraph on mobile */
+    .automation-description {
+        display: none;
     }
     
     .automation-stats {
@@ -2615,8 +2701,8 @@ body {
 
 /* AI Comparison Section Styles */
 .ai-comparison {
-    margin: 1.5rem 0 6rem 0;
-    padding: 4rem 0;
+    margin: 10px 0 20px 0;
+    padding: 10px 0;
     position: relative;
 }
 
@@ -2849,8 +2935,8 @@ body {
 
 @media (max-width: 480px) {
     .ai-comparison {
-        margin: 4rem 0 3rem 0;
-        padding: 2rem 0;
+        margin: 10px 0 20px 0;
+        padding: 10px 0;
     }
     
     .comparison-title {
@@ -2880,8 +2966,8 @@ body {
 
 /* Everything Connects Copy Section */
 .everything-connects {
-    margin: 1.5rem 0 0.375rem 0;
-    padding: 4rem 0;
+    margin: 15px 0;
+    padding: 15px 0;
     position: relative;
     overflow: hidden;
 }
@@ -2962,6 +3048,51 @@ body {
     text-align: center;
 }
 
+.animated-title {
+    background: linear-gradient(135deg, #10b981, #059669, #047857);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: title-gradient 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.4));
+    position: relative;
+    display: inline-block;
+}
+
+.animated-title::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #10b981, #059669);
+    border-radius: 2px;
+    animation: title-underline 3s ease-in-out infinite;
+}
+
+@keyframes title-gradient {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes title-underline {
+    0%, 100% {
+        width: 0;
+        opacity: 0;
+    }
+    50% {
+        width: 100%;
+        opacity: 1;
+    }
+}
+
 .results-list {
     list-style: none;
     padding: 0;
@@ -3039,6 +3170,68 @@ body {
     display: inline-block;
 }
 
+.animated-message {
+    animation: message-pulse 3s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.animated-question {
+    background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: question-glow 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6));
+    position: relative;
+}
+
+.animated-question::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, rgba(245, 158, 11, 0.1), rgba(217, 119, 6, 0.1), rgba(245, 158, 11, 0.1));
+    border-radius: 8px;
+    z-index: -1;
+    animation: border-pulse 2s ease-in-out infinite;
+}
+
+@keyframes message-pulse {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes question-glow {
+    0%, 100% {
+        background-position: 0% 50%;
+        filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6));
+    }
+    50% {
+        background-position: 100% 50%;
+        filter: drop-shadow(0 0 25px rgba(245, 158, 11, 0.8));
+    }
+}
+
+@keyframes border-pulse {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+
 .cta-question::before {
     content: '⚡';
     position: absolute;
@@ -3064,8 +3257,8 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     .everything-connects {
-        margin: 1rem 0 0.25rem 0;
-        padding: 2rem 0;
+        margin: 15px 0;
+        padding: 15px 0;
     }
     
     .copy-title {
@@ -3148,7 +3341,7 @@ body {
 /* Free Automation Blueprint Section */
 .blueprint-section {
     margin: 4rem 0 2rem 0;
-    padding: 3rem 0;
+    padding: 0;
     position: relative;
 }
 
@@ -3475,22 +3668,23 @@ body {
 }
 
 .blueprint-button {
-    background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
-    color: white;
-    border: none;
-    padding: 1.25rem 3rem;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+    color: #1a1a1a;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    padding: 1.5rem 3rem;
     font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 50px;
+    font-weight: 700;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
-    animation: buttonPulse 3s ease-in-out infinite;
+    animation: mobileGoldGlow 3s ease-in-out infinite;
+    transform: translateY(0);
 }
 
 .blueprint-button::before {
@@ -3509,27 +3703,34 @@ body {
 }
 
 .blueprint-button:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.6);
-    background: linear-gradient(135deg, #2563EB 0%, #1E40AF 100%);
+    transform: translateY(-8px) scale(1.08);
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, #FFA500 0%, #FF8C00 50%, #FF6B00 100%);
+    border-color: rgba(255, 215, 0, 0.6);
 }
 
 .button-text {
     position: relative;
     z-index: 1;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    color: white;
 }
 
 .button-arrow {
     position: relative;
     z-index: 1;
-    animation: arrowSlide 1.5s ease-in-out infinite;
+    font-size: 1.3rem;
+    animation: mobileGoldArrow 2s ease-in-out infinite;
+    color: white;
 }
 
 /* Responsive Design for Blueprint Section */
 @media (max-width: 768px) {
     .blueprint-section {
         margin: 2rem 0 1rem 0;
-        padding: 2rem 0;
+        padding: 0;
     }
     
     .blueprint-title {
@@ -3566,15 +3767,65 @@ body {
     }
     
     .blueprint-button {
-        padding: 0.875rem 2rem;
-        font-size: 1rem;
+        padding: 1.5rem 3rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        animation: mobileGoldGlow 3s ease-in-out infinite;
+        transform: translateY(0);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .blueprint-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .blueprint-button:hover::before {
+        left: 100%;
+    }
+
+    .blueprint-button:hover {
+        transform: translateY(-8px) scale(1.08);
+        box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6), 0 0 25px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 50%, #FF6B00 100%);
+        border-color: rgba(255, 215, 0, 0.6);
+    }
+
+    .blueprint-button:active {
+        transform: translateY(-4px) scale(1.04);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
+    }
+
+    .button-text {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        color: #1a1a1a;
+    }
+
+    .button-arrow {
+        font-size: 1.3rem;
+        animation: mobileGoldArrow 2s ease-in-out infinite;
+        color: #1a1a1a;
     }
 }
 
 @media (max-width: 480px) {
     .blueprint-section {
         margin: 1.5rem 0 0.75rem 0;
-        padding: 1.5rem 0;
+        padding: 0;
     }
     
     .blueprint-container {
@@ -3614,8 +3865,58 @@ body {
     }
     
     .blueprint-button {
-        padding: 0.75rem 1.75rem;
-        font-size: 0.95rem;
+        padding: 1.25rem 2.5rem;
+        font-size: 1rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(255, 215, 0, 0.4), 0 0 12px rgba(255, 215, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        animation: mobileGoldGlow 3s ease-in-out infinite;
+        transform: translateY(0);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .blueprint-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .blueprint-button:hover::before {
+        left: 100%;
+    }
+
+    .blueprint-button:hover {
+        transform: translateY(-6px) scale(1.06);
+        box-shadow: 0 12px 28px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 50%, #FF6B00 100%);
+        border-color: rgba(255, 215, 0, 0.6);
+    }
+
+    .blueprint-button:active {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 6px 18px rgba(255, 215, 0, 0.5);
+    }
+
+    .button-text {
+        font-weight: 700;
+        letter-spacing: 0.3px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        color: #1a1a1a;
+    }
+
+    .button-arrow {
+        font-size: 1.2rem;
+        animation: mobileGoldArrow 2s ease-in-out infinite;
+        color: #1a1a1a;
     }
     
     .blueprint-next-steps {
@@ -4237,5 +4538,712 @@ body {
     
     .time-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile Navigation Styles */
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1001;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+}
+
+.mobile-menu-btn:hover .hamburger-line {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.mobile-nav-overlay.mobile-nav-active ~ .header .mobile-menu-btn .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.mobile-nav-overlay.mobile-nav-active ~ .header .mobile-menu-btn .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-nav-overlay.mobile-nav-active ~ .header .mobile-menu-btn .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.mobile-nav-overlay {
+    display: none;
+}
+
+
+
+
+
+
+
+
+
+/* Mobile-First Responsive Design */
+@media (max-width: 768px) {
+    /* Hide desktop navigation on mobile */
+    .navigation {
+        display: none;
+    }
+    
+    /* Hide mobile menu button */
+    .mobile-menu-btn {
+        display: none;
+    }
+    
+    /* Mobile header adjustments */
+    .header {
+        padding: 1rem 0;
+    }
+    
+    .header .container {
+        padding: 0 1rem;
+    }
+    
+    .main-content {
+        padding-top: 0;
+        min-height: 100vh;
+    }
+    
+    .logo-text {
+        font-size: 1.25rem;
+    }
+    
+    /* Show only "GMT" on mobile */
+    .logo-text::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #0f1419;
+        z-index: 1;
+    }
+    
+    .logo-text::before {
+        content: 'GMT';
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        z-index: 2;
+    }
+    
+    /* Remove logo animation on mobile */
+    .logo:hover {
+        transform: none;
+    }
+    
+    .logo-text::after {
+        display: none;
+    }
+    
+    /* Mobile hero section */
+    .hero {
+        padding: 4rem 0 6rem 0;
+        min-height: 100vh;
+    }
+    
+    /* Mobile social proof - stack vertically */
+    .social-proof {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .avatars {
+        order: 1;
+    }
+    
+    .social-text {
+        order: 2;
+        text-align: center;
+        margin: 0;
+    }
+    
+    .hero-headline {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-partner {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    /* Mobile text display for hero description */
+    .hero-description .desktop-text {
+        display: none;
+    }
+    
+    .hero-description .mobile-text {
+        display: inline;
+    }
+    
+    /* Mobile CTA buttons */
+    .cta-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 3rem;
+    }
+    
+    .cta-button {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        min-height: 56px;
+    }
+    
+    /* Mobile process panel */
+    .process-panel {
+        padding: 2rem 1rem;
+        margin: 2rem 0;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .process-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        background: linear-gradient(135deg, #3B82F6, #1D4ED8);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+    
+    .process-subtitle {
+        font-size: 1.1rem;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1rem;
+    }
+
+    .process-intro {
+        font-size: 0.95rem;
+        margin-top: 1rem;
+        padding: 0 1rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Mobile text display for process intro */
+    .process-intro .desktop-text {
+        display: none;
+    }
+    
+    .process-intro .mobile-text {
+        display: inline;
+    }
+    
+    .process-steps {
+        gap: 1.5rem;
+        flex-direction: column;
+    }
+    
+    .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        gap: 1.5rem;
+    }
+    
+    .step-number {
+        font-size: 3rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        animation: number-pulse 2s ease-in-out infinite;
+        margin-bottom: 0.5rem;
+    }
+    
+    .step-content {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        order: 2;
+    }
+    
+    .step-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 1rem;
+        transition: color 0.3s ease;
+    }
+    
+    .step-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        transition: color 0.3s ease;
+        max-width: 100%;
+    }
+
+    /* Mobile text display */
+    .desktop-text {
+        display: none;
+    }
+    
+    .mobile-text {
+        display: inline;
+    }
+    
+    .step-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 1;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        order: 3;
+        margin-top: 1rem;
+    }
+    
+    .step-icon svg {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* Mobile why section */
+    .why-section {
+        padding: 2rem 1rem;
+    }
+    
+    .why-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .why-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .why-grid {
+        gap: 1.5rem;
+    }
+    
+    .why-card {
+        padding: 1.5rem;
+        animation: cardSlideInUp 0.8s ease-out forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .why-card:nth-child(1) { animation-delay: 0.1s; }
+    .why-card:nth-child(2) { animation-delay: 0.3s; }
+    .why-card:nth-child(3) { animation-delay: 0.5s; }
+    
+    .why-card-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .why-card-description {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .why-icon svg {
+        width: 60px;
+        height: 60px;
+    }
+    
+    /* Mobile testimonials */
+    .testimonials-panel {
+        padding: 2rem 1rem;
+    }
+    
+    .testimonials-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .testimonials-subtitle {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .testimonial-card {
+        padding: 1.5rem;
+    }
+    
+    .testimonial-text {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    /* Mobile blueprint section */
+    .blueprint-section {
+        padding: 2rem 1rem;
+    }
+    
+    .blueprint-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+    
+    .blueprint-subtitle {
+        font-size: 1rem;
+    }
+    
+    .blueprint-description p {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .blueprint-content {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .blueprint-what-you-get,
+    .blueprint-why-different {
+        padding: 1.5rem;
+    }
+    
+    .what-you-get-title,
+    .why-different-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .blueprint-benefits li,
+    .blueprint-reasons li {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 0.75rem;
+    }
+    
+    .blueprint-button {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        min-height: 56px;
+    }
+    
+    /* Mobile modal */
+    .modal-container {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+    
+    .modal-content {
+        padding: 1.5rem;
+    }
+    
+    .modal-layout {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .modal-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .modal-description {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 1rem;
+        min-height: 56px;
+    }
+    
+    .form-group label {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .confirm-booking {
+        width: 100%;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        min-height: 56px;
+    }
+    
+    /* Mobile footer */
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .footer-main {
+        text-align: center;
+    }
+    
+    .footer-contact {
+        text-align: center;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .contact-info,
+    .contact-links {
+        gap: 0.5rem;
+    }
+    
+    .contact-email,
+    .linkedin-link {
+        font-size: 0.9rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+    .hero-headline {
+        font-size: 2rem;
+    }
+    
+    .hero-partner {
+        font-size: 1.8rem;
+    }
+    
+    .process-title {
+        font-size: 1.8rem;
+    }
+    
+    .why-title {
+        font-size: 1.8rem;
+    }
+    
+    .blueprint-title {
+        font-size: 1.8rem;
+    }
+    
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .cta-button {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .step {
+        padding: 1rem;
+    }
+    
+    .why-card {
+        padding: 1rem;
+    }
+    
+    .testimonial-card {
+        padding: 1rem;
+    }
+    
+    .blueprint-what-you-get,
+    .blueprint-why-different {
+        padding: 1rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    .nav-link,
+    .mobile-nav-link,
+    .cta-button,
+    .blueprint-button,
+    .confirm-booking {
+        min-height: 44px;
+        padding: 0.75rem 1.5rem;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        min-height: 44px;
+        padding: 0.75rem;
+    }
+    
+    .mobile-nav-link {
+        padding: 1rem 0;
+        min-height: 56px;
+    }
+}
+
+/* Performance optimizations for mobile */
+@media (max-width: 768px) {
+    /* Reduce animations on mobile for better performance */
+    .hero-bg-elements {
+        animation: none;
+    }
+    
+    .floating-dots .dot {
+        animation-duration: 8s;
+    }
+    
+    .network-nodes {
+        animation: none;
+    }
+    
+    /* Optimize background elements for mobile */
+    .bg-wave {
+        display: none;
+    }
+    
+    .network-nodes {
+        opacity: 0.3;
+    }
+    
+    /* Reduce shadow complexity on mobile */
+    .process-panel::before,
+    .process-panel::after,
+    .why-card::before,
+    .why-card::after {
+        display: none;
+    }
+
+    /* Mobile card animations */
+    .testimonial-card {
+        animation: cardFadeInScale 0.6s ease-out forwards;
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    .testimonial-card.active {
+        animation: cardFadeInScale 0.6s ease-out forwards;
+    }
+
+    .step {
+        animation: cardSlideInLeft 0.7s ease-out forwards;
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    .step:nth-child(1) { animation-delay: 0.1s; }
+    .step:nth-child(2) { animation-delay: 0.3s; }
+    .step:nth-child(3) { animation-delay: 0.5s; }
+
+    .blueprint-what-you-get,
+    .blueprint-why-different {
+        animation: cardSlideInUp 0.8s ease-out forwards;
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    .blueprint-what-you-get { animation-delay: 0.2s; }
+    .blueprint-why-different { animation-delay: 0.4s; }
+
+    /* Mobile animation keyframes */
+    @keyframes cardSlideInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes cardFadeInScale {
+        0% {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes cardSlideInLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes cardBounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3) translateY(50px);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05) translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    /* Mobile button animations */
+    @keyframes mobileGoldGlow {
+        0%, 100% {
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+        50% {
+            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+    }
+
+    @keyframes mobileGoldArrow {
+        0%, 100% {
+            transform: translateX(0) scale(1);
+        }
+        50% {
+            transform: translateX(4px) scale(1.1);
+        }
     }
 }

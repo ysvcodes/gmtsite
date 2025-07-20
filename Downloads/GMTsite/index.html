@@ -17,7 +17,30 @@
                 <a href="#build" class="nav-link">Build</a>
                 <a href="#results" class="nav-link">Results</a>
                 <a href="#benefits" class="nav-link">Benefits</a>
+                <button class="nav-link book-call-btn" onclick="openModal()">Book Call</button>
             </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation Overlay -->
+        <div class="mobile-nav-overlay" id="mobileNavOverlay">
+            <div class="mobile-nav-content">
+                <div class="mobile-nav-header">
+                    <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
+                </div>
+                <nav class="mobile-navigation">
+                    <a href="#build" class="mobile-nav-link">Build</a>
+                    <a href="#results" class="mobile-nav-link">Results</a>
+                    <a href="#benefits" class="mobile-nav-link">Benefits</a>
+                    <button class="mobile-nav-link book-call-btn">Book Call</button>
+                </nav>
+            </div>
         </div>
     </header>
 
@@ -103,7 +126,8 @@
                 </p>
                 
                 <p class="hero-description">
-                    We build and deploy a dedicated digital workforce for your business. We transform your operations by engineering custom AI solutions that eliminate repetitive tasks, integrate your entire tech stack, and unlock your team to drive growth.
+                    <span class="desktop-text">We build and deploy a dedicated digital workforce for your business. We transform your operations by engineering custom AI solutions that eliminate repetitive tasks, integrate your entire tech stack, and unlock your team to drive growth.</span>
+                    <span class="mobile-text">We build and deploy a dedicated digital workforce for your business. We transform your operations by engineering custom AI solutions that eliminate repetitive tasks, integrate your entire tech stack, and unlock your team to drive growth. Our systems work 24/7, handling everything from customer inquiries to data processing, so you can focus on strategic decisions and business expansion.</span>
                 </p>
                 <div class="description-divider"></div>
                 
@@ -117,6 +141,10 @@
                     <div class="process-header">
                         <h2 class="process-title">Build. Integrate. Chill.</h2>
                         <div class="process-subtitle">Your journey to automated excellence</div>
+                        <p class="process-intro">
+                            <span class="desktop-text">We build seamless, intelligent workflows that connect with the tools you already use, or the ones you should be. There are no limitations to what we can automate.</span>
+                            <span class="mobile-text">We build seamless, intelligent workflows that connect with the tools you already use, or the ones you should be. There are no limitations to what we can automate for your business.</span>
+                        </p>
                     </div>
                     
                     <div class="process-steps">
@@ -124,7 +152,10 @@
                             <div class="step-number">01</div>
                             <div class="step-content">
                                 <h3 class="step-title">We Build</h3>
-                                <p class="step-description">We create a tailored automation system designed around how your business really works, replacing repetitive tasks, closing gaps, and setting up processes that scale with you. No plug-and-play shortcuts, just a system that feels like it was built in-house, without the in-house headaches.</p>
+                                <p class="step-description">
+                                    <span class="desktop-text">We create a tailored automation system designed around how your business really works — replacing repetitive tasks, closing gaps, and setting up processes that scale with you. No plug-and-play shortcuts — just a system that feels like it was built in-house, without the in-house headaches.</span>
+                                    <span class="mobile-text">We create tailored automation systems that replace repetitive tasks and scale with your business. No shortcuts, just systems that feel built in-house and grow alongside your operations.</span>
+                                </p>
                             </div>
                             <div class="step-icon">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -143,7 +174,10 @@
                             <div class="step-number">02</div>
                             <div class="step-content">
                                 <h3 class="step-title">We Integrate</h3>
-                                <p class="step-description">We bring everything together, your tools, data, and workflows, into one seamless, automated ecosystem. No more scattered platforms or manual handoffs. You get complete visibility and control, without ever touching the backend.</p>
+                                <p class="step-description">
+                                    <span class="desktop-text">We bring everything together — your tools, data, and workflows — into one seamless, automated ecosystem. No more scattered platforms or manual handoffs. You get complete visibility and control, without ever touching the backend.</span>
+                                    <span class="mobile-text">We integrate your tools, data, and workflows into one seamless ecosystem. Complete visibility and control without touching the backend or disrupting your existing processes.</span>
+                                </p>
                             </div>
                             <div class="step-icon">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -163,7 +197,10 @@
                             <div class="step-number">03</div>
                             <div class="step-content">
                                 <h3 class="step-title">You Chill</h3>
-                                <p class="step-description">While the system handles the routine, you focus on what matters: growing the business, leading your team, and unlocking new opportunities. Imagine waking up to clean pipelines, followed-up leads, and updates already handled, all before your first coffee.</p>
+                                <p class="step-description">
+                                    <span class="desktop-text">While the system handles the routine, you focus on what matters: growing the business, leading your team, and unlocking new opportunities. Imagine waking up to clean pipelines, followed-up leads, and updates already handled — all before your first coffee.</span>
+                                    <span class="mobile-text">While the system handles routine tasks, you focus on growing your business and unlocking new opportunities. Wake up to clean pipelines, handled updates, and automated workflows running smoothly.</span>
+                                </p>
                             </div>
                             <div class="step-icon">
                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -257,14 +294,14 @@
                         <!-- Add summary paragraph after the last card -->
                         <div class="why-summary-wrap">
                             <p class="why-summary">
-                                Automating with GMT isn't just about saving time, it's about transforming how your business runs. Our systems connect your tools, eliminate repetitive tasks, and speed up key processes like onboarding and follow ups. Teams report smoother operations, higher client retention, and faster decision-making all without added technical complexity. With improvements often seen within weeks and a free trial you can get a feel of your new AI System.
+                                Automating with GMT transforms how your business runs. Our systems connect your tools, eliminate repetitive tasks, and speed up key processes. Teams report smoother operations, higher client retention, and faster decision-making all without added technical complexity. With improvements often seen within weeks and a free trial you can get a feel of your new AI System.
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Testimonials Panel -->
-                <div class="testimonials-panel">
+                <div class="testimonials-panel" id="results">
                     <div class="testimonials-header">
                         <h2 class="testimonials-title">Real Results for Real People</h2>
                         <p class="testimonials-subtitle">Testimonial stories from the businesses we've helped. See how GMT Automations has delivered measurable results and transformed operations for clients across various industries.</p>
@@ -649,7 +686,7 @@
 
                         </div>
                         
-                        <div class="results-section" id="results">
+                        <div class="results-section">
                             <h3 class="results-title">✅ Real Results, Not Just Integrations</h3>
                             <ul class="results-list">
                                 <li>AI-driven lead capture from your site straight into your CRM.</li>
@@ -659,8 +696,8 @@
                             </ul>
                             
                             <div class="final-cta">
-                                <p class="cta-message">We don't ask "can it be automated?"</p>
-                                <p class="cta-question">We ask "how fast do you want it done?"</p>
+                                <p class="cta-message animated-message">We don't ask "can it be automated?"</p>
+                                <p class="cta-question animated-question">⚡ We ask "how fast do you want it done?" ⚡</p>
                             </div>
                         </div>
                     </div>
@@ -722,14 +759,12 @@
                             </div>
                         </div>
                         
-                        <div class="blueprint-cta">
-                            <div class="cta-sparkle">✨</div>
-                            <button class="blueprint-button">
-                                <span class="button-text">Free AI Automation System Blueprint</span>
-                                <span class="button-arrow">→</span>
-                            </button>
-                            <div class="cta-sparkle">✨</div>
-                        </div>
+                                        <div class="blueprint-cta">
+                    <button class="blueprint-button">
+                        <span class="button-text">Free AI Automation System Blueprint</span>
+                        <span class="button-arrow">→</span>
+                    </button>
+                </div>
                     </div>
                 </div>
             </div>
@@ -827,7 +862,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-main">
-                    <p>&copy; 2024 GMT Acquisition. All rights reserved.</p>
+            <p>&copy; 2024 GMT Acquisition. All rights reserved.</p>
                 </div>
                 <div class="footer-contact">
                     <div class="contact-info">
@@ -848,8 +883,8 @@
         const modalOverlay = document.getElementById('modalOverlay');
         const modalClose = document.getElementById('modalClose');
         
-        // Get all buttons except nav buttons
-        const buttons = document.querySelectorAll('button:not(.nav-button), .cta-button, .blueprint-button');
+        // Get all buttons except nav buttons, mobile nav elements, and testimonial elements
+        const buttons = document.querySelectorAll('button:not(.nav-button):not(.mobile-nav-link):not(.mobile-menu-btn):not(.mobile-nav-close):not(.testimonial-dot), .cta-button, .blueprint-button');
         
         // Open modal function
         function openModal() {
@@ -866,6 +901,16 @@
         // Add click listeners to all buttons
         buttons.forEach(button => {
             button.addEventListener('click', (e) => {
+                // Don't open modal if clicking on testimonial elements
+                if (e.target.closest('.testimonials-panel') || 
+                    e.target.closest('.testimonial-card') || 
+                    e.target.closest('.testimonial-dot') ||
+                    e.target.closest('.testimonial-content') ||
+                    e.target.closest('.testimonial-text') ||
+                    e.target.closest('.testimonial-author')) {
+                    return;
+                }
+                
                 e.preventDefault();
                 openModal();
             });
@@ -901,6 +946,64 @@
                         block: 'start'
                     });
                 }
+            });
+        });
+        
+        // Mobile Navigation
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+        
+        // Open mobile menu
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileNavOverlay.classList.add('mobile-nav-active');
+            document.body.style.overflow = 'hidden';
+        });
+        
+        // Close mobile menu
+        mobileNavClose.addEventListener('click', () => {
+            mobileNavOverlay.classList.remove('mobile-nav-active');
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Close mobile menu when clicking outside
+        mobileNavOverlay.addEventListener('click', (e) => {
+            if (e.target === mobileNavOverlay) {
+                mobileNavOverlay.classList.remove('mobile-nav-active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Mobile navigation smooth scrolling
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                // Check if it's a Book Call button (has onclick attribute)
+                if (link.classList.contains('book-call-btn')) {
+                    // Open modal and close mobile menu
+                    openModal();
+                    mobileNavOverlay.classList.remove('mobile-nav-active');
+                    document.body.style.overflow = 'auto';
+                    return;
+                }
+                
+                // Handle regular navigation links
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Close mobile menu after clicking link
+                mobileNavOverlay.classList.remove('mobile-nav-active');
+                document.body.style.overflow = 'auto';
             });
         });
         
