@@ -1,4 +1,4 @@
- u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -983,10 +983,11 @@
             const name = document.getElementById('modalName').value.trim();
             const email = document.getElementById('modalEmail').value.trim();
             const phone = document.getElementById('modalPhone').value.trim();
+            const company = document.getElementById('modalCompany').value.trim();
             
-            console.log('Form values:', { name, email, phone });
+            console.log('Form values:', { name, email, phone, company });
             
-            if (!name || !email || !phone) {
+            if (!name || !email || !phone || !company) {
                 console.error('Required fields missing');
                 return false;
             }
@@ -994,7 +995,8 @@
             const leadData = {
                 full_name: name,
                 email: email,
-                phone: phone
+                phone: phone,
+                company_name: company
             };
             
             console.log('Attempting to save lead data:', leadData);
