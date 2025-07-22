@@ -5,14 +5,82 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>User Dashboard - GMT</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      /* Animated, seamless, blended gradient background */
+      background: repeating-linear-gradient(135deg, #172554 0%, #1e293b 30%, #3b82f6 60%, #0f172a 100%);
+      background-size: 300% 300%;
+      animation: moveGradientLoop 40s linear infinite;
+      position: relative;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: rgba(30,41,59,0.25) 0 0 no-repeat;
+      backdrop-filter: blur(60px);
+      -webkit-backdrop-filter: blur(60px);
+    }
+    @keyframes moveGradientLoop {
+      0% {
+        background-position: 0% 0%;
+      }
+      100% {
+        background-position: 100% 100%;
+      }
+    }
+    .dashboard-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .dashboard-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    .dashboard-welcome {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      color: #c7d2fe;
+    }
+    .logout-btn {
+      padding: 0.75rem 2.5rem;
+      border-radius: 0.75rem;
+      background: #ef4444;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      border: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #b91c1c;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl flex flex-col items-center px-8 py-10 mt-10">
-    <h2 class="text-2xl font-extrabold text-blue-900 mb-6 tracking-tight">User Dashboard</h2>
-    <div class="w-full flex flex-col items-center mt-8">
-      <h3 class="text-xl font-bold mb-4">Welcome, User!</h3>
-      <button id="userLogout" class="py-2 px-6 rounded bg-red-600 text-white font-bold">Logout</button>
-    </div>
+<body>
+  <div class="dashboard-content">
+    <h2 class="dashboard-title">User Dashboard</h2>
+    <div class="dashboard-welcome">Welcome, User!</div>
+    <button id="userLogout" class="logout-btn">Logout</button>
   </div>
   <script>
     // Utility: Get session (checks both localStorage and sessionStorage)
@@ -22,7 +90,6 @@
         JSON.parse(sessionStorage.getItem('gmt_user'))
       );
     }
-    // Session check
     const user = getSession();
     const isFileProtocol = window.location.protocol === 'file:';
     if (!user || user.type !== 'user') {
@@ -35,7 +102,11 @@
     document.getElementById('userLogout').addEventListener('click', function() {
       localStorage.removeItem('gmt_user');
       sessionStorage.removeItem('gmt_user');
-      window.location.href = '../login/login.html';
+      if (isFileProtocol) {
+        window.location.href = '../login/login.html';
+      } else {
+        window.location.href = '/client/login/login.html';
+      }
     });
   </script>
 </body>

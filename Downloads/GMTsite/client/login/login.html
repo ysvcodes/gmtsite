@@ -59,6 +59,18 @@
     .forgot-link:hover {
       text-decoration: underline;
     }
+    .fade-banner {
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .fade-banner.show {
+      opacity: 1;
+    }
+    .btn-navy:active, .btn-navy.active {
+      filter: brightness(0.85);
+      outline: 2px solid #172554;
+      outline-offset: 2px;
+    }
   </style>
   <style>
     @media (max-width: 480px) {
@@ -174,7 +186,7 @@
     </div>
     <div id="loginErrorMsg" class="text-xs text-center mb-2" style="color:#ef4444;display:none;"></div>
     <div id="loginFailNotification" style="display:none;position:absolute;left:0;right:0;margin-left:auto;margin-right:auto;bottom:-53px;z-index:101;width:100%;max-width:inherit;pointer-events:none;">
-      <div id="loginFailBar" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#ef4444;padding:0.5rem 1.5rem;border-radius:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);opacity:0;transition:opacity 0.5s;pointer-events:auto;">
+      <div id="loginFailBar" class="fade-banner" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#ef4444;padding:0.5rem 1.5rem;border-radius:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);pointer-events:auto;">
         <span style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="white"/><path d="M6 6l6 6M12 6l-6 6" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
@@ -205,6 +217,16 @@
         JSON.parse(sessionStorage.getItem('gmt_user'))
       );
     }
+
+    const loginBtn = document.querySelector('button[type="submit"]');
+    const form = document.querySelector('form');
+    // Add Enter key visual feedback
+    form.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        loginBtn.classList.add('active');
+        setTimeout(() => loginBtn.classList.remove('active'), 150);
+      }
+    });
 
     document.querySelector('form').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -249,14 +271,16 @@
 
       // 3. If neither, show error
       const failNotif = document.getElementById('loginFailNotification');
-      failNotif.style.display = 'block';
       const notifDiv = document.getElementById('loginFailBar');
-      notifDiv.style.opacity = '0';
+      // Always reset fade state
+      notifDiv.classList.remove('show');
+      failNotif.style.display = 'block';
+      // Force reflow to restart animation
+      void notifDiv.offsetWidth;
+      notifDiv.classList.add('show');
+      // Remove after fade out
       setTimeout(() => {
-        notifDiv.style.opacity = '1';
-      }, 10);
-      setTimeout(() => {
-        notifDiv.style.opacity = '0';
+        notifDiv.classList.remove('show');
         setTimeout(() => {
           failNotif.style.display = 'none';
         }, 500);
