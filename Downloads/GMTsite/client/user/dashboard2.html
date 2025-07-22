@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard - GMT (Copy)</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl flex flex-col items-center px-8 py-10 mt-10">
+    <h2 class="text-2xl font-extrabold text-blue-900 mb-6 tracking-tight">User Dashboard (Copy)</h2>
+    <div class="w-full flex flex-col items-center mt-8">
+      <h3 class="text-xl font-bold mb-4">Welcome, User! (Copy)</h3>
+      <button id="userLogout" class="py-2 px-6 rounded bg-red-600 text-white font-bold">Logout</button>
+    </div>
+  </div>
+  <script>
+    // Utility: Get session (checks both localStorage and sessionStorage)
+    function getSession() {
+      return (
+        JSON.parse(localStorage.getItem('gmt_user')) ||
+        JSON.parse(sessionStorage.getItem('gmt_user'))
+      );
+    }
+    // Session check (ENABLED FOR TESTING)
+    const user = getSession();
+    const isFileProtocol = window.location.protocol === 'file:';
+    if (!user || user.type !== 'user') {
+      if (isFileProtocol) {
+        window.location.href = '../login/login.html';
+      } else {
+        window.location.href = '/client/login/login.html';
+      }
+    }
+    document.getElementById('userLogout').addEventListener('click', function() {
+      localStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_user');
+      if (isFileProtocol) {
+        window.location.href = '../login/login.html';
+      } else {
+        window.location.href = '/client/login/login.html';
+      }
+    });
+  </script>
+</body>
+</html> 

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GMT Client Portal Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .fade-in {
+      opacity: 0;
+      transform: translateY(32px);
+      animation: fadeInUp 0.8s cubic-bezier(.4,0,.2,1) 0.2s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .bg-animated {
+      background: radial-gradient(circle at 50% 50%, #3b82f6 0%, #172554 60%, #0f172a 100%);
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-animated::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 50% 50%, #3b82f6 0%, transparent 70%),
+                  radial-gradient(circle at 50% 50%, #0e172a 0%, transparent 80%);
+      opacity: 0.18;
+      animation: moveBg 8s linear infinite alternate;
+    }
+    @keyframes moveBg {
+      0% { background-position: 60% 40%, 30% 70%; }
+      100% { background-position: 65% 45%, 35% 75%; }
+    }
+    ::placeholder, .placeholder-navy::placeholder {
+      color: #172554 !important;
+      opacity: 1;
+      font-weight: bold;
+    }
+    .navy-bold {
+      color: #172554 !important;
+      font-weight: bold !important;
+    }
+    .btn-navy {
+      background-color: #172554;
+      color: #fff;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .btn-navy:hover {
+      background-color: #0f172a;
+    }
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+  <style>
+    @media (max-width: 480px) {
+      html, body {
+        overflow-x: hidden !important;
+      }
+      .max-w-md {
+        max-width: 80vw !important;
+        max-width: 360px !important;
+        min-width: unset !important;
+        box-sizing: border-box !important;
+        border-radius: 0.75rem !important;
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+      }
+      .fade-in {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+      .px-8 {
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+      }
+      .py-10 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+      .w-full {
+        width: 100% !important;
+      }
+      .btn-navy {
+        width: 100% !important;
+        font-size: 1rem !important;
+        padding-top: 0.6rem !important;
+        padding-bottom: 0.6rem !important;
+      }
+      .form-checkbox {
+        width: 1rem !important;
+        height: 1rem !important;
+      }
+      input[type="email"], input[type="password"] {
+        font-size: 0.95rem !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        height: 2.1rem !important;
+      }
+      .text-base {
+        font-size: 1rem !important;
+      }
+      .text-xs {
+        font-size: 0.95rem !important;
+      }
+      img[alt="GMT Logo"] {
+        width: 100px !important;
+        margin-bottom: 8px !important;
+      }
+    }
+  </style>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center relative transition-colors duration-500" id="body">
+  <div class="bg-animated">
+    <!-- Animated SVG Waves from Center -->
+    <svg class="center-waves" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1;pointer-events:none;" width="600" height="600" viewBox="0 0 600 600">
+      <defs>
+        <radialGradient id="waveGradient" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#172554" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#172554" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle id="wave1" cx="300" cy="300" r="120" fill="url(#waveGradient)">
+        <animate attributeName="r" values="120;200;120" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.3;0.1;0.3" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle id="wave2" cx="300" cy="300" r="180" fill="url(#waveGradient)" opacity="0.2">
+        <animate attributeName="r" values="180;300;180" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.05;0.2" dur="6s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+  <!-- Modular Login Card -->
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl flex flex-col items-center px-8 py-10 fade-in">
+    <img src="../../assets/Navy_GMT.png" alt="GMT Logo" style="width:180px;height:auto;margin:0;padding:0 0 15px 0;display:block;" />
+    <div class="flex flex-col items-center mb-2">
+      <p class="text-base text-center" style="color:#172554;font-weight:bold;margin-bottom:10px;">Login with the credentials provided to you.</p>
+    </div>
+    <form class="w-full flex flex-col gap-4" autocomplete="off">
+      <label class="flex flex-col gap-1">
+        <span class="sr-only">Email</span>
+        <div class="flex items-center bg-gray-200 rounded-lg px-3">
+          <!-- Envelope icon for email -->
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M22 6l-10 7L2 6"/></svg>
+          <input type="email" class="flex-1 py-2 bg-gray-200 border-none focus:outline-none text-gray-900 placeholder-navy" placeholder="Email" required />
+        </div>
+      </label>
+      <label class="flex flex-col gap-1">
+        <span class="sr-only">Password</span>
+        <div class="flex items-center bg-gray-200 rounded-lg px-3">
+          <!-- Lock icon for password -->
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="8" rx="2"/><path d="M12 15v2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" class="flex-1 py-2 bg-gray-200 border-none focus:outline-none text-gray-900 placeholder-navy" placeholder="Password" required />
+        </div>
+      </label>
+      <!-- Remember Me Checkbox -->
+      <div class="flex items-center" style="margin-bottom:0;">
+        <input id="rememberMe" type="checkbox" class="form-checkbox h-4 w-4 text-[#172554] border-[#172554] focus:ring-[#172554] transition duration-150 mr-2" />
+        <label for="rememberMe" class="text-xs select-none cursor-pointer" style="color:#172554;font-weight:bold;">Remember Me</label>
+      </div>
+      <button type="submit" class="w-full py-2 rounded-lg btn-navy shadow">LOGIN</button>
+    </form>
+    <div class="w-full flex justify-center mt-4">
+      <a href="forgot-password.html" class="text-xs forgot-link" style="color:#172554;font-weight:bold;">Forgot Password?</a>
+    </div>
+    <div id="loginErrorMsg" class="text-xs text-center mb-2" style="color:#ef4444;display:none;"></div>
+    <div id="loginFailNotification" style="display:none;position:absolute;left:0;right:0;margin-left:auto;margin-right:auto;bottom:-53px;z-index:101;width:100%;max-width:inherit;pointer-events:none;">
+      <div id="loginFailBar" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:#ef4444;padding:0.5rem 1.5rem;border-radius:0.75rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);opacity:0;transition:opacity 0.5s;pointer-events:auto;">
+        <span style="background:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="white"/><path d="M6 6l6 6M12 6l-6 6" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span style="color:white;font-size:1rem;font-weight:bold;">Email or Password is wrong.</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Supabase login logic
+    const supabaseUrl = 'https://mdxcytltlftuqxmlczam.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keGN5dGx0bGZ0dXF4bWxjemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMzg0MzMsImV4cCI6MjA2ODYxNDQzM30.wRVqK3H1lptqWsSzQy0yuYaggRA584Jbf6Bq-5MDLWQ';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Utility: Set session (localStorage or sessionStorage)
+    function setSession(userObj, remember) {
+      if (remember) {
+        localStorage.setItem('gmt_user', JSON.stringify(userObj));
+        sessionStorage.removeItem('gmt_user');
+      } else {
+        sessionStorage.setItem('gmt_user', JSON.stringify(userObj));
+        localStorage.removeItem('gmt_user');
+      }
+    }
+    // Utility: Get session (checks both)
+    function getSession() {
+      return (
+        JSON.parse(localStorage.getItem('gmt_user')) ||
+        JSON.parse(sessionStorage.getItem('gmt_user'))
+      );
+    }
+
+    document.querySelector('form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.querySelector('input[type="email"]').value.trim();
+      const password = document.querySelector('input[type="password"]').value;
+      const remember = document.getElementById('rememberMe').checked;
+      const errorMsg = document.getElementById('loginErrorMsg');
+      errorMsg.style.display = 'none';
+
+      const isFileProtocol = window.location.protocol === 'file:';
+      // 1. Try admin login
+      const { data: admin, error: adminError } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('email', email)
+        .single();
+      if (admin && admin.password_hash === password) {
+        setSession({ email, type: 'admin' }, remember);
+        if (isFileProtocol) {
+          window.location.href = '../admin/panel.html';
+        } else {
+          window.location.href = '/client/admin/panel.html';
+        }
+        return;
+      }
+
+      // 2. Try user login
+      const { data: user, error: userError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email)
+        .single();
+      if (user && user.password_hash === password) {
+        setSession({ email, type: 'user' }, remember);
+        if (isFileProtocol) {
+          window.location.href = '../user/dashboard.html';
+        } else {
+          window.location.href = '/client/user/dashboard.html';
+        }
+        return;
+      }
+
+      // 3. If neither, show error
+      const failNotif = document.getElementById('loginFailNotification');
+      failNotif.style.display = 'block';
+      const notifDiv = document.getElementById('loginFailBar');
+      notifDiv.style.opacity = '0';
+      setTimeout(() => {
+        notifDiv.style.opacity = '1';
+      }, 10);
+      setTimeout(() => {
+        notifDiv.style.opacity = '0';
+        setTimeout(() => {
+          failNotif.style.display = 'none';
+        }, 500);
+      }, 2000);
+    });
+  </script>
+</body>
+</html> 
