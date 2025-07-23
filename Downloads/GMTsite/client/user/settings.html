@@ -552,15 +552,19 @@
           <div class="flex flex-col md:flex-row gap-8">
             <div class="flex-1">
               <h3 class="font-semibold text-gray-800 mb-2" for-activity data-i18n="recentActivity">Recent Activity</h3>
-              <ul class="text-sm text-gray-700" id="activityLog">
-                <!-- Real activity log will be loaded here -->
-              </ul>
+              <div style="max-height:220px;overflow-y:auto;background:rgba(255,255,255,0.07);border-radius:0.75rem;padding:0.5rem 0.75rem;box-shadow:0 2px 8px rgba(30,41,59,0.04);">
+                <ul class="text-sm text-gray-700" id="activityLog">
+                  <!-- Real activity log will be loaded here -->
+                </ul>
+              </div>
             </div>
             <div class="flex-1">
               <h3 class="font-semibold text-gray-800 mb-2" for-sessions data-i18n="activeSessions">Active Sessions</h3>
-              <ul class="text-sm text-gray-700" id="sessionList">
-                <!-- Real sessions will be loaded here -->
-              </ul>
+              <div style="max-height:220px;overflow-y:auto;background:rgba(255,255,255,0.07);border-radius:0.75rem;padding:0.5rem 0.75rem;box-shadow:0 2px 8px rgba(30,41,59,0.04);">
+                <ul class="text-sm text-gray-700" id="sessionList">
+                  <!-- Real sessions will be loaded here -->
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -598,6 +602,167 @@ const user = getCurrentUser();
 if (!user) {
   window.location.href = '/client/login/login.html';
 }
+
+// --- i18n dictionary for English and Spanish ---
+const i18n = {
+  en: {
+    saveAll: 'Save All Changes',
+    unsaved: 'You have unsaved changes.',
+    profileInfo: 'Profile Information',
+    security: 'Security',
+    currentPassword: 'Current Password',
+    newPassword: 'New Password',
+    confirmNewPassword: 'Confirm New Password',
+    updatePassword: 'Update Password',
+    accountActivity: 'Account Activity & Sessions',
+    recentActivity: 'Recent Activity',
+    activeSessions: 'Active Sessions',
+    dangerZone: 'Danger Zone',
+    downloadData: 'Download My Data',
+    requestExport: 'Request Account Export',
+    deleteAccount: 'Delete Account',
+    fontSizeLabel: 'Font Size',
+    fontSizeDesc: 'Adjust for readability',
+    darkModeLabel: 'Dark Mode',
+    darkModeDesc: 'Reduce eye strain with a dark theme',
+    timeZoneLabel: 'Time Zone',
+    timeZoneDesc: 'Auto-detected, but you can change it',
+    languageLabel: 'Language',
+    languageDesc: 'Choose your preferred language',
+    fullName: 'Full Name',
+    email: 'Email Address',
+    company: 'Company',
+    phone: 'Phone Number',
+    phoneError: 'Phone number must be at least 10 digits.',
+    phoneModalTitle: 'Invalid Phone Number',
+    phoneModalMsg: 'Phone number must be at least 10 digits and contain only numbers.',
+    invalidPw: 'Incorrect password.',
+    requiredPw: 'Password required.',
+    deleteTitle: 'Delete Account',
+    deletePwPrompt: 'Please enter your password to confirm account deletion.',
+    deleteAutoTitle: 'Delete Automations?',
+    deleteAutoMsg: 'Do you want to delete your automations for',
+    deleteReviewTitle: 'Account Deletion Requested',
+    deleteReviewMsg: 'Your account is being reviewed before proper deletion. You will be notified when the process is complete.',
+    close: 'Close',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    yes: 'Yes',
+    no: 'No',
+    save: 'Save',
+    leaveWithoutSaving: 'Leave Without Saving',
+    unsavedModalTitle: 'You have unsaved changes',
+    unsavedModalMsg: 'Do you want to save before leaving?'
+  },
+  es: {
+    saveAll: 'Guardar todos los cambios',
+    unsaved: 'Tienes cambios sin guardar.',
+    profileInfo: 'Información de perfil',
+    security: 'Seguridad',
+    currentPassword: 'Contraseña actual',
+    newPassword: 'Nueva contraseña',
+    confirmNewPassword: 'Confirmar nueva contraseña',
+    updatePassword: 'Actualizar contraseña',
+    accountActivity: 'Actividad de la cuenta y sesiones',
+    recentActivity: 'Actividad reciente',
+    activeSessions: 'Sesiones activas',
+    dangerZone: 'Zona de peligro',
+    downloadData: 'Descargar mis datos',
+    requestExport: 'Solicitar exportación de cuenta',
+    deleteAccount: 'Eliminar cuenta',
+    fontSizeLabel: 'Tamaño de fuente',
+    fontSizeDesc: 'Ajustar para la legibilidad',
+    darkModeLabel: 'Modo oscuro',
+    darkModeDesc: 'Reduce la fatiga visual con un tema oscuro',
+    timeZoneLabel: 'Zona horaria',
+    timeZoneDesc: 'Detectado automáticamente, pero puedes cambiarlo',
+    languageLabel: 'Idioma',
+    languageDesc: 'Elige tu idioma preferido',
+    fullName: 'Nombre completo',
+    email: 'Correo electrónico',
+    company: 'Empresa',
+    phone: 'Teléfono',
+    phoneError: 'El número debe tener al menos 10 dígitos.',
+    phoneModalTitle: 'Número de teléfono inválido',
+    phoneModalMsg: 'El número debe tener al menos 10 dígitos y contener solo números.',
+    invalidPw: 'Contraseña incorrecta.',
+    requiredPw: 'Se requiere contraseña.',
+    deleteTitle: 'Eliminar cuenta',
+    deletePwPrompt: 'Por favor, introduce tu contraseña para confirmar la eliminación.',
+    deleteAutoTitle: '¿Eliminar automatizaciones?',
+    deleteAutoMsg: '¿Deseas eliminar tus automatizaciones para',
+    deleteReviewTitle: 'Solicitud de eliminación de cuenta',
+    deleteReviewMsg: 'Tu cuenta está siendo revisada antes de la eliminación. Se te notificará cuando el proceso esté completo.',
+    close: 'Cerrar',
+    confirm: 'Confirmar',
+    cancel: 'Cancelar',
+    yes: 'Sí',
+    no: 'No',
+    save: 'Guardar',
+    leaveWithoutSaving: 'Salir sin guardar',
+    unsavedModalTitle: 'Tienes cambios sin guardar',
+    unsavedModalMsg: '¿Quieres guardar antes de salir?'
+  }
+};
+
+// --- Apply language to all visible UI text ---
+function applyLanguage(lang) {
+  const dict = i18n[lang] || i18n['en'];
+  // Section headers
+  document.querySelector('.settings-section h2.section-title[data-i18n-section="profileInfo"]').textContent = dict.profileInfo;
+  document.querySelector('.settings-section h2.section-title[data-i18n-section="security"]').textContent = dict.security;
+  document.querySelector('.settings-section h2.section-title[data-i18n-section="accountActivity"]').textContent = dict.accountActivity;
+  document.querySelector('.settings-section h2.section-title[data-i18n-section="dangerZone"]').textContent = dict.dangerZone;
+  // Profile labels
+  document.querySelector('[data-i18n="fullName"]').textContent = dict.fullName;
+  document.querySelector('[data-i18n="email"]').textContent = dict.email;
+  document.querySelector('[data-i18n="company"]').textContent = dict.company;
+  document.querySelector('[data-i18n="phone"]').textContent = dict.phone;
+  // Security labels
+  document.querySelector('label[for="currentPassword"]').textContent = dict.currentPassword;
+  document.querySelector('label[for="newPassword"]').textContent = dict.newPassword;
+  document.querySelector('label[for="confirmNewPassword"]').textContent = dict.confirmNewPassword;
+  document.getElementById('passwordForm').querySelector('button[type="submit"]').textContent = dict.updatePassword;
+  // Appearance & Accessibility
+  document.querySelector('[data-i18n="fontSizeLabel"]').textContent = dict.fontSizeLabel;
+  document.querySelector('[data-i18n="fontSizeDesc"]').textContent = dict.fontSizeDesc;
+  document.querySelector('[data-i18n="darkModeLabel"]').textContent = dict.darkModeLabel;
+  document.querySelector('[data-i18n="darkModeDesc"]').textContent = dict.darkModeDesc;
+  document.querySelector('[data-i18n="timeZoneLabel"]').textContent = dict.timeZoneLabel;
+  document.querySelector('[data-i18n="timeZoneDesc"]').textContent = dict.timeZoneDesc;
+  document.querySelector('[data-i18n="languageLabel"]').textContent = dict.languageLabel;
+  document.querySelector('[data-i18n="languageDesc"]').textContent = dict.languageDesc;
+  // Save/unsaved
+  document.getElementById('saveAllBtn').textContent = dict.saveAll;
+  document.getElementById('unsavedMsg').textContent = dict.unsaved;
+  // Account Activity & Sessions
+  document.querySelector('h3[for-activity]').textContent = dict.recentActivity;
+  document.querySelector('h3[for-sessions]').textContent = dict.activeSessions;
+  // Danger Zone buttons
+  document.querySelector('button.btn-secondary.mb-2[data-i18n="downloadData"]').textContent = dict.downloadData;
+  document.querySelector('button.btn-secondary.mb-2[data-i18n="requestExport"]').textContent = dict.requestExport;
+  document.getElementById('deleteAccountBtn').textContent = dict.deleteAccount;
+  // Phone error
+  if (document.getElementById('phoneErrorMsg')) document.getElementById('phoneErrorMsg').textContent = '';
+}
+
+// --- On page load, apply language from Supabase or localStorage ---
+window.addEventListener('DOMContentLoaded', async function() {
+  let lang = 'en';
+  const { data } = await supabase.from('users').select('language').eq('email', user.email).single();
+  if (data && data.language) lang = data.language;
+  localStorage.setItem('gmt_lang', lang);
+  applyLanguage(lang);
+  document.getElementById('languageSelect').value = lang;
+});
+
+document.getElementById('languageSelect').addEventListener('change', async function() {
+  localStorage.setItem('gmt_lang', this.value);
+  applyLanguage(this.value);
+  setUnsaved(true);
+  // Save language to Supabase immediately
+  await supabase.from('users').update({ language: this.value }).eq('email', user.email);
+});
 
 // --- Auto-detect timezone if not set in Supabase, otherwise use saved value ---
 function detectBrowserTimezoneGMT() {
@@ -645,7 +810,6 @@ async function loadUserSettings() {
     document.getElementById('timezoneSelect').value = tz;
   }
   document.getElementById('languageSelect').value = data.language || 'en';
-  document.getElementById('darkModeToggle').checked = !!data.dark_mode;
   let fontSize = data.font_size;
   if (!fontSize || !['Small','Normal','Large','Extra Large'].includes(fontSize)) {
     fontSize = 'Normal';
@@ -721,8 +885,8 @@ async function loadActivityLog() {
     .from('activity_log')
     .select('*')
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(10);
+    .order('created_at', { ascending: false }) // Most recent at the top
+    .limit(30); // Limit to latest 30
   const logList = document.getElementById('activityLog');
   logList.innerHTML = '';
   if (error || !data || data.length === 0) {
@@ -731,7 +895,7 @@ async function loadActivityLog() {
   }
   data.forEach(item => {
     const li = document.createElement('li');
-    li.textContent = `${item.event} (${item.device || 'Unknown device'}) - ${new Date(item.created_at).toLocaleString()}`;
+    li.innerHTML = `${getDeviceIcon(item.device)} <span>${item.event}</span> <span class="text-gray-400 ml-1">(${parseDeviceInfo(item.device)})</span> <span class="text-gray-400 ml-1">- ${new Date(item.created_at).toLocaleString()}</span>`;
     logList.appendChild(li);
   });
 }
@@ -748,11 +912,49 @@ async function loadSessions() {
     sessionList.innerHTML = '<li class="text-gray-400">No active sessions found.</li>';
     return;
   }
-  data.forEach(session => {
+  // Deduplicate by device+user agent (keep most recent per device)
+  const seen = new Set();
+  const deduped = [];
+  for (const session of data) {
+    const key = session.device || 'unknown';
+    if (!seen.has(key)) {
+      seen.add(key);
+      deduped.push(session);
+    }
+  }
+  // Limit to latest 30 deduped sessions
+  deduped.slice(0, 30).forEach(session => {
     const li = document.createElement('li');
-    li.innerHTML = `${session.device || 'Unknown device'} <span class="text-gray-400 ml-2">${session.is_current ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
+    li.innerHTML = `${getDeviceIcon(session.device)} <span>${parseDeviceInfo(session.device)}</span> <span class="text-gray-400 ml-2">${session.is_current ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
     sessionList.appendChild(li);
   });
+}
+// --- Device icon and info helpers ---
+function getDeviceIcon(deviceStr) {
+  if (!deviceStr) return '<svg style="vertical-align:middle;opacity:0.7;" width="18" height="18" fill="none" stroke="#64748b" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 21v-4h8v4"/><path d="M12 11v-4"/></svg>';
+  if (/mobile|android|iphone|ipad|ipod/i.test(deviceStr)) {
+    return '<svg style="vertical-align:middle;opacity:0.7;" width="18" height="18" fill="none" stroke="#3b82f6" stroke-width="2" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><circle cx="12" cy="18" r="1.5"/></svg>';
+  }
+  if (/windows|macintosh|linux/i.test(deviceStr)) {
+    return '<svg style="vertical-align:middle;opacity:0.7;" width="18" height="18" fill="none" stroke="#6366f1" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 20h8"/></svg>';
+  }
+  return '<svg style="vertical-align:middle;opacity:0.7;" width="18" height="18" fill="none" stroke="#64748b" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 21v-4h8v4"/><path d="M12 11v-4"/></svg>';
+}
+function parseDeviceInfo(deviceStr) {
+  if (!deviceStr) return 'Unknown device';
+  // Try to extract OS and browser
+  let os = 'Unknown OS', browser = 'Unknown browser';
+  if (/windows/i.test(deviceStr)) os = 'Windows';
+  else if (/macintosh/i.test(deviceStr)) os = 'Mac';
+  else if (/linux/i.test(deviceStr)) os = 'Linux';
+  else if (/android/i.test(deviceStr)) os = 'Android';
+  else if (/iphone|ipad|ipod/i.test(deviceStr)) os = 'iOS';
+  if (/chrome\//i.test(deviceStr)) browser = 'Chrome';
+  else if (/safari\//i.test(deviceStr)) browser = 'Safari';
+  else if (/firefox\//i.test(deviceStr)) browser = 'Firefox';
+  else if (/edg\//i.test(deviceStr)) browser = 'Edge';
+  else if (/opera|opr\//i.test(deviceStr)) browser = 'Opera';
+  return `${os}, ${browser}`;
 }
 // --- Log out a session ---
 window.logoutSession = async function(sessionId) {
@@ -770,13 +972,13 @@ function showDeletePasswordModal(onPassword) {
   const html = `
     <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-        <h2 style='color:#ef4444;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>Delete Account</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Please enter your password to confirm account deletion.</p>
+        <h2 style='color:#ef4444;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteTitle}</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deletePwPrompt}</p>
         <input id='deletePwInput' type='password' placeholder='Password' style='padding:0.7rem 1rem;border-radius:0.75rem;border:1.5px solid #ddd;width:90%;margin-bottom:1.5rem;font-size:1rem;'>
         <div id='deletePwError' style='color:#ef4444;font-size:0.95rem;margin-bottom:1rem;display:none;'></div>
         <div style='display:flex;gap:1.5rem;justify-content:center;'>
-          <button id='deletePwConfirmBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Confirm</button>
-          <button id='deletePwCancelBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Cancel</button>
+          <button id='deletePwConfirmBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].confirm}</button>
+          <button id='deletePwCancelBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].cancel}</button>
         </div>
       </div>
     </div>
@@ -790,7 +992,7 @@ function showDeletePasswordModal(onPassword) {
     const pw = document.getElementById('deletePwInput').value;
     if (!pw) {
       const err = document.getElementById('deletePwError');
-      err.textContent = 'Password required.';
+      err.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].requiredPw;
       err.style.display = '';
       return;
     }
@@ -802,11 +1004,11 @@ function showDeleteAutomationsModal(company, onYes, onNo) {
   const html = `
     <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-        <h2 style='color:#ef4444;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>Delete Automations?</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Do you want to delete your automations for <b>${company}</b>?</p>
+        <h2 style='color:#ef4444;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteAutoTitle}</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteAutoMsg} <b>${company}</b>?</p>
         <div style='display:flex;gap:1.5rem;justify-content:center;'>
-          <button id='deleteAutoYesBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Yes</button>
-          <button id='deleteAutoNoBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>No</button>
+          <button id='deleteAutoYesBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].yes}</button>
+          <button id='deleteAutoNoBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].no}</button>
         </div>
       </div>
     </div>
@@ -821,9 +1023,9 @@ function showDeleteReviewModal() {
   const html = `
     <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-        <h2 style='color:#22c55e;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>Account Deletion Requested</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Your account is being reviewed before proper deletion. You will be notified when the process is complete.</p>
-        <button id='deleteReviewCloseBtn' style='background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Close</button>
+        <h2 style='color:#22c55e;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteReviewTitle}</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteReviewMsg}</p>
+        <button id='deleteReviewCloseBtn' style='background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].close}</button>
       </div>
     </div>
     <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
@@ -851,7 +1053,7 @@ document.getElementById('deleteAccountBtn').addEventListener('click', async func
       return;
     }
     if (data.password_hash !== pw) {
-      document.getElementById('deletePwError').textContent = 'Incorrect password.';
+      document.getElementById('deletePwError').textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].invalidPw;
       document.getElementById('deletePwError').style.display = '';
       return;
     }
@@ -967,11 +1169,11 @@ ensureSessionAndActivity();
 const modalHtml = `
   <div id="unsavedModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
     <div id="unsavedModal" style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-      <h2 style='color:#172554;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>You have unsaved changes</h2>
-      <p style='color:#374151;font-size:1rem;margin-bottom:2rem;'>Do you want to save before leaving?</p>
+      <h2 style='color:#172554;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].unsavedModalTitle}</h2>
+      <p style='color:#374151;font-size:1rem;margin-bottom:2rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].unsavedModalMsg}</p>
       <div style='display:flex;gap:1.5rem;justify-content:center;'>
-        <button id="unsavedModalSaveBtn" class="unsaved-modal-btn" style="background:#f1f5fd;color:#2563eb;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Save</button>
-        <button id="unsavedModalLeaveBtn" class="unsaved-modal-btn" style="background:#fef2f2;color:#ef4444;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Leave Without Saving</button>
+        <button id="unsavedModalSaveBtn" class="unsaved-modal-btn" style="background:#f1f5fd;color:#2563eb;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">${i18n[localStorage.getItem('gmt_lang') || 'en'].save}</button>
+        <button id="unsavedModalLeaveBtn" class="unsaved-modal-btn" style="background:#fef2f2;color:#ef4444;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">${i18n[localStorage.getItem('gmt_lang') || 'en'].leaveWithoutSaving}</button>
       </div>
     </div>
   </div>
@@ -1173,7 +1375,7 @@ phoneInput.addEventListener('input', function(e) {
   let val = this.value.replace(/[^0-9]/g, '');
   this.value = val;
   if (val.length > 0 && val.length < 10) {
-    phoneError.textContent = 'Phone number must be at least 10 digits.';
+    phoneError.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].phoneError;
     phoneError.style.display = '';
   } else {
     phoneError.textContent = '';
@@ -1187,9 +1389,9 @@ function showPhoneErrorModal() {
   const html = `
     <div id="phoneModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:99999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.2rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-        <h2 style='color:#ef4444;font-size:1.1rem;font-weight:700;margin-bottom:1rem;'>Invalid Phone Number</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Phone number must be at least 10 digits and contain only numbers.</p>
-        <button id='phoneModalOkBtn' style='background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>OK</button>
+        <h2 style='color:#ef4444;font-size:1.1rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].phoneModalTitle}</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].phoneModalMsg}</p>
+        <button id='phoneModalOkBtn' style='background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].close}</button>
       </div>
     </div>
     <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
@@ -1252,13 +1454,22 @@ document.getElementById('fontSizeSelect').addEventListener('change', function() 
 // --- Ensure font size starts at Normal unless set in Supabase ---
 // (No need to set font size on DOMContentLoaded, loadUserSettings handles it)
 
-// Patch Save All Changes button
-const origSaveAllBtnHandler = document.getElementById('saveAllBtn').onclick;
+// --- Utility: Log activity events ---
+async function logActivity(event) {
+  await supabase.from('activity_log').insert({
+    user_id: user.id,
+    event: event,
+    device: navigator.userAgent,
+    created_at: new Date().toISOString()
+  });
+}
+
+// --- Patch Save All Changes button to log activity ---
 document.getElementById('saveAllBtn').onclick = async function(e) {
   e.preventDefault();
   const phoneVal = document.getElementById('profilePhone').value;
   if (phoneVal.length < 10) {
-    document.getElementById('saveAllMsg').textContent = 'Phone number must be at least 10 digits.';
+    document.getElementById('saveAllMsg').textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].phoneError;
     document.getElementById('saveAllMsg').style.color = 'red';
     showPhoneErrorModal();
     return;
@@ -1285,10 +1496,155 @@ document.getElementById('saveAllBtn').onclick = async function(e) {
       setUnsaved(false);
       await loadUserSettings();
       showSaveBanner();
+      await logActivity('Updated profile/settings');
     }
     setTimeout(() => { document.getElementById('saveAllMsg').textContent = ''; }, 2000);
   });
 };
+
+// --- Patch password change to log activity ---
+document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const currentPw = document.getElementById('currentPassword').value;
+  const newPw = document.getElementById('newPassword').value;
+  const confirmPw = document.getElementById('confirmNewPassword').value;
+  const msgEl = document.getElementById('passwordMsg');
+  msgEl.textContent = '';
+  if (!currentPw || !newPw || !confirmPw) {
+    msgEl.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].requiredPw;
+    msgEl.style.color = 'red';
+    return;
+  }
+  if (newPw !== confirmPw) {
+    msgEl.textContent = 'New passwords do not match.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  // Verify current password
+  const { data, error } = await supabase
+    .from('users')
+    .select('password_hash')
+    .eq('email', user.email)
+    .single();
+  if (error || !data) {
+    msgEl.textContent = 'Could not verify current password.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  if (data.password_hash !== currentPw) {
+    msgEl.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].invalidPw;
+    msgEl.style.color = 'red';
+    return;
+  }
+  // Update password
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({ password_hash: newPw })
+    .eq('email', user.email);
+  if (updateError) {
+    msgEl.textContent = 'Failed to update password.';
+    msgEl.style.color = 'red';
+  } else {
+    msgEl.textContent = 'Password updated successfully!';
+    msgEl.style.color = 'green';
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmNewPassword').value = '';
+    await logActivity('Changed password');
+  }
+});
+
+// --- Patch logout to log activity ---
+window.logoutSession = async function(sessionId) {
+  const { error } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('id', sessionId);
+  if (error) alert('Failed to log out session');
+  else {
+    await logActivity('Logged out session');
+    loadSessions();
+  }
+};
+
+// --- Load Activity Log (10 most recent) ---
+async function loadActivityLog() {
+  const { data, error } = await supabase
+    .from('activity_log')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(30); // Limit to latest 30
+  const logList = document.getElementById('activityLog');
+  logList.innerHTML = '';
+  if (error || !data || data.length === 0) {
+    logList.innerHTML = '<li class="text-gray-400">No recent activity found.</li>';
+    return;
+  }
+  data.forEach(item => {
+    const li = document.createElement('li');
+    li.innerHTML = `${getDeviceIcon(item.device)} <span>${item.event}</span> <span class="text-gray-400 ml-1">(${parseDeviceInfo(item.device)})</span> <span class="text-gray-400 ml-1">- ${new Date(item.created_at).toLocaleString()}</span>`;
+    logList.appendChild(li);
+  });
+}
+
+// --- Load Sessions (mark current session) ---
+async function loadSessions() {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('last_active', { ascending: false });
+  const sessionList = document.getElementById('sessionList');
+  sessionList.innerHTML = '';
+  if (error || !data || data.length === 0) {
+    sessionList.innerHTML = '<li class="text-gray-400">No active sessions found.</li>';
+    return;
+  }
+  const currentDevice = navigator.userAgent;
+  data.forEach(session => {
+    const isCurrent = session.device === currentDevice;
+    const li = document.createElement('li');
+    li.innerHTML = `${getDeviceIcon(session.device)} <span>${parseDeviceInfo(session.device)}</span> <span class="text-gray-400 ml-2">${isCurrent ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
+    sessionList.appendChild(li);
+  });
+}
+
+// --- On page load, ensure session/activity and reload lists ---
+async function ensureSessionAndActivity() {
+  const device = navigator.userAgent;
+  // Try to find a session for this user/device
+  let { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('device', device)
+    .maybeSingle();
+  if (!data) {
+    // Insert a new session
+    const { error: insertErr } = await supabase.from('sessions').insert({
+      user_id: user.id,
+      device: device,
+      is_current: true,
+      last_active: new Date().toISOString()
+    });
+    if (insertErr) console.error('Session insert error:', insertErr);
+  } else {
+    // Update last_active and is_current
+    const { error: updateErr } = await supabase.from('sessions').update({
+      last_active: new Date().toISOString(),
+      is_current: true
+    }).eq('id', data.id);
+    if (updateErr) console.error('Session update error:', updateErr);
+  }
+  // Log a 'Viewed settings' event to activity_log on page load
+  await logActivity('Viewed settings');
+  // After ensuring, reload lists
+  await loadSessions();
+  await loadActivityLog();
+}
+// On page load, ensure session/activity and reload lists
+ensureSessionAndActivity();
 
 function closeUnsavedModal() {
   const overlay = document.getElementById('unsavedModalOverlay');
@@ -1297,6 +1653,26 @@ function closeUnsavedModal() {
     console.log('Unsaved modal closed');
   }
 }
+
+// --- Patch: Ensure user.id is always present in session ---
+async function ensureUserIdInSession() {
+  let userObj = JSON.parse(localStorage.getItem('gmt_user')) || JSON.parse(sessionStorage.getItem('gmt_user'));
+  if (userObj && !userObj.id && userObj.email) {
+    // Fetch user from Supabase
+    const { data, error } = await supabase.from('users').select('id').eq('email', userObj.email).single();
+    if (data && data.id) {
+      userObj.id = data.id;
+      if (localStorage.getItem('gmt_user')) {
+        localStorage.setItem('gmt_user', JSON.stringify(userObj));
+      } else {
+        sessionStorage.setItem('gmt_user', JSON.stringify(userObj));
+      }
+      // Reload page to use new id
+      window.location.reload();
+    }
+  }
+}
+window.addEventListener('DOMContentLoaded', ensureUserIdInSession);
 
 </script>
 </body>

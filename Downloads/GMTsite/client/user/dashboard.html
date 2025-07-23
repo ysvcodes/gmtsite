@@ -93,7 +93,9 @@
       max-width: 56px;
       width: 56px;
       transition: max-width 0.3s, min-width 0.3s, width 0.3s, background 0.3s, box-shadow 0.3s, border-radius 0.3s, backdrop-filter 0.3s;
-      position: relative;
+      position: fixed;
+      left: 0;
+      top: 0;
       z-index: 2;
       background: rgba(255,255,255,0.85);
       box-shadow:
@@ -107,12 +109,17 @@
       border: 1.5px solid rgba(30,41,59,0.10);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .dashboard-nav-placeholder:hover {
       background: #fff;
-      min-width: 120px;
-      max-width: 120px;
-      width: 120px;
+      min-width: 100px;
+      max-width: 100px;
+      width: 100px;
       box-shadow: 0 8px 32px rgba(30,41,59,0.14), 2px 0 0 0 rgba(30,41,59,0.08);
       border-top-right-radius: 2rem;
       border-bottom-right-radius: 2rem;
@@ -312,23 +319,42 @@
     .dashboard-panel.overview-panel.analytics-overview-panel {
       min-width: unset;
       max-width: unset;
-      margin-left: 20px;
+      margin-left: 72px;
       margin-right: 20px;
-      width: calc(100vw - 56px - 8px - 40px); /* nav + 8px gap + 20px left/right margins */
+      width: calc(100vw - 72px - 20px - 8px); /* nav + gap + right margin + gap */
       transition: width 0.3s, margin 0.3s;
+    }
+    @media (max-width: 600px) {
+      .dashboard-panel.overview-panel.analytics-overview-panel {
+        margin-left: 56px;
+        width: calc(100vw - 56px - 8px - 20px);
+      }
+    }
+    @keyframes fadeInQuick {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+    .fade-in-quick {
+      animation: fadeInQuick 0.35s cubic-bezier(0.4,0,0.2,1) both;
     }
   </style>
 </head>
 <body>
   <div class="dashboard-content">
-    <div class="dashboard-nav-placeholder" style="height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="dashboard-nav-placeholder fade-in-quick">
       <nav class="flex flex-col items-center w-full gap-6 justify-center flex-1" style="height: 100%;">
         <a href="#" class="flex flex-col items-center group active" title="Overview">
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Overview</span>
         </a>
         <a href="#" class="flex flex-col items-center group" title="Automations">
-          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 28 28">
+            <rect x="6" y="9" width="16" height="10" rx="5"/>
+            <circle cx="10" cy="14" r="1.5"/>
+            <circle cx="18" cy="14" r="1.5"/>
+            <path d="M14 9V4"/>
+            <circle cx="14" cy="3" r="1.2"/>
+          </svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Automations</span>
         </a>
         <a href="#" class="flex flex-col items-center group" title="Insights">
@@ -337,19 +363,26 @@
         </a>
         <a href="#" class="flex flex-col items-center group" title="Team">
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="12" cy="11" r="3"/>
-            <circle cx="6.5" cy="13.5" r="2.5"/>
-            <circle cx="17.5" cy="13.5" r="2.5"/>
-            <path d="M4 19c0-2.2 3.6-4 8-4s8 1.8 8 4"/>
+            <circle cx="8" cy="13" r="3"/>
+            <circle cx="16" cy="13" r="3"/>
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M2 21c0-2.5 4-4.5 10-4.5s10 2 10 4.5"/>
           </svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Team</span>
         </a>
-        <a href="#" class="flex flex-col items-center group" title="Settings">
+        <a href="#" id="settingsLink" class="flex flex-col items-center group" title="Settings">
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="3.5"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
           </svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Settings</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Support">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Support</span>
         </a>
         <button id="userLogout" class="flex flex-col items-center group focus:outline-none" title="Sign Out">
           <svg width="28" height="28" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12H4"/><path d="M11 8l4 4-4 4"/><rect x="2" y="2" width="20" height="20" rx="6" stroke="#ef4444" stroke-width="2" fill="none"/></svg>
@@ -357,9 +390,10 @@
         </button>
       </nav>
     </div>
-    <div class="dashboard-panel overview-panel analytics-overview-panel">
+    <div class="dashboard-panel overview-panel analytics-overview-panel fade-in-quick">
     </div>
   </div>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script>
     // Utility: Get session (checks both localStorage and sessionStorage)
     function getSession() {
@@ -377,9 +411,85 @@
         window.location.href = '/client/login/login.html';
       }
     }
+    // --- Supabase config (same as settings) ---
+    const supabaseUrl = 'https://mdxcytltlftuqxmlczam.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keGN5dGx0bGZ0dXF4bWxjemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMzg0MzMsImV4cCI6MjA2ODYxNDQzM30.wRVqK3H1lptqWsSzQy0yuYaggRA584Jbf6Bq-5MDLWQ';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // --- Log activity for dashboard page view and login ---
+    async function logActivity(event) {
+      if (!user || !user.id) return;
+      await supabase.from('activity_log').insert({
+        user_id: user.id,
+        event: event,
+        device: navigator.userAgent,
+        created_at: new Date().toISOString()
+      });
+    }
+    // --- Ensure only one active session per device/user ---
+    async function ensureSingleSession() {
+      if (!user || !user.id) return;
+      const device = navigator.userAgent;
+      // Check for existing session for this user/device
+      const { data, error } = await supabase
+        .from('sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('device', device)
+        .maybeSingle();
+      if (!data) {
+        // No session for this device, create one
+        await supabase.from('sessions').insert({
+          user_id: user.id,
+          device: device,
+          is_current: true,
+          last_active: new Date().toISOString()
+        });
+      } else {
+        // Session exists, just update last_active and is_current
+        await supabase.from('sessions').update({
+          last_active: new Date().toISOString(),
+          is_current: true
+        }).eq('id', data.id);
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Log dashboard view for logged-in user
+      if (user && user.id) {
+        ensureSingleSession();
+        logActivity('Viewed dashboard');
+        if (!sessionStorage.getItem('gmt_logged_in')) {
+          logActivity('Logged in');
+          sessionStorage.setItem('gmt_logged_in', '1');
+        }
+      }
+      // Add navigation logging for all nav links (except logout)
+      document.querySelectorAll('.dashboard-nav-placeholder nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const page = this.title || this.textContent.trim() || 'Unknown';
+          if (user && user.id && page && page.toLowerCase() !== 'sign out') {
+            logActivity('Navigated to ' + page);
+          }
+        });
+      });
+      const settingsLink = document.getElementById('settingsLink');
+      if (settingsLink) {
+        settingsLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (isFileProtocol) {
+            window.location.href = 'settings.html';
+          } else {
+            window.location.href = '/client/user/settings.html';
+          }
+        });
+      } else {
+        console.error('Settings link not found');
+      }
+    });
     document.getElementById('userLogout').addEventListener('click', function() {
+      if (user && user.id) logActivity('Logged out');
       localStorage.removeItem('gmt_user');
       sessionStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_logged_in');
       if (isFileProtocol) {
         window.location.href = '../login/login.html';
       } else {
