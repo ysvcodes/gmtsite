@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - GMT User Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: repeating-linear-gradient(135deg, #172554 0%, #1e293b 30%, #3b82f6 60%, #0f172a 100%);
+      background-size: 300% 300%;
+      animation: moveGradientLoop 40s linear infinite;
+      position: relative;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: rgba(30,41,59,0.25) 0 0 no-repeat;
+      backdrop-filter: blur(60px);
+      -webkit-backdrop-filter: blur(60px);
+    }
+    @keyframes moveGradientLoop {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
+    }
+    @keyframes fadeInQuick {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
+    }
+    .fade-in-quick {
+      animation: fadeInQuick 0.35s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .settings-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+      color: #fff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    }
+    .settings-nav-placeholder {
+      min-width: 56px;
+      max-width: 56px;
+      width: 56px;
+      transition: max-width 0.3s, min-width 0.3s, width 0.3s, background 0.3s, box-shadow 0.3s, border-radius 0.3s, backdrop-filter 0.3s;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      background: rgba(255,255,255,0.85);
+      box-shadow:
+        0 8px 32px 0 rgba(30,41,59,0.18),
+        2px 0 8px 0 rgba(37,99,235,0.08),
+        0 1.5px 0 0 rgba(30,41,59,0.04) inset;
+      border-top-right-radius: 2rem;
+      border-bottom-right-radius: 2rem;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border: 1.5px solid rgba(30,41,59,0.10);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .settings-nav-placeholder:hover {
+      background: #fff;
+      min-width: 100px;
+      max-width: 100px;
+      width: 100px;
+      box-shadow: 0 8px 32px rgba(30,41,59,0.14), 2px 0 0 0 rgba(30,41,59,0.08);
+      border-top-right-radius: 2rem;
+      border-bottom-right-radius: 2rem;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      left: 0;
+    }
+    .settings-nav-placeholder nav {
+      width: 100%;
+      transition: width 0.3s;
+    }
+    .settings-nav-placeholder nav span {
+      opacity: 0;
+      max-width: 0;
+      transition: opacity 0.2s, max-width 0.2s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .settings-nav-placeholder:hover nav span {
+      opacity: 1;
+      max-width: 120px;
+    }
+    .settings-nav-placeholder nav a, .settings-nav-placeholder nav button {
+      border-radius: 1.2rem;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      padding: 0.5rem 0.7rem;
+      margin: 0 0.2rem;
+    }
+    .settings-nav-placeholder nav a:not(.active):hover, .settings-nav-placeholder nav button:not(.active):hover {
+      background: #e0e7ef;
+      color: #2563eb;
+      box-shadow: 0 6px 24px 0 rgba(37,99,235,0.13), 0 1.5px 0 0 rgba(30,41,59,0.04) inset;
+      border: 1.5px solid rgba(37,99,235,0.10);
+      transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+    }
+    .settings-nav-placeholder nav button#userLogout:hover {
+      background: #ef4444 !important;
+      color: #fff !important;
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 8px rgba(239,68,68,0.10);
+    }
+    .settings-nav-placeholder nav button#userLogout:hover svg {
+      stroke: #fff !important;
+    }
+    .settings-nav-placeholder nav button#userLogout:hover svg rect {
+      stroke: #fff !important;
+      fill: none !important;
+    }
+    .settings-nav-placeholder nav button#userLogout:hover svg path {
+      stroke: #fff !important;
+      fill: none !important;
+    }
+    .settings-nav-placeholder nav button#userLogout:hover span {
+      color: #fff !important;
+    }
+    .settings-nav-placeholder:not(:hover) nav button#userLogout svg {
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      margin-bottom: 0;
+      stroke: #ef4444;
+    }
+    .settings-nav-placeholder:hover nav button#userLogout,
+    .settings-nav-placeholder nav button#userLogout:hover {
+      background: #fef2f2;
+      border-radius: 1.2rem;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .settings-nav-placeholder nav .active {
+      position: relative;
+    }
+    .settings-nav-placeholder nav .active svg {
+      stroke: #2563eb !important;
+    }
+    .settings-nav-placeholder:hover nav .active {
+      box-shadow: 0 6px 24px 0 rgba(37,99,235,0.13), 0 1.5px 0 0 rgba(30,41,59,0.04) inset;
+      border: 1.5px solid rgba(37,99,235,0.13);
+      transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+    }
+    .settings-nav-placeholder nav .active span {
+      color: #2563eb !important;
+      font-weight: 700 !important;
+    }
+    .settings-nav-placeholder nav a:not(.active):hover svg,
+    .settings-nav-placeholder nav button:not(.active):hover svg {
+      stroke: #2563eb !important;
+    }
+    .settings-nav-placeholder nav .active svg {
+      stroke: #2563eb !important;
+    }
+    .settings-nav-placeholder nav .active span {
+      color: #2563eb !important;
+      font-weight: 700 !important;
+    }
+    .settings-nav-placeholder nav a:not(.active):hover svg,
+    .settings-nav-placeholder nav button:not(.active):hover svg {
+      stroke: #2563eb !important;
+    }
+    .settings-nav-placeholder:hover nav .active {
+      box-shadow: 0 6px 24px 0 rgba(37,99,235,0.13), 0 1.5px 0 0 rgba(30,41,59,0.04) inset;
+      border: 1.5px solid rgba(37,99,235,0.13);
+      transition: background 0.18s, box-shadow 0.18s, border 0.18s;
+    }
+    .settings-content {
+      flex: 1;
+      padding: 2rem;
+      margin-left: 72px;
+      margin-right: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      width: calc(100vw - 72px - 20px - 8px);
+      transition: width 0.3s, margin 0.3s;
+    }
+    .settings-panel {
+      background: rgba(255,255,255,0.92);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(30,41,59,0.18);
+      padding: 2.5rem;
+      min-height: calc(100vh - 40px);
+      color: #172554;
+      text-shadow: none;
+    }
+    .settings-header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid rgba(30,41,59,0.08);
+    }
+    .settings-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #172554;
+      margin-bottom: 0.5rem;
+    }
+    .settings-subtitle {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+    .settings-section {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.6);
+      border-radius: 1rem;
+      border: 1px solid rgba(30,41,59,0.06);
+    }
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #172554;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid rgba(30,41,59,0.1);
+      border-radius: 0.75rem;
+      background: rgba(255,255,255,0.8);
+      color: #172554;
+      font-size: 1rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(37,99,235,0.3);
+    }
+    .btn-secondary {
+      background: rgba(30,41,59,0.1);
+      color: #172554;
+      padding: 0.75rem 1.5rem;
+      border: 2px solid rgba(30,41,59,0.2);
+      border-radius: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(30,41,59,0.15);
+      border-color: rgba(30,41,59,0.3);
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 3rem;
+      height: 1.5rem;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #cbd5e1;
+      transition: 0.3s;
+      border-radius: 1.5rem;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 1.25rem;
+      width: 1.25rem;
+      left: 0.125rem;
+      bottom: 0.125rem;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    input:checked + .toggle-slider {
+      background-color: #2563eb;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(1.5rem);
+    }
+    .danger-zone {
+      border: 2px solid #ef4444;
+      background: rgba(239,68,68,0.05);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .danger-zone .section-title {
+      color: #ef4444;
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(239,68,68,0.2);
+    }
+    .btn-danger:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(239,68,68,0.3);
+    }
+    @media (max-width: 768px) {
+      .settings-content {
+        margin-left: 56px;
+        width: calc(100vw - 56px);
+      }
+      .settings-panel {
+        padding: 1.5rem;
+      }
+      .settings-title {
+        font-size: 1.5rem;
+      }
+    }
+    /* Responsive for mobile */
+    @media (max-width: 600px) {
+      .settings-nav-placeholder {
+        min-width: 44px;
+        max-width: 44px;
+        width: 44px;
+      }
+      .settings-content {
+        margin-left: 44px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <div class="settings-nav-placeholder fade-in-quick">
+      <nav class="flex flex-col items-center w-full gap-6 justify-center flex-1" style="height: 100%;">
+        <a href="dashboard.html" class="flex flex-col items-center group" title="Overview">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Overview</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Automations">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 28 28">
+            <rect x="6" y="9" width="16" height="10" rx="5"/>
+            <circle cx="10" cy="14" r="1.5"/>
+            <circle cx="18" cy="14" r="1.5"/>
+            <path d="M14 9V4"/>
+            <circle cx="14" cy="3" r="1.2"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Automations</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Insights">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="13" width="3" height="7" rx="1.5"/><rect x="10" y="9" width="3" height="11" rx="1.5"/><rect x="16" y="5" width="3" height="15" rx="1.5"/></svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Insights</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Team">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="8" cy="13" r="3"/>
+            <circle cx="16" cy="13" r="3"/>
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M2 21c0-2.5 4-4.5 10-4.5s10 2 10 4.5"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Team</span>
+        </a>
+        <a href="settings.html" class="flex flex-col items-center group active" title="Settings">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.09a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Settings</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Support">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Support</span>
+        </a>
+        <button id="userLogout" class="flex flex-col items-center group focus:outline-none" title="Sign Out">
+          <svg width="28" height="28" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12H4"/><path d="M11 8l4 4-4 4"/><rect x="2" y="2" width="20" height="20" rx="6" stroke="#ef4444" stroke-width="2" fill="none"/></svg>
+          <span class="text-xs mt-1 text-red-600 group-hover:text-red-800 font-semibold">Sign Out</span>
+        </button>
+      </nav>
+    </div>
+    <div class="settings-content">
+      <div class="settings-panel fade-in-quick">
+        <div class="settings-header">
+          <h1 class="settings-title">Settings</h1>
+          <p class="settings-subtitle">Manage your account preferences and security settings</p>
+        </div>
+
+        <!-- Profile Settings -->
+        <div class="settings-section">
+          <h2 class="section-title" data-i18n-section="profileInfo">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="10" r="4"/>
+              <path d="M4 20c0-2.2 3.6-4 8-4s8 1.8 8 4"/>
+            </svg>
+            Profile Information
+          </h2>
+          <form id="profileForm" autocomplete="off">
+            <div class="form-group">
+              <label class="form-label" data-i18n="fullName">Full Name</label>
+              <input type="text" class="form-input" id="profileFullName" placeholder="Enter your full name" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="email">Email Address</label>
+              <input type="email" class="form-input" id="profileEmail" disabled>
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="company">Company</label>
+              <input type="text" class="form-input" id="profileCompany" placeholder="Enter your company name" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="phone">Phone Number</label>
+              <input type="tel" class="form-input" id="profilePhone" placeholder="Enter your phone number" autocomplete="off">
+            </div>
+          </form>
+        </div>
+        <!-- Security Settings -->
+        <div class="settings-section">
+          <h2 class="section-title" data-i18n-section="security">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="5" y="11" width="14" height="8" rx="2"/>
+              <path d="M12 15v2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Security
+          </h2>
+          <form id="passwordForm" autocomplete="off">
+            <div class="form-group">
+              <label class="form-label" data-i18n="currentPassword">Current Password</label>
+              <input type="password" class="form-input" id="currentPassword" placeholder="Enter current password" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="newPassword">New Password</label>
+              <input type="password" class="form-input" id="newPassword" placeholder="Enter new password" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="confirmNewPassword">Confirm New Password</label>
+              <input type="password" class="form-input" id="confirmNewPassword" placeholder="Confirm new password" autocomplete="off">
+            </div>
+            <button type="submit" class="btn-primary" data-i18n="updatePassword">Update Password</button>
+            <div id="passwordMsg" class="mt-2 text-sm"></div>
+          </form>
+        </div>
+        <!-- Advanced: Theme & Accessibility -->
+        <div class="settings-section">
+          <h2 class="section-title">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            Appearance & Accessibility
+          </h2>
+          <div class="form-group flex items-center justify-between">
+            <div>
+              <label class="form-label" data-i18n="darkModeLabel">Dark Mode</label>
+              <p class="text-sm text-gray-600" data-i18n="darkModeDesc">Reduce eye strain with a dark theme</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="darkModeToggle">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="form-group flex items-center justify-between">
+            <div>
+              <label class="form-label" data-i18n="fontSizeLabel">Font Size</label>
+              <p class="text-sm text-gray-600" data-i18n="fontSizeDesc">Adjust for readability</p>
+            </div>
+            <select class="form-input" id="fontSizeSelect" style="max-width:120px;">
+              <option>Small</option>
+              <option>Normal</option>
+              <option>Large</option>
+              <option>Extra Large</option>
+            </select>
+          </div>
+          <div class="form-group flex items-center justify-between">
+            <div>
+              <label class="form-label" data-i18n="timeZoneLabel">Time Zone</label>
+              <p class="text-sm text-gray-600" data-i18n="timeZoneDesc">Auto-detected, but you can change it</p>
+            </div>
+            <select class="form-input" id="timezoneSelect" style="max-width:220px;"></select>
+          </div>
+          <div class="form-group flex items-center justify-between">
+            <div>
+              <label class="form-label" data-i18n="languageLabel">Language</label>
+              <p class="text-sm text-gray-600" data-i18n="languageDesc">Choose your preferred language</p>
+            </div>
+            <select class="form-input" id="languageSelect" style="max-width:180px;">
+              <option value="en">English</option>
+              <option value="es">Spanish</option>
+              <option value="fr">French</option>
+              <option value="de">German</option>
+              <option value="zh">Chinese</option>
+              <option value="ar">Arabic</option>
+              <option value="hi">Hindi</option>
+              <option value="pt">Portuguese</option>
+              <option value="ru">Russian</option>
+              <option value="ja">Japanese</option>
+            </select>
+          </div>
+        </div>
+        <!-- Advanced: Account Activity & Sessions (Merged) -->
+        <div class="settings-section">
+          <h2 class="section-title" data-i18n-section="accountActivity">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 21v-4h8v4"/><path d="M12 11v-4"/></svg>
+            Account Activity & Sessions
+          </h2>
+          <div class="flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-800 mb-2" for-activity data-i18n="recentActivity">Recent Activity</h3>
+              <ul class="text-sm text-gray-700" id="activityLog">
+                <!-- Real activity log will be loaded here -->
+              </ul>
+            </div>
+            <div class="flex-1">
+              <h3 class="font-semibold text-gray-800 mb-2" for-sessions data-i18n="activeSessions">Active Sessions</h3>
+              <ul class="text-sm text-gray-700" id="sessionList">
+                <!-- Real sessions will be loaded here -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- Save All Changes Button (now just below Account Activity & Sessions) -->
+        <div class="flex flex-col items-center mt-8 mb-4" id="saveAllContainer">
+          <div id="unsavedMsg" class="text-yellow-600 font-semibold mb-2" style="display:none;" data-i18n="unsaved">You have unsaved changes.</div>
+          <button class="btn-primary" id="saveAllBtn" data-i18n="saveAll">Save All Changes</button>
+          <div id="saveAllMsg" class="mt-2 text-sm"></div>
+        </div>
+
+        <!-- Enhanced Danger Zone -->
+        <div class="danger-zone">
+          <h2 class="section-title" data-i18n-section="dangerZone">Danger Zone</h2>
+          <p class="text-sm text-gray-600 mb-4">These actions cannot be undone. Please proceed with caution.</p>
+          <button class="btn-secondary mb-2" data-i18n="downloadData">Download My Data</button>
+          <button class="btn-secondary mb-2" data-i18n="requestExport">Request Account Export</button>
+          <button class="btn-danger" id="deleteAccountBtn" data-i18n="deleteAccount">Delete Account</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+// Use existing Supabase config from index.html or set here
+const supabaseUrl = 'https://mdxcytltlftuqxmlczam.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keGN5dGx0bGZ0dXF4bWxjemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMzg0MzMsImV4cCI6MjA2ODYxNDQzM30.wRVqK3H1lptqWsSzQy0yuYaggRA584Jbf6Bq-5MDLWQ';
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+function getCurrentUser() {
+  return JSON.parse(localStorage.getItem('gmt_user')) || JSON.parse(sessionStorage.getItem('gmt_user'));
+}
+const user = getCurrentUser();
+if (!user) {
+  window.location.href = '/client/login/login.html';
+}
+
+// --- Define loadUserSettings to fetch and prefill all fields from Supabase ---
+async function loadUserSettings() {
+  populateTimezoneDropdown();
+  const { data, error } = await supabase
+    .from('users')
+    .select('full_name, email, company, phone, timezone, language, dark_mode, font_size')
+    .eq('email', user.email)
+    .single();
+  if (error || !data) {
+    console.error('Failed to load user settings:', error);
+    return;
+  }
+  document.getElementById('profileFullName').value = data.full_name || '';
+  document.getElementById('profileEmail').value = data.email || '';
+  document.getElementById('profileCompany').value = data.company || '';
+  document.getElementById('profilePhone').value = data.phone || '';
+  document.getElementById('timezoneSelect').value = data.timezone || 'GMT';
+  document.getElementById('languageSelect').value = data.language || 'en';
+  document.getElementById('darkModeToggle').checked = !!data.dark_mode;
+  document.getElementById('fontSizeSelect').value = data.font_size || 'Normal';
+}
+
+// On page load, always call loadUserSettings to prefill fields
+window.addEventListener('DOMContentLoaded', function() {
+  loadUserSettings();
+});
+
+// --- Populate timezone dropdown with major English-speaking region timezones only ---
+function populateTimezoneDropdown() {
+  const tzSelect = document.getElementById('timezoneSelect');
+  tzSelect.innerHTML = '';
+  const timezoneOptions = [
+    { value: 'GMT', label: 'GMT (Greenwich Mean Time)' },
+    { value: 'BST', label: 'BST (British Summer Time)' },
+    { value: 'EST', label: 'EST (Eastern Time US & Canada)' },
+    { value: 'CST', label: 'CST (Central Time US & Canada)' },
+    { value: 'MST', label: 'MST (Mountain Time US & Canada)' },
+    { value: 'PST', label: 'PST (Pacific Time US & Canada)' },
+    { value: 'AST', label: 'AST (Atlantic Time Canada)' },
+    { value: 'AEST', label: 'AEST (Australian Eastern Standard Time)' },
+    { value: 'AEDT', label: 'AEDT (Australian Eastern Daylight Time)' },
+    { value: 'ACST', label: 'ACST (Australian Central Standard Time)' },
+    { value: 'AWST', label: 'AWST (Australian Western Standard Time)' },
+    { value: 'NZST', label: 'NZST (New Zealand Standard Time)' },
+    { value: 'HST', label: 'HST (Hawaii Standard Time)' },
+    { value: 'AKST', label: 'AKST (Alaska Standard Time)' }
+  ];
+  timezoneOptions.forEach(opt => {
+    const option = document.createElement('option');
+    option.value = opt.value;
+    option.textContent = opt.label;
+    tzSelect.appendChild(option);
+  });
+}
+
+// --- Only save timezone to DB when Save All Changes is clicked (not on change) ---
+document.getElementById('saveAllBtn').addEventListener('click', async function() {
+  const updates = {
+    full_name: document.getElementById('profileFullName').value,
+    company: document.getElementById('profileCompany').value,
+    phone: document.getElementById('profilePhone').value,
+    timezone: document.getElementById('timezoneSelect').value,
+    language: document.getElementById('languageSelect').value,
+    dark_mode: document.getElementById('darkModeToggle').checked,
+    font_size: document.getElementById('fontSizeSelect').value,
+  };
+  const { error } = await supabase
+    .from('users')
+    .update(updates)
+    .eq('email', user.email);
+  if (error) {
+    document.getElementById('saveAllMsg').textContent = 'Error saving: ' + error.message;
+    document.getElementById('saveAllMsg').style.color = 'red';
+  } else {
+    document.getElementById('saveAllMsg').textContent = 'All changes saved!';
+    document.getElementById('saveAllMsg').style.color = 'green';
+    setUnsaved(false);
+    await loadUserSettings();
+  }
+  setTimeout(() => { document.getElementById('saveAllMsg').textContent = ''; }, 2000);
+});
+
+// --- Load Activity Log ---
+async function loadActivityLog() {
+  const { data, error } = await supabase
+    .from('activity_log')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(10);
+  const logList = document.getElementById('activityLog');
+  logList.innerHTML = '';
+  if (error || !data || data.length === 0) {
+    logList.innerHTML = '<li class="text-gray-400">No recent activity found.</li>';
+    return;
+  }
+  data.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.event} (${item.device || 'Unknown device'}) - ${new Date(item.created_at).toLocaleString()}`;
+    logList.appendChild(li);
+  });
+}
+// --- Load Sessions ---
+async function loadSessions() {
+  const { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('user_id', user.id)
+    .order('last_active', { ascending: false });
+  const sessionList = document.getElementById('sessionList');
+  sessionList.innerHTML = '';
+  if (error || !data || data.length === 0) {
+    sessionList.innerHTML = '<li class="text-gray-400">No active sessions found.</li>';
+    return;
+  }
+  data.forEach(session => {
+    const li = document.createElement('li');
+    li.innerHTML = `${session.device || 'Unknown device'} <span class="text-gray-400 ml-2">${session.is_current ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
+    sessionList.appendChild(li);
+  });
+}
+// --- Log out a session ---
+window.logoutSession = async function(sessionId) {
+  const { error } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('id', sessionId);
+  if (error) alert('Failed to log out session');
+  else loadSessions();
+};
+
+// --- Custom Delete Account Modal Flow ---
+function showDeletePasswordModal(onPassword) {
+  if (document.getElementById('deleteModalOverlay')) return;
+  const html = `
+    <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+      <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+        <h2 style='color:#ef4444;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>Delete Account</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Please enter your password to confirm account deletion.</p>
+        <input id='deletePwInput' type='password' placeholder='Password' style='padding:0.7rem 1rem;border-radius:0.75rem;border:1.5px solid #ddd;width:90%;margin-bottom:1.5rem;font-size:1rem;'>
+        <div id='deletePwError' style='color:#ef4444;font-size:0.95rem;margin-bottom:1rem;display:none;'></div>
+        <div style='display:flex;gap:1.5rem;justify-content:center;'>
+          <button id='deletePwConfirmBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Confirm</button>
+          <button id='deletePwCancelBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Cancel</button>
+        </div>
+      </div>
+    </div>
+    <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+  `;
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('deletePwCancelBtn').onclick = function() {
+    closeDeleteModal();
+  };
+  document.getElementById('deletePwConfirmBtn').onclick = function() {
+    const pw = document.getElementById('deletePwInput').value;
+    if (!pw) {
+      const err = document.getElementById('deletePwError');
+      err.textContent = 'Password required.';
+      err.style.display = '';
+      return;
+    }
+    onPassword(pw);
+  };
+}
+function showDeleteAutomationsModal(company, onYes, onNo) {
+  if (document.getElementById('deleteModalOverlay')) closeDeleteModal();
+  const html = `
+    <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+      <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+        <h2 style='color:#ef4444;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>Delete Automations?</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Do you want to delete your automations for <b>${company}</b>?</p>
+        <div style='display:flex;gap:1.5rem;justify-content:center;'>
+          <button id='deleteAutoYesBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Yes</button>
+          <button id='deleteAutoNoBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>No</button>
+        </div>
+      </div>
+    </div>
+    <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+  `;
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('deleteAutoYesBtn').onclick = function() { onYes(); };
+  document.getElementById('deleteAutoNoBtn').onclick = function() { closeDeleteModal(); };
+}
+function showDeleteReviewModal() {
+  if (document.getElementById('deleteModalOverlay')) closeDeleteModal();
+  const html = `
+    <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+      <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+        <h2 style='color:#22c55e;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>Account Deletion Requested</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Your account is being reviewed before proper deletion. You will be notified when the process is complete.</p>
+        <button id='deleteReviewCloseBtn' style='background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>Close</button>
+      </div>
+    </div>
+    <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+  `;
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('deleteReviewCloseBtn').onclick = function() { closeDeleteModal(); };
+}
+function closeDeleteModal() {
+  const overlay = document.getElementById('deleteModalOverlay');
+  if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+}
+
+document.getElementById('deleteAccountBtn').addEventListener('click', async function() {
+  disableBeforeUnload();
+  showDeletePasswordModal(async function(pw) {
+    // Verify password
+    const { data, error } = await supabase
+      .from('users')
+      .select('password_hash, company')
+      .eq('email', user.email)
+      .single();
+    if (error || !data) {
+      document.getElementById('deletePwError').textContent = 'Could not verify password.';
+      document.getElementById('deletePwError').style.display = '';
+      return;
+    }
+    if (data.password_hash !== pw) {
+      document.getElementById('deletePwError').textContent = 'Incorrect password.';
+      document.getElementById('deletePwError').style.display = '';
+      return;
+    }
+    closeDeleteModal();
+    showDeleteAutomationsModal(data.company || 'your company', async function() {
+      // Mark for deletion review
+      await supabase.from('users').update({ deletion_requested: true }).eq('email', user.email);
+      closeDeleteModal();
+      showDeleteReviewModal();
+    }, function() {
+      closeDeleteModal();
+    });
+  });
+});
+
+document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const currentPw = document.getElementById('currentPassword').value;
+  const newPw = document.getElementById('newPassword').value;
+  const confirmPw = document.getElementById('confirmNewPassword').value;
+  const msgEl = document.getElementById('passwordMsg');
+  msgEl.textContent = '';
+  if (!currentPw || !newPw || !confirmPw) {
+    msgEl.textContent = 'Please fill in all fields.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  if (newPw !== confirmPw) {
+    msgEl.textContent = 'New passwords do not match.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  // Verify current password
+  const { data, error } = await supabase
+    .from('users')
+    .select('password_hash')
+    .eq('email', user.email)
+    .single();
+  if (error || !data) {
+    msgEl.textContent = 'Could not verify current password.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  if (data.password_hash !== currentPw) {
+    msgEl.textContent = 'Current password is incorrect.';
+    msgEl.style.color = 'red';
+    return;
+  }
+  // Update password
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({ password_hash: newPw })
+    .eq('email', user.email);
+  if (updateError) {
+    msgEl.textContent = 'Failed to update password.';
+    msgEl.style.color = 'red';
+  } else {
+    msgEl.textContent = 'Password updated successfully!';
+    msgEl.style.color = 'green';
+    document.getElementById('currentPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmNewPassword').value = '';
+  }
+});
+
+// --- Delete Account Modal logic ---
+// Remove beforeunload event to prevent browser alert
+window.onbeforeunload = null;
+
+async function ensureSessionAndActivity() {
+  const device = navigator.userAgent;
+  // Try to find a session for this user/device
+  let { data, error } = await supabase
+    .from('sessions')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('device', device)
+    .maybeSingle();
+  if (!data) {
+    // Insert a new session
+    const { error: insertErr } = await supabase.from('sessions').insert({
+      user_id: user.id,
+      device: device,
+      is_current: true,
+      last_active: new Date().toISOString()
+    });
+    if (insertErr) console.error('Session insert error:', insertErr);
+  } else {
+    // Update last_active and is_current
+    const { error: updateErr } = await supabase.from('sessions').update({
+      last_active: new Date().toISOString(),
+      is_current: true
+    }).eq('id', data.id);
+    if (updateErr) console.error('Session update error:', updateErr);
+  }
+  // Log a 'Viewed settings' event to activity_log on page load
+  const { error: logErr } = await supabase.from('activity_log').insert({
+    user_id: user.id,
+    event: 'Viewed settings',
+    device: device,
+    created_at: new Date().toISOString()
+  });
+  if (logErr) console.error('Activity log insert error:', logErr);
+  // After ensuring, reload lists
+  await loadSessions();
+  await loadActivityLog();
+}
+// On page load, ensure session/activity and reload lists
+ensureSessionAndActivity();
+
+// --- Update unsaved changes modal buttons for correct save and hover mechanics ---
+// --- Update Save button in unsaved changes modal to be inverse (pale blue, blue text, no border) ---
+const modalHtml = `
+  <div id="unsavedModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+    <div id="unsavedModal" style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+      <h2 style='color:#172554;font-size:1.3rem;font-weight:700;margin-bottom:1rem;'>You have unsaved changes</h2>
+      <p style='color:#374151;font-size:1rem;margin-bottom:2rem;'>Do you want to save before leaving?</p>
+      <div style='display:flex;gap:1.5rem;justify-content:center;'>
+        <button id="unsavedModalSaveBtn" class="unsaved-modal-btn" style="background:#f1f5fd;color:#2563eb;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Save</button>
+        <button id="unsavedModalLeaveBtn" class="unsaved-modal-btn" style="background:#fef2f2;color:#ef4444;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;">Leave Without Saving</button>
+      </div>
+    </div>
+  </div>
+  <style>
+    @keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+    #unsavedModalSaveBtn.unsaved-modal-btn:hover {
+      background: #2563eb !important;
+      color: #fff !important;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+      transform: translateY(-2px) scale(1.04);
+    }
+    #unsavedModalSaveBtn.unsaved-modal-btn {
+      background: #f1f5fd;
+      color: #2563eb;
+    }
+    #unsavedModalLeaveBtn.unsaved-modal-btn:hover {
+      background: #ef4444 !important;
+      color: #fff !important;
+      box-shadow: 0 2px 8px rgba(239,68,68,0.13);
+      transform: translateY(-2px) scale(1.04);
+    }
+    #unsavedModalLeaveBtn.unsaved-modal-btn {
+      background: #fef2f2;
+      color: #ef4444;
+    }
+  </style>
+`;
+
+// --- Robust beforeunload and modal logic ---
+// Only set beforeunload if unsaved and NOT interacting with modal
+function enableBeforeUnload() {
+  window.onbeforeunload = function(e) {
+    if (unsaved && !document.getElementById('unsavedModalOverlay')) {
+      e.preventDefault();
+      e.returnValue = '';
+      return '';
+    }
+  };
+}
+function disableBeforeUnload() {
+  window.onbeforeunload = null;
+}
+
+// Always enable beforeunload when unsaved, except when modal is open
+setInterval(() => {
+  if (unsaved && !document.getElementById('unsavedModalOverlay')) {
+    enableBeforeUnload();
+  } else {
+    disableBeforeUnload();
+  }
+}, 200);
+
+// --- Update modal logic ---
+// --- Fix Save button in modal: close modal, show banner, then navigate after fade ---
+function showUnsavedModal(onSave, onLeave) {
+  if (document.getElementById('unsavedModalOverlay')) return;
+  disableBeforeUnload();
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+  document.getElementById('unsavedModalSaveBtn').onclick = async function() {
+    disableBeforeUnload();
+    await document.getElementById('saveAllBtn').click();
+    showSaveBanner();
+    // After banner fades, close modal and navigate
+    if (onSave) setTimeout(() => { closeUnsavedModal(); onSave(); }, 2100);
+  };
+  document.getElementById('unsavedModalLeaveBtn').onclick = function() {
+    disableBeforeUnload();
+    setUnsaved(false); // Mark as not unsaved so beforeunload never triggers
+    closeUnsavedModal();
+    if (onLeave) onLeave();
+  };
+}
+
+// --- Intercept navigation (links) ---
+// --- Use event delegation for ALL <a> clicks, including sidebar and dynamic links ---
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a');
+  if (a && a.getAttribute('href') && a.getAttribute('href').charAt(0) !== '#') {
+    if (unsaved) {
+      e.preventDefault();
+      pendingNavigationHref = a.getAttribute('href');
+      showUnsavedModal(
+        () => { window.location.href = pendingNavigationHref; },
+        () => { setUnsaved(false); window.location.href = pendingNavigationHref; }
+      );
+    }
+  }
+});
+
+// --- Intercept browser tab close/reload ---
+window.addEventListener('beforeunload', function(e) {
+  if (unsaved) {
+    e.preventDefault();
+    e.returnValue = '';
+    showUnsavedModal(
+      () => { window.removeEventListener('beforeunload', arguments.callee); window.location.reload(); },
+      () => { window.removeEventListener('beforeunload', arguments.callee); }
+    );
+    return '';
+  }
+});
+
+// --- Intercept browser back/forward navigation (SPA or history) ---
+window.addEventListener('popstate', function(e) {
+  if (unsaved) {
+    e.preventDefault();
+    pendingNavigationEvent = e;
+    showUnsavedModal(
+      () => { history.go(-1); },
+      () => { history.go(-1); }
+    );
+  }
+});
+
+// --- Ensure unsaved state is set on any input/change ---
+['profileFullName','profileCompany','profilePhone','timezoneSelect','languageSelect','fontSizeSelect'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => setUnsaved(true));
+  document.getElementById(id).addEventListener('change', () => setUnsaved(true));
+});
+document.getElementById('darkModeToggle').addEventListener('change', () => setUnsaved(true));
+
+// --- Fix navigation modal for ALL links, including sidebar nav ---
+document.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    if (this.getAttribute('href') && this.getAttribute('href').charAt(0) !== '#') {
+      if (unsaved) {
+        e.preventDefault();
+        pendingNavigationHref = this.getAttribute('href');
+        showUnsavedModal(
+          () => { window.location.href = pendingNavigationHref; },
+          () => { window.location.href = pendingNavigationHref; }
+        );
+      }
+    }
+  });
+});
+
+// --- Unsaved state tracking ---
+let unsaved = false;
+function setUnsaved(val) {
+  unsaved = val;
+  const msg = document.getElementById('unsavedMsg');
+  if (msg) msg.style.display = val ? '' : 'none';
+}
+
+// --- Remove beforeunload alert when saving ---
+function temporarilyDisableBeforeUnload(callback) {
+  const handler = window.onbeforeunload;
+  window.onbeforeunload = null;
+  callback();
+  setTimeout(() => { window.onbeforeunload = handler; }, 100);
+}
+
+// --- Show green info banner on save ---
+function showSaveBanner() {
+  if (document.getElementById('saveBanner')) return;
+  const banner = document.createElement('div');
+  banner.id = 'saveBanner';
+  banner.textContent = 'Changes have been saved.';
+  banner.style.position = 'fixed';
+  banner.style.top = '0';
+  banner.style.left = '0';
+  banner.style.width = '100vw';
+  banner.style.background = 'linear-gradient(90deg,#22c55e 0%,#16a34a 100%)';
+  banner.style.color = 'white';
+  banner.style.fontWeight = '600';
+  banner.style.fontSize = '1.1rem';
+  banner.style.textAlign = 'center';
+  banner.style.padding = '1rem 0';
+  banner.style.zIndex = '99999';
+  banner.style.boxShadow = '0 2px 8px rgba(34,197,94,0.15)';
+  banner.style.opacity = '0';
+  banner.style.transition = 'opacity 0.3s';
+  document.body.appendChild(banner);
+  setTimeout(() => { banner.style.opacity = '1'; }, 10);
+  setTimeout(() => {
+    banner.style.opacity = '0';
+    setTimeout(() => { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 400);
+  }, 2000);
+}
+
+// --- Phone number input: only allow numbers, ignore dashes/spaces, min 10 digits ---
+const phoneInput = document.getElementById('profilePhone');
+// --- Live phone number validation error message (bold, always underneath) ---
+let phoneError = document.getElementById('phoneErrorMsg');
+if (!phoneError) {
+  phoneError = document.createElement('div');
+  phoneError.id = 'phoneErrorMsg';
+  phoneError.style.color = 'red';
+  phoneError.style.fontWeight = '600';
+  phoneError.style.fontSize = '1rem';
+  phoneError.style.marginTop = '0.3rem';
+  phoneError.style.marginBottom = '0.7rem';
+  phoneError.style.display = 'none';
+  const phoneField = document.getElementById('profilePhone');
+  phoneField.parentNode.insertBefore(phoneError, phoneField.nextSibling);
+}
+phoneInput.addEventListener('input', function(e) {
+  let val = this.value.replace(/[^0-9]/g, '');
+  this.value = val;
+  if (val.length > 0 && val.length < 10) {
+    phoneError.textContent = 'Phone number must be at least 10 digits.';
+    phoneError.style.display = '';
+  } else {
+    phoneError.textContent = '';
+    phoneError.style.display = 'none';
+  }
+});
+
+// --- Custom modal for phone number validation error ---
+function showPhoneErrorModal() {
+  if (document.getElementById('phoneModalOverlay')) return;
+  const html = `
+    <div id="phoneModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:99999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+      <div style="background:white;padding:2.2rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+        <h2 style='color:#ef4444;font-size:1.1rem;font-weight:700;margin-bottom:1rem;'>Invalid Phone Number</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Phone number must be at least 10 digits and contain only numbers.</p>
+        <button id='phoneModalOkBtn' style='background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>OK</button>
+      </div>
+    </div>
+    <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+  `;
+  document.body.insertAdjacentHTML('beforeend', html);
+  document.getElementById('phoneModalOkBtn').onclick = function() {
+    const overlay = document.getElementById('phoneModalOverlay');
+    if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+  };
+}
+
+// --- Block unsaved changes modal and saving if phone number is invalid ---
+function isPhoneValid() {
+  const phoneVal = document.getElementById('profilePhone').value;
+  return phoneVal.length >= 10;
+}
+
+// Patch navigation interception for unsaved changes
+const originalShowUnsavedModal = showUnsavedModal;
+showUnsavedModal = function(onSave, onLeave) {
+  if (!isPhoneValid()) {
+    showPhoneErrorModal();
+    return;
+  }
+  originalShowUnsavedModal(onSave, onLeave);
+};
+
+// --- Disable Save All Changes button if phone number is invalid ---
+function updateSaveBtnState() {
+  const btn = document.getElementById('saveAllBtn');
+  const phoneVal = document.getElementById('profilePhone').value;
+  if (phoneVal.length < 10) {
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'not-allowed';
+  } else {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  }
+}
+phoneInput.addEventListener('input', updateSaveBtnState);
+window.addEventListener('DOMContentLoaded', updateSaveBtnState);
+
+// Patch Save All Changes button
+const origSaveAllBtnHandler = document.getElementById('saveAllBtn').onclick;
+document.getElementById('saveAllBtn').onclick = async function(e) {
+  e.preventDefault();
+  const phoneVal = document.getElementById('profilePhone').value;
+  if (phoneVal.length < 10) {
+    document.getElementById('saveAllMsg').textContent = 'Phone number must be at least 10 digits.';
+    document.getElementById('saveAllMsg').style.color = 'red';
+    showPhoneErrorModal();
+    return;
+  }
+  temporarilyDisableBeforeUnload(async () => {
+    const updates = {
+      full_name: document.getElementById('profileFullName').value,
+      company: document.getElementById('profileCompany').value,
+      phone: phoneVal,
+      timezone: document.getElementById('timezoneSelect').value,
+      language: document.getElementById('languageSelect').value,
+      dark_mode: document.getElementById('darkModeToggle').checked,
+      font_size: document.getElementById('fontSizeSelect').value,
+    };
+    const { error } = await supabase
+      .from('users')
+      .update(updates)
+      .eq('email', user.email);
+    if (error) {
+      document.getElementById('saveAllMsg').textContent = 'Error saving: ' + error.message;
+      document.getElementById('saveAllMsg').style.color = 'red';
+    } else {
+      document.getElementById('saveAllMsg').textContent = '';
+      setUnsaved(false);
+      await loadUserSettings();
+      showSaveBanner();
+    }
+    setTimeout(() => { document.getElementById('saveAllMsg').textContent = ''; }, 2000);
+  });
+};
+
+function closeUnsavedModal() {
+  const overlay = document.getElementById('unsavedModalOverlay');
+  if (overlay && overlay.parentNode) {
+    overlay.parentNode.removeChild(overlay);
+    console.log('Unsaved modal closed');
+  }
+}
+
+</script>
+</body>
+</html> 
