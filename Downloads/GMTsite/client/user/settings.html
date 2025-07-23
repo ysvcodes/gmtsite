@@ -599,6 +599,26 @@ if (!user) {
   window.location.href = '/client/login/login.html';
 }
 
+// --- Auto-detect timezone if not set in Supabase, otherwise use saved value ---
+function detectBrowserTimezoneGMT() {
+  const offset = -new Date().getTimezoneOffset() / 60;
+  if (offset === 0) return 'GMT';
+  if (offset === 1) return 'BST';
+  if (offset === -5) return 'EST';
+  if (offset === -6) return 'CST';
+  if (offset === -7) return 'MST';
+  if (offset === -8) return 'PST';
+  if (offset === 10) return 'AEST';
+  if (offset === 11) return 'AEDT';
+  if (offset === 9.5) return 'ACST';
+  if (offset === 8) return 'AWST';
+  if (offset === 12) return 'NZST';
+  if (offset === -10) return 'HST';
+  if (offset === -9) return 'AKST';
+  if (offset === -4) return 'AST';
+  return 'GMT';
+}
+
 // --- Define loadUserSettings to fetch and prefill all fields from Supabase ---
 async function loadUserSettings() {
   populateTimezoneDropdown();
@@ -615,10 +635,24 @@ async function loadUserSettings() {
   document.getElementById('profileEmail').value = data.email || '';
   document.getElementById('profileCompany').value = data.company || '';
   document.getElementById('profilePhone').value = data.phone || '';
-  document.getElementById('timezoneSelect').value = data.timezone || 'GMT';
+  let tz = data.timezone;
+  if (!tz) {
+    tz = detectBrowserTimezoneGMT();
+    document.getElementById('timezoneSelect').value = tz;
+    // Save detected timezone to DB for future loads
+    await supabase.from('users').update({ timezone: tz }).eq('email', user.email);
+  } else {
+    document.getElementById('timezoneSelect').value = tz;
+  }
   document.getElementById('languageSelect').value = data.language || 'en';
   document.getElementById('darkModeToggle').checked = !!data.dark_mode;
-  document.getElementById('fontSizeSelect').value = data.font_size || 'Normal';
+  let fontSize = data.font_size;
+  if (!fontSize || !['Small','Normal','Large','Extra Large'].includes(fontSize)) {
+    fontSize = 'Normal';
+  }
+  document.getElementById('fontSizeSelect').value = fontSize;
+  applyFontSize(fontSize);
+  updateSaveBtnState(); // Ensure Save button state is correct after loading
 }
 
 // On page load, always call loadUserSettings to prefill fields
@@ -1199,6 +1233,24 @@ function updateSaveBtnState() {
 }
 phoneInput.addEventListener('input', updateSaveBtnState);
 window.addEventListener('DOMContentLoaded', updateSaveBtnState);
+
+// --- Font size logic: apply live on change ---
+function applyFontSize(size) {
+  let px = '16px';
+  if (size === 'Small') px = '13px';
+  else if (size === 'Normal') px = '16px';
+  else if (size === 'Large') px = '19px';
+  else if (size === 'Extra Large') px = '22px';
+  document.documentElement.style.fontSize = px;
+}
+
+document.getElementById('fontSizeSelect').addEventListener('change', function() {
+  applyFontSize(this.value);
+  setUnsaved(true);
+});
+
+// --- Ensure font size starts at Normal unless set in Supabase ---
+// (No need to set font size on DOMContentLoaded, loadUserSettings handles it)
 
 // Patch Save All Changes button
 const origSaveAllBtnHandler = document.getElementById('saveAllBtn').onclick;
