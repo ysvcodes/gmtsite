@@ -347,8 +347,9 @@
       box-shadow: 0 4px 12px rgba(239,68,68,0.2);
     }
     .btn-danger:hover {
+      background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+      box-shadow: 0 6px 16px rgba(185,28,28,0.28);
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(239,68,68,0.3);
     }
     @media (max-width: 768px) {
       .settings-content {
@@ -373,7 +374,31 @@
         margin-left: 44px;
       }
     }
-
+    .btn-billing {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(34,197,94,0.18);
+    }
+    .btn-billing:hover {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      box-shadow: 0 6px 16px rgba(34,197,94,0.28);
+      transform: translateY(-1px);
+    }
+    .btn-billing:disabled,
+    .btn-billing.cursor-not-allowed {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .btn-billing:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(34,197,94,0.28);
+    }
   </style>
 </head>
 <body>
@@ -398,7 +423,7 @@
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="13" width="3" height="7" rx="1.5"/><rect x="10" y="9" width="3" height="11" rx="1.5"/><rect x="16" y="5" width="3" height="15" rx="1.5"/></svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Insights</span>
         </a>
-        <a href="#" class="flex flex-col items-center group" title="Team">
+        <a href="team.html" class="flex flex-col items-center group" title="Team">
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="8" cy="13" r="3"/>
             <circle cx="16" cy="13" r="3"/>
@@ -414,7 +439,7 @@
           </svg>
           <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Settings</span>
         </a>
-        <a href="#" class="flex flex-col items-center group" title="Support">
+        <a href="support.html" class="flex flex-col items-center group" title="Support">
           <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"/>
             <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -434,13 +459,10 @@
           <p class="settings-subtitle">Manage your account preferences and security settings</p>
         </div>
 
-        <!-- Profile Settings -->
+        <!-- Profile Information Section (add SVG) -->
         <div class="settings-section">
-          <h2 class="section-title" data-i18n-section="profileInfo">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="10" r="4"/>
-              <path d="M4 20c0-2.2 3.6-4 8-4s8 1.8 8 4"/>
-            </svg>
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 8-4 8-4s8 0 8 4"/></svg>
             Profile Information
           </h2>
           <form id="profileForm" autocomplete="off">
@@ -460,16 +482,42 @@
               <label class="form-label" data-i18n="phone">Phone Number</label>
               <input type="tel" class="form-input" id="profilePhone" placeholder="Enter your phone number" autocomplete="off">
             </div>
+            <div class="form-group">
+              <label class="form-label" data-i18n="tier">Account Tier</label>
+              <input type="text" class="form-input" id="profileTier" disabled style="background:#f3f4f6;color:#172554;font-weight:bold;">
+            </div>
           </form>
         </div>
-        <!-- Security Settings -->
+        <!-- Change Email Section -->
+        <div class="settings-section" id="changeEmailSection">
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M22 6l-10 7L2 6"/></svg>
+            Change Email
+          </h2>
+          <form id="changeEmailForm" autocomplete="off">
+            <div class="form-group">
+              <label class="form-label" for="newEmail">New Email Address</label>
+              <input type="email" class="form-input" id="newEmail" placeholder="Enter new email address" autocomplete="off">
+            </div>
+            <button type="button" class="btn-primary" id="requestEmailOtpBtn">Request OTP</button>
+            <div id="emailOtpRequestMsg" class="mt-2 text-sm"></div>
+            <div id="otpSection" style="display:none;">
+              <div class="form-group mt-4">
+                <label class="form-label" for="emailOtp">Enter OTP sent to your new email</label>
+                <input type="text" class="form-input" id="emailOtp" maxlength="6" placeholder="6-digit code">
+              </div>
+              <div class="flex gap-2">
+                <button type="button" class="btn-primary" id="verifyEmailOtpBtn">Verify & Change Email</button>
+                <button type="button" class="btn-secondary" id="resendEmailOtpBtn" style="opacity:0.6;cursor:not-allowed;" disabled>Resend Code (60s)</button>
+              </div>
+              <div id="emailOtpVerifyMsg" class="mt-2 text-sm"></div>
+            </div>
+          </form>
+        </div>
+        <!-- Security Section (add SVG) -->
         <div class="settings-section">
-          <h2 class="section-title" data-i18n-section="security">
-            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <rect x="5" y="11" width="14" height="8" rx="2"/>
-              <path d="M12 15v2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Security
           </h2>
           <form id="passwordForm" autocomplete="off">
@@ -480,6 +528,7 @@
             <div class="form-group">
               <label class="form-label" data-i18n="newPassword">New Password</label>
               <input type="password" class="form-input" id="newPassword" placeholder="Enter new password" autocomplete="off">
+              <div id="passwordStrength" class="mt-1 text-sm font-semibold"></div>
             </div>
             <div class="form-group">
               <label class="form-label" data-i18n="confirmNewPassword">Confirm New Password</label>
@@ -543,6 +592,130 @@
             </select>
           </div>
         </div>
+        <!-- 💬 Support Shortcut Section -->
+        <div class="settings-section mb-6">
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Support Shortcut
+          </h2>
+          <div class="text-gray-700 mb-3">Need help with your account?</div>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <a href="support.html" class="btn-primary w-full sm:w-auto text-center">Visit Support Center</a>
+          </div>
+        </div>
+        <!-- Billing & Subscription Panel -->
+        <div class="settings-section">
+          <h2 class="section-title">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 21v-4h8v4"/><path d="M12 11v-4"/></svg>
+            Billing & Subscription
+          </h2>
+          <div id="billingInfo" class="mb-3 text-gray-800 bg-blue-50 rounded p-3"></div>
+          <div class="flex flex-col sm:flex-row gap-2 mb-4">
+            <button class="btn-billing w-full sm:w-1/3">Update Payment Method</button>
+            <button class="btn-billing w-full sm:w-1/3">Download Past Invoices</button>
+            <button class="btn-billing w-full sm:w-1/3">Change Billing Email</button>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 mb-2">
+            <button class="btn-secondary cursor-not-allowed opacity-70 w-full" disabled>Manage Billing</button>
+            <button class="btn-secondary cursor-not-allowed opacity-70 w-full" disabled>Pay Now</button>
+          </div>
+          <div class="text-sm text-gray-500">Billing actions will be available here in the future.</div>
+        </div>
+        <!-- 🔔 Notification Preferences Section -->
+        <div class="settings-section mt-6">
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Notification Preferences
+          </h2>
+          <div class="space-y-3 mt-3" id="notificationPrefs">
+            <div class="flex items-center justify-between">
+              <span>Weekly Insights Summary</span>
+              <label class="toggle-switch">
+                <input type="checkbox" data-pref="weekly">
+                <span class="toggle-slider"></span>
+                <span class="ml-2 text-sm text-gray-500 pref-label">ON</span>
+              </label>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Automation Performance Alerts</span>
+              <label class="toggle-switch">
+                <input type="checkbox" data-pref="automation">
+                <span class="toggle-slider"></span>
+                <span class="ml-2 text-sm text-gray-500 pref-label">ON</span>
+              </label>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>New Feature Announcements</span>
+              <label class="toggle-switch">
+                <input type="checkbox" data-pref="features">
+                <span class="toggle-slider"></span>
+                <span class="ml-2 text-sm text-gray-500 pref-label">ON</span>
+              </label>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>Billing Reminders</span>
+              <label class="toggle-switch">
+                <input type="checkbox" data-pref="billing">
+                <span class="toggle-slider"></span>
+                <span class="ml-2 text-sm text-gray-500 pref-label">ON</span>
+              </label>
+            </div>
+            <div class="flex items-center justify-between">
+              <span>System Downtime Notices</span>
+              <label class="toggle-switch">
+                <input type="checkbox" data-pref="downtime">
+                <span class="toggle-slider"></span>
+                <span class="ml-2 text-sm text-gray-500 pref-label">ON</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <script>
+        // Notification Preferences: Interactive toggles with localStorage persistence
+        const defaultPrefs = {
+          weekly: true,
+          automation: true,
+          features: true,
+          billing: true,
+          downtime: true
+        };
+        function loadNotificationPrefs() {
+          let prefs = {};
+          try {
+            prefs = JSON.parse(localStorage.getItem('gmt_notification_prefs')) || {};
+          } catch (e) { prefs = {}; }
+          prefs = { ...defaultPrefs, ...prefs };
+          document.querySelectorAll('#notificationPrefs input[type="checkbox"]').forEach(input => {
+            const key = input.getAttribute('data-pref');
+            input.checked = !!prefs[key];
+            const label = input.parentElement.querySelector('.pref-label');
+            label.textContent = input.checked ? 'ON' : 'OFF';
+            input.disabled = false;
+            // Add unsaved state trigger
+            input.addEventListener('change', () => setUnsaved(true));
+          });
+        }
+        if (document.readyState === 'loading') {
+          window.addEventListener('DOMContentLoaded', loadNotificationPrefs);
+        } else {
+          loadNotificationPrefs();
+        }
+        </script>
+        <!-- Move Data & Export Section to just above Account Activity & Sessions -->
+        <!-- ...other settings sections... -->
+        <!-- Data & Export Section -->
+        <div class="settings-section mb-6">
+          <h2 class="section-title flex items-center">
+            <svg class="mr-2" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-6-6m6 6l6-6"/></svg>
+            Data & Export
+          </h2>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button class="btn-primary mb-2" data-i18n="downloadData">Download My Data</button>
+            <button class="btn-primary mb-2" data-i18n="requestExport">Request Account Export</button>
+            <button class="btn-primary mb-2" id="exportActivityBtn">Export Account Activity & Sessions</button>
+          </div>
+        </div>
+        <!-- Account Activity & Sessions Section follows here -->
         <!-- Advanced: Account Activity & Sessions (Merged) -->
         <div class="settings-section">
           <h2 class="section-title" data-i18n-section="accountActivity">
@@ -573,17 +746,20 @@
           <div id="unsavedMsg" class="text-yellow-600 font-semibold mb-2" style="display:none;" data-i18n="unsaved">You have unsaved changes.</div>
           <button class="btn-primary" id="saveAllBtn" data-i18n="saveAll">Save All Changes</button>
           <div id="saveAllMsg" class="mt-2 text-sm"></div>
+          <div id="saveAllDisabledMsg" class="mt-2 text-sm text-red-600 font-semibold" style="display:none;">Please fill in all required fields appropriately.</div>
         </div>
 
         <!-- Enhanced Danger Zone -->
         <div class="danger-zone">
           <h2 class="section-title" data-i18n-section="dangerZone">Danger Zone</h2>
           <p class="text-sm text-gray-600 mb-4">These actions cannot be undone. Please proceed with caution.</p>
-          <button class="btn-secondary mb-2" data-i18n="downloadData">Download My Data</button>
-          <button class="btn-secondary mb-2" data-i18n="requestExport">Request Account Export</button>
           <button class="btn-danger" id="deleteAccountBtn" data-i18n="deleteAccount">Delete Account</button>
         </div>
 
+        <!-- Add Sign Out button to the settings page, below Save All Changes -->
+        <div class="flex flex-col items-center mt-2 mb-4" id="signOutContainer">
+          <button class="btn-secondary" id="signOutBtn">Sign Out</button>
+        </div>
       </div>
     </div>
   </div>
@@ -709,41 +885,69 @@ const i18n = {
 function applyLanguage(lang) {
   const dict = i18n[lang] || i18n['en'];
   // Section headers
-  document.querySelector('.settings-section h2.section-title[data-i18n-section="profileInfo"]').textContent = dict.profileInfo;
-  document.querySelector('.settings-section h2.section-title[data-i18n-section="security"]').textContent = dict.security;
-  document.querySelector('.settings-section h2.section-title[data-i18n-section="accountActivity"]').textContent = dict.accountActivity;
-  document.querySelector('.settings-section h2.section-title[data-i18n-section="dangerZone"]').textContent = dict.dangerZone;
+  var el = document.querySelector('.settings-section h2.section-title[data-i18n-section="profileInfo"]');
+  if (el) el.textContent = dict.profileInfo;
+  el = document.querySelector('.settings-section h2.section-title[data-i18n-section="security"]');
+  if (el) el.textContent = dict.security;
+  el = document.querySelector('.settings-section h2.section-title[data-i18n-section="accountActivity"]');
+  if (el) el.textContent = dict.accountActivity;
+  el = document.querySelector('.settings-section h2.section-title[data-i18n-section="dangerZone"]');
+  if (el) el.textContent = dict.dangerZone;
   // Profile labels
-  document.querySelector('[data-i18n="fullName"]').textContent = dict.fullName;
-  document.querySelector('[data-i18n="email"]').textContent = dict.email;
-  document.querySelector('[data-i18n="company"]').textContent = dict.company;
-  document.querySelector('[data-i18n="phone"]').textContent = dict.phone;
+  el = document.querySelector('[data-i18n="fullName"]');
+  if (el) el.textContent = dict.fullName;
+  el = document.querySelector('[data-i18n="email"]');
+  if (el) el.textContent = dict.email;
+  el = document.querySelector('[data-i18n="company"]');
+  if (el) el.textContent = dict.company;
+  el = document.querySelector('[data-i18n="phone"]');
+  if (el) el.textContent = dict.phone;
   // Security labels
-  document.querySelector('label[for="currentPassword"]').textContent = dict.currentPassword;
-  document.querySelector('label[for="newPassword"]').textContent = dict.newPassword;
-  document.querySelector('label[for="confirmNewPassword"]').textContent = dict.confirmNewPassword;
-  document.getElementById('passwordForm').querySelector('button[type="submit"]').textContent = dict.updatePassword;
+  el = document.querySelector('label[for="currentPassword"]');
+  if (el) el.textContent = dict.currentPassword;
+  el = document.querySelector('label[for="newPassword"]');
+  if (el) el.textContent = dict.newPassword;
+  el = document.querySelector('label[for="confirmNewPassword"]');
+  if (el) el.textContent = dict.confirmNewPassword;
+  el = document.getElementById('passwordForm') ? document.getElementById('passwordForm').querySelector('button[type="submit"]') : null;
+  if (el) el.textContent = dict.updatePassword;
   // Appearance & Accessibility
-  document.querySelector('[data-i18n="fontSizeLabel"]').textContent = dict.fontSizeLabel;
-  document.querySelector('[data-i18n="fontSizeDesc"]').textContent = dict.fontSizeDesc;
-  document.querySelector('[data-i18n="darkModeLabel"]').textContent = dict.darkModeLabel;
-  document.querySelector('[data-i18n="darkModeDesc"]').textContent = dict.darkModeDesc;
-  document.querySelector('[data-i18n="timeZoneLabel"]').textContent = dict.timeZoneLabel;
-  document.querySelector('[data-i18n="timeZoneDesc"]').textContent = dict.timeZoneDesc;
-  document.querySelector('[data-i18n="languageLabel"]').textContent = dict.languageLabel;
-  document.querySelector('[data-i18n="languageDesc"]').textContent = dict.languageDesc;
+  el = document.querySelector('[data-i18n="fontSizeLabel"]');
+  if (el) el.textContent = dict.fontSizeLabel;
+  el = document.querySelector('[data-i18n="fontSizeDesc"]');
+  if (el) el.textContent = dict.fontSizeDesc;
+  el = document.querySelector('[data-i18n="darkModeLabel"]');
+  if (el) el.textContent = dict.darkModeLabel;
+  el = document.querySelector('[data-i18n="darkModeDesc"]');
+  if (el) el.textContent = dict.darkModeDesc;
+  el = document.querySelector('[data-i18n="timeZoneLabel"]');
+  if (el) el.textContent = dict.timeZoneLabel;
+  el = document.querySelector('[data-i18n="timeZoneDesc"]');
+  if (el) el.textContent = dict.timeZoneDesc;
+  el = document.querySelector('[data-i18n="languageLabel"]');
+  if (el) el.textContent = dict.languageLabel;
+  el = document.querySelector('[data-i18n="languageDesc"]');
+  if (el) el.textContent = dict.languageDesc;
   // Save/unsaved
-  document.getElementById('saveAllBtn').textContent = dict.saveAll;
-  document.getElementById('unsavedMsg').textContent = dict.unsaved;
+  el = document.getElementById('saveAllBtn');
+  if (el) el.textContent = dict.saveAll;
+  el = document.getElementById('unsavedMsg');
+  if (el) el.textContent = dict.unsaved;
   // Account Activity & Sessions
-  document.querySelector('h3[for-activity]').textContent = dict.recentActivity;
-  document.querySelector('h3[for-sessions]').textContent = dict.activeSessions;
+  el = document.querySelector('h3[for-activity]');
+  if (el) el.textContent = dict.recentActivity;
+  el = document.querySelector('h3[for-sessions]');
+  if (el) el.textContent = dict.activeSessions;
   // Danger Zone buttons
-  document.querySelector('button.btn-secondary.mb-2[data-i18n="downloadData"]').textContent = dict.downloadData;
-  document.querySelector('button.btn-secondary.mb-2[data-i18n="requestExport"]').textContent = dict.requestExport;
-  document.getElementById('deleteAccountBtn').textContent = dict.deleteAccount;
+  el = document.querySelector('button.btn-secondary.mb-2[data-i18n="downloadData"]');
+  if (el) el.textContent = dict.downloadData;
+  el = document.querySelector('button.btn-secondary.mb-2[data-i18n="requestExport"]');
+  if (el) el.textContent = dict.requestExport;
+  el = document.getElementById('deleteAccountBtn');
+  if (el) el.textContent = dict.deleteAccount;
   // Phone error
-  if (document.getElementById('phoneErrorMsg')) document.getElementById('phoneErrorMsg').textContent = '';
+  el = document.getElementById('phoneErrorMsg');
+  if (el) el.textContent = '';
 }
 
 // --- On page load, apply language from Supabase or localStorage ---
@@ -787,35 +991,115 @@ function detectBrowserTimezoneGMT() {
 // --- Define loadUserSettings to fetch and prefill all fields from Supabase ---
 async function loadUserSettings() {
   populateTimezoneDropdown();
-  const { data, error } = await supabase
+  // Fetch user profile and settings from user_profiles and user_settings
+  let { data: profile, error: profileError } = await supabase
+    .from('user_profiles')
+    .select('full_name, company, phone')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (!profile) {
+    // Insert a blank profile row if missing
+    await supabase.from('user_profiles').insert({ user_id: user.id });
+    // Refetch
+    const res = await supabase
+      .from('user_profiles')
+      .select('full_name, company, phone')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    profile = res.data;
+  }
+  let { data: settings, error: settingsError } = await supabase
+    .from('user_settings')
+    .select('timezone, language, dark_mode, font_size, notify_weekly, notify_automation, notify_features, notify_billing, notify_downtime')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  if (!settings) {
+    // Insert a blank settings row if missing
+    await supabase.from('user_settings').insert({ user_id: user.id });
+    // Refetch
+    const res = await supabase
+      .from('user_settings')
+      .select('timezone, language, dark_mode, font_size, notify_weekly, notify_automation, notify_features, notify_billing, notify_downtime')
+      .eq('user_id', user.id)
+      .maybeSingle();
+    settings = res.data;
+  }
+  // Always get email and tier from users table
+  const { data: userData, error: userError } = await supabase
     .from('users')
-    .select('full_name, email, company, phone, timezone, language, dark_mode, font_size')
-    .eq('email', user.email)
+    .select('email, tier')
+    .eq('id', user.id)
     .single();
-  if (error || !data) {
-    console.error('Failed to load user settings:', error);
+  if (profileError || settingsError || userError || !userData) {
+    console.error('Failed to load user settings:', profileError || settingsError || userError);
     return;
   }
-  document.getElementById('profileFullName').value = data.full_name || '';
-  document.getElementById('profileEmail').value = data.email || '';
-  document.getElementById('profileCompany').value = data.company || '';
-  document.getElementById('profilePhone').value = data.phone || '';
-  let tz = data.timezone;
+  document.getElementById('profileFullName').value = (profile && profile.full_name) || '';
+  document.getElementById('profileEmail').value = userData.email || '';
+  document.getElementById('profileCompany').value = (profile && profile.company) || '';
+  document.getElementById('profilePhone').value = (profile && profile.phone) || '';
+  // Set tier display value and style
+  let tierDisplay = 'Unknown';
+  if (userData.tier === 'pro') {
+    tierDisplay = 'Pro';
+  } else if (userData.tier === 'core') {
+    tierDisplay = 'Core';
+  } else if (userData.tier === 'lite') {
+    tierDisplay = 'Lite';
+  }
+  const tierInput = document.getElementById('profileTier');
+  tierInput.value = tierDisplay;
+  if (userData.tier === 'pro') {
+    tierInput.style.color = '#FFD700';
+    tierInput.style.fontWeight = 'bold';
+    tierInput.style.textShadow = '0 0 8px #FFD700, 0 0 4px #fff, 0 0 12px #FFD700';
+  } else if (userData.tier === 'core') {
+    tierInput.style.color = '#a259ff';
+    tierInput.style.fontWeight = 'bold';
+    tierInput.style.textShadow = '0 0 8px #a259ff, 0 0 4px #fff, 0 0 12px #a259ff';
+  } else if (userData.tier === 'lite') {
+    tierInput.style.color = '#6b7280';
+    tierInput.style.fontWeight = 'bold';
+    tierInput.style.textShadow = '0 0 8px #6b7280, 0 0 4px #fff, 0 0 12px #6b7280';
+  } else {
+    tierInput.style.color = '#172554';
+    tierInput.style.fontWeight = 'bold';
+    tierInput.style.textShadow = 'none';
+  }
+  let tz = settings && settings.timezone;
   if (!tz) {
     tz = detectBrowserTimezoneGMT();
     document.getElementById('timezoneSelect').value = tz;
     // Save detected timezone to DB for future loads
-    await supabase.from('users').update({ timezone: tz }).eq('email', user.email);
+    await supabase.from('user_settings').update({ timezone: tz }).eq('user_id', user.id);
   } else {
     document.getElementById('timezoneSelect').value = tz;
   }
-  document.getElementById('languageSelect').value = data.language || 'en';
-  let fontSize = data.font_size;
+  document.getElementById('languageSelect').value = (settings && settings.language) || 'en';
+  let fontSize = settings && settings.font_size;
   if (!fontSize || !['Small','Normal','Large','Extra Large'].includes(fontSize)) {
     fontSize = 'Normal';
   }
   document.getElementById('fontSizeSelect').value = fontSize;
   applyFontSize(fontSize);
+  document.getElementById('darkModeToggle').checked = !!(settings && settings.dark_mode);
+  // Set notification preferences from Supabase
+  const notifPrefs = {
+    weekly: settings && settings.notify_weekly !== undefined ? settings.notify_weekly : true,
+    automation: settings && settings.notify_automation !== undefined ? settings.notify_automation : true,
+    features: settings && settings.notify_features !== undefined ? settings.notify_features : true,
+    billing: settings && settings.notify_billing !== undefined ? settings.notify_billing : true,
+    downtime: settings && settings.notify_downtime !== undefined ? settings.notify_downtime : true
+  };
+  document.querySelectorAll('#notificationPrefs input[type="checkbox"]').forEach(input => {
+    const key = input.getAttribute('data-pref');
+    input.checked = !!notifPrefs[key];
+    const label = input.parentElement.querySelector('.pref-label');
+    label.textContent = input.checked ? 'ON' : 'OFF';
+    input.disabled = false;
+    // Add unsaved state trigger
+    input.addEventListener('change', () => setUnsaved(true));
+  });
   updateSaveBtnState(); // Ensure Save button state is correct after loading
 }
 
@@ -853,30 +1137,87 @@ function populateTimezoneDropdown() {
 }
 
 // --- Only save timezone to DB when Save All Changes is clicked (not on change) ---
-document.getElementById('saveAllBtn').addEventListener('click', async function() {
-  const updates = {
-    full_name: document.getElementById('profileFullName').value,
-    company: document.getElementById('profileCompany').value,
-    phone: document.getElementById('profilePhone').value,
-    timezone: document.getElementById('timezoneSelect').value,
-    language: document.getElementById('languageSelect').value,
-    dark_mode: document.getElementById('darkModeToggle').checked,
-    font_size: document.getElementById('fontSizeSelect').value,
-  };
-  const { error } = await supabase
-    .from('users')
-    .update(updates)
-    .eq('email', user.email);
-  if (error) {
-    document.getElementById('saveAllMsg').textContent = 'Error saving: ' + error.message;
-    document.getElementById('saveAllMsg').style.color = 'red';
-  } else {
-    document.getElementById('saveAllMsg').textContent = 'All changes saved!';
-    document.getElementById('saveAllMsg').style.color = 'green';
-    setUnsaved(false);
-    await loadUserSettings();
+document.getElementById('saveAllBtn').addEventListener('click', async function(e) {
+  e.preventDefault();
+
+  // Required fields validation
+  const fullNameVal = document.getElementById('profileFullName').value.trim();
+  const companyVal = document.getElementById('profileCompany').value.trim();
+  const phoneVal = document.getElementById('profilePhone').value.trim();
+  const saveMsg = document.getElementById('saveAllMsg');
+  if (!fullNameVal || !companyVal || phoneVal.length < 10) {
+    saveMsg.textContent = 'Please fill in all required fields appropriately.';
+    saveMsg.style.color = 'red';
+    if (phoneVal.length < 10 && typeof showPhoneErrorModal === 'function') showPhoneErrorModal();
+    return;
   }
-  setTimeout(() => { document.getElementById('saveAllMsg').textContent = ''; }, 2000);
+
+  // Ensure user_profiles and user_settings rows exist before saving
+  const profileExists = await supabase.from('user_profiles').select('id').eq('user_id', user.id).maybeSingle();
+  if (!profileExists.data) {
+    await supabase.from('user_profiles').insert({ user_id: user.id });
+  }
+  const settingsExists = await supabase.from('user_settings').select('id').eq('user_id', user.id).maybeSingle();
+  if (!settingsExists.data) {
+    await supabase.from('user_settings').insert({ user_id: user.id });
+  }
+
+  // Use temporarilyDisableBeforeUnload for smooth UX
+  temporarilyDisableBeforeUnload(async () => {
+    // Notification preferences
+    const notificationPrefs = {
+      notify_weekly: document.querySelector('input[data-pref="weekly"]').checked,
+      notify_automation: document.querySelector('input[data-pref="automation"]').checked,
+      notify_features: document.querySelector('input[data-pref="features"]').checked,
+      notify_billing: document.querySelector('input[data-pref="billing"]').checked,
+      notify_downtime: document.querySelector('input[data-pref="downtime"]').checked,
+    };
+
+    // Profile info
+    const profileUpdates = {
+      full_name: fullNameVal,
+      company: companyVal,
+      phone: phoneVal,
+    };
+
+    // Settings info
+    const settingsUpdates = {
+      timezone: document.getElementById('timezoneSelect').value,
+      language: document.getElementById('languageSelect').value,
+      dark_mode: document.getElementById('darkModeToggle').checked,
+      font_size: document.getElementById('fontSizeSelect').value,
+      ...notificationPrefs
+    };
+
+    // Clear previous error message before starting save
+    saveMsg.textContent = '';
+
+    // Update user_profiles
+    const { error: profileError } = await supabase
+      .from('user_profiles')
+      .update(profileUpdates)
+      .eq('user_id', user.id);
+
+    // Update user_settings
+    const { error: settingsError } = await supabase
+      .from('user_settings')
+      .update(settingsUpdates)
+      .eq('user_id', user.id);
+
+    if (profileError || settingsError) {
+      saveMsg.textContent = 'Error saving: ' + (profileError?.message || settingsError?.message);
+      saveMsg.style.color = 'red';
+    } else {
+      saveMsg.textContent = 'All changes saved!';
+      saveMsg.style.color = 'green';
+      setUnsaved(false);
+      await loadUserSettings();
+      // Optionally show a green save banner and log activity
+      if (typeof showSaveBanner === 'function') showSaveBanner();
+      if (typeof logActivity === 'function') await logActivity('Updated profile/settings');
+    }
+    setTimeout(() => { saveMsg.textContent = ''; }, 2000);
+  });
 });
 
 // --- Load Activity Log ---
@@ -999,13 +1340,17 @@ function showDeletePasswordModal(onPassword) {
     onPassword(pw);
   };
 }
-function showDeleteAutomationsModal(company, onYes, onNo) {
+function showDeleteAutomationsModal(company, email, onYes, onNo) {
   if (document.getElementById('deleteModalOverlay')) closeDeleteModal();
   const html = `
     <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
         <h2 style='color:#ef4444;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteAutoTitle}</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteAutoMsg} <b>${company}</b>?</p>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>
+          ${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteAutoMsg}
+          <b>${company}</b><br>
+          <span style="color:#2563eb;font-size:0.98rem;">${email}</span>
+        </p>
         <div style='display:flex;gap:1.5rem;justify-content:center;'>
           <button id='deleteAutoYesBtn' style='background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].yes}</button>
           <button id='deleteAutoNoBtn' style='background:#f3f4f6;color:#374151;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].no}</button>
@@ -1023,15 +1368,35 @@ function showDeleteReviewModal() {
   const html = `
     <div id="deleteModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
       <div style="background:white;padding:2.5rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
-        <h2 style='color:#22c55e;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteReviewTitle}</h2>
-        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].deleteReviewMsg}</p>
-        <button id='deleteReviewCloseBtn' style='background:linear-gradient(135deg,#22c55e 0%,#16a34a 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;'>${i18n[localStorage.getItem('gmt_lang') || 'en'].close}</button>
+        <h2 style='color:#ef4444;font-size:1.2rem;font-weight:700;margin-bottom:1rem;'>Account Deletion Requested</h2>
+        <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>Your account is being reviewed before proper deletion. You will be notified when the process is complete.</p>
+        <button id="deleteReviewCloseBtn" style="background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;">Close</button>
       </div>
     </div>
     <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
   `;
   document.body.insertAdjacentHTML('beforeend', html);
-  document.getElementById('deleteReviewCloseBtn').onclick = function() { closeDeleteModal(); };
+  document.getElementById('deleteReviewCloseBtn').onclick = function() {
+    closeDeleteModal();
+    // Show additional explanation modal
+    const msgHtml = `
+      <div id="deletePausedOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:10000;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+        <div style="background:white;padding:2.2rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+          <h2 style='color:#ef4444;font-size:1.1rem;font-weight:700;margin-bottom:1rem;'>Access Paused</h2>
+          <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>To protect your data and make sure this request is processed correctly, we've paused your access until our team follows up. No more than three business days.</p>
+          <button id="deletePausedCloseBtn" style="background:linear-gradient(135deg,#ef4444 0%,#dc2626 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;">Close</button>
+        </div>
+      </div>
+      <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+    `;
+    document.body.insertAdjacentHTML('beforeend', msgHtml);
+    document.getElementById('deletePausedCloseBtn').onclick = function() {
+      const overlay = document.getElementById('deletePausedOverlay');
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      // Redirect to login (relative path for production)
+      window.location.href = '../../login/login.html';
+    };
+  };
 }
 function closeDeleteModal() {
   const overlay = document.getElementById('deleteModalOverlay');
@@ -1039,26 +1404,41 @@ function closeDeleteModal() {
 }
 
 document.getElementById('deleteAccountBtn').addEventListener('click', async function() {
-  disableBeforeUnload();
   showDeletePasswordModal(async function(pw) {
-    // Verify password
+    // Debug: print the email being checked
+    console.log('Checking password for email:', user.email);
+
+    // Query the user by email
     const { data, error } = await supabase
       .from('users')
-      .select('password_hash, company')
+      .select('password_hash')
       .eq('email', user.email)
       .single();
-    if (error || !data) {
+
+    // Debug: print the result
+    console.log('User data:', data);
+
+    // Handle errors or missing user
+    if (error || !data || !data.password_hash) {
       document.getElementById('deletePwError').textContent = 'Could not verify password.';
       document.getElementById('deletePwError').style.display = '';
       return;
     }
+
+    // Compare entered password to password_hash
     if (data.password_hash !== pw) {
-      document.getElementById('deletePwError').textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].invalidPw;
+      document.getElementById('deletePwError').textContent = 'Incorrect password.';
       document.getElementById('deletePwError').style.display = '';
       return;
     }
+
+    // If correct, proceed with deletion request
+    // Fetch company and email from the profile form fields
+    const company = document.getElementById('profileCompany').value || 'N/A';
+    const email = document.getElementById('profileEmail').value || user.email || 'N/A';
+
     closeDeleteModal();
-    showDeleteAutomationsModal(data.company || 'your company', async function() {
+    showDeleteAutomationsModal(company, email, async function() {
       // Mark for deletion review
       await supabase.from('users').update({ deletion_requested: true }).eq('email', user.email);
       closeDeleteModal();
@@ -1092,7 +1472,10 @@ document.getElementById('passwordForm').addEventListener('submit', async functio
     .select('password_hash')
     .eq('email', user.email)
     .single();
-  if (error || !data) {
+  console.log('User data:', data);
+  console.log('DB password_hash:', data ? data.password_hash : null);
+  console.log('Entered password:', currentPw);
+  if (error || !data || !data.password_hash) {
     msgEl.textContent = 'Could not verify current password.';
     msgEl.style.color = 'red';
     return;
@@ -1423,14 +1806,17 @@ showUnsavedModal = function(onSave, onLeave) {
 function updateSaveBtnState() {
   const btn = document.getElementById('saveAllBtn');
   const phoneVal = document.getElementById('profilePhone').value;
+  const disabledMsg = document.getElementById('saveAllDisabledMsg');
   if (phoneVal.length < 10) {
     btn.disabled = true;
     btn.style.opacity = '0.5';
     btn.style.cursor = 'not-allowed';
+    if (disabledMsg) disabledMsg.style.display = '';
   } else {
     btn.disabled = false;
     btn.style.opacity = '1';
     btn.style.cursor = 'pointer';
+    if (disabledMsg) disabledMsg.style.display = 'none';
   }
 }
 phoneInput.addEventListener('input', updateSaveBtnState);
@@ -1464,188 +1850,6 @@ async function logActivity(event) {
   });
 }
 
-// --- Patch Save All Changes button to log activity ---
-document.getElementById('saveAllBtn').onclick = async function(e) {
-  e.preventDefault();
-  const phoneVal = document.getElementById('profilePhone').value;
-  if (phoneVal.length < 10) {
-    document.getElementById('saveAllMsg').textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].phoneError;
-    document.getElementById('saveAllMsg').style.color = 'red';
-    showPhoneErrorModal();
-    return;
-  }
-  temporarilyDisableBeforeUnload(async () => {
-    const updates = {
-      full_name: document.getElementById('profileFullName').value,
-      company: document.getElementById('profileCompany').value,
-      phone: phoneVal,
-      timezone: document.getElementById('timezoneSelect').value,
-      language: document.getElementById('languageSelect').value,
-      dark_mode: document.getElementById('darkModeToggle').checked,
-      font_size: document.getElementById('fontSizeSelect').value,
-    };
-    const { error } = await supabase
-      .from('users')
-      .update(updates)
-      .eq('email', user.email);
-    if (error) {
-      document.getElementById('saveAllMsg').textContent = 'Error saving: ' + error.message;
-      document.getElementById('saveAllMsg').style.color = 'red';
-    } else {
-      document.getElementById('saveAllMsg').textContent = '';
-      setUnsaved(false);
-      await loadUserSettings();
-      showSaveBanner();
-      await logActivity('Updated profile/settings');
-    }
-    setTimeout(() => { document.getElementById('saveAllMsg').textContent = ''; }, 2000);
-  });
-};
-
-// --- Patch password change to log activity ---
-document.getElementById('passwordForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const currentPw = document.getElementById('currentPassword').value;
-  const newPw = document.getElementById('newPassword').value;
-  const confirmPw = document.getElementById('confirmNewPassword').value;
-  const msgEl = document.getElementById('passwordMsg');
-  msgEl.textContent = '';
-  if (!currentPw || !newPw || !confirmPw) {
-    msgEl.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].requiredPw;
-    msgEl.style.color = 'red';
-    return;
-  }
-  if (newPw !== confirmPw) {
-    msgEl.textContent = 'New passwords do not match.';
-    msgEl.style.color = 'red';
-    return;
-  }
-  // Verify current password
-  const { data, error } = await supabase
-    .from('users')
-    .select('password_hash')
-    .eq('email', user.email)
-    .single();
-  if (error || !data) {
-    msgEl.textContent = 'Could not verify current password.';
-    msgEl.style.color = 'red';
-    return;
-  }
-  if (data.password_hash !== currentPw) {
-    msgEl.textContent = i18n[localStorage.getItem('gmt_lang') || 'en'].invalidPw;
-    msgEl.style.color = 'red';
-    return;
-  }
-  // Update password
-  const { error: updateError } = await supabase
-    .from('users')
-    .update({ password_hash: newPw })
-    .eq('email', user.email);
-  if (updateError) {
-    msgEl.textContent = 'Failed to update password.';
-    msgEl.style.color = 'red';
-  } else {
-    msgEl.textContent = 'Password updated successfully!';
-    msgEl.style.color = 'green';
-    document.getElementById('currentPassword').value = '';
-    document.getElementById('newPassword').value = '';
-    document.getElementById('confirmNewPassword').value = '';
-    await logActivity('Changed password');
-  }
-});
-
-// --- Patch logout to log activity ---
-window.logoutSession = async function(sessionId) {
-  const { error } = await supabase
-    .from('sessions')
-    .delete()
-    .eq('id', sessionId);
-  if (error) alert('Failed to log out session');
-  else {
-    await logActivity('Logged out session');
-    loadSessions();
-  }
-};
-
-// --- Load Activity Log (10 most recent) ---
-async function loadActivityLog() {
-  const { data, error } = await supabase
-    .from('activity_log')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
-    .limit(30); // Limit to latest 30
-  const logList = document.getElementById('activityLog');
-  logList.innerHTML = '';
-  if (error || !data || data.length === 0) {
-    logList.innerHTML = '<li class="text-gray-400">No recent activity found.</li>';
-    return;
-  }
-  data.forEach(item => {
-    const li = document.createElement('li');
-    li.innerHTML = `${getDeviceIcon(item.device)} <span>${item.event}</span> <span class="text-gray-400 ml-1">(${parseDeviceInfo(item.device)})</span> <span class="text-gray-400 ml-1">- ${new Date(item.created_at).toLocaleString()}</span>`;
-    logList.appendChild(li);
-  });
-}
-
-// --- Load Sessions (mark current session) ---
-async function loadSessions() {
-  const { data, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .eq('user_id', user.id)
-    .order('last_active', { ascending: false });
-  const sessionList = document.getElementById('sessionList');
-  sessionList.innerHTML = '';
-  if (error || !data || data.length === 0) {
-    sessionList.innerHTML = '<li class="text-gray-400">No active sessions found.</li>';
-    return;
-  }
-  const currentDevice = navigator.userAgent;
-  data.forEach(session => {
-    const isCurrent = session.device === currentDevice;
-    const li = document.createElement('li');
-    li.innerHTML = `${getDeviceIcon(session.device)} <span>${parseDeviceInfo(session.device)}</span> <span class="text-gray-400 ml-2">${isCurrent ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
-    sessionList.appendChild(li);
-  });
-}
-
-// --- On page load, ensure session/activity and reload lists ---
-async function ensureSessionAndActivity() {
-  const device = navigator.userAgent;
-  // Try to find a session for this user/device
-  let { data, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('device', device)
-    .maybeSingle();
-  if (!data) {
-    // Insert a new session
-    const { error: insertErr } = await supabase.from('sessions').insert({
-      user_id: user.id,
-      device: device,
-      is_current: true,
-      last_active: new Date().toISOString()
-    });
-    if (insertErr) console.error('Session insert error:', insertErr);
-  } else {
-    // Update last_active and is_current
-    const { error: updateErr } = await supabase.from('sessions').update({
-      last_active: new Date().toISOString(),
-      is_current: true
-    }).eq('id', data.id);
-    if (updateErr) console.error('Session update error:', updateErr);
-  }
-  // Log a 'Viewed settings' event to activity_log on page load
-  await logActivity('Viewed settings');
-  // After ensuring, reload lists
-  await loadSessions();
-  await loadActivityLog();
-}
-// On page load, ensure session/activity and reload lists
-ensureSessionAndActivity();
-
 function closeUnsavedModal() {
   const overlay = document.getElementById('unsavedModalOverlay');
   if (overlay && overlay.parentNode) {
@@ -1673,6 +1877,323 @@ async function ensureUserIdInSession() {
   }
 }
 window.addEventListener('DOMContentLoaded', ensureUserIdInSession);
+
+var manageBillingBtn = document.getElementById('manageBillingBtn');
+if (manageBillingBtn) {
+  manageBillingBtn.addEventListener('click', function() {
+    // TODO: Replace with your real Stripe Billing Portal session URL logic
+    window.location.href = 'https://billing.stripe.com/p/login/test_billing_portal';
+  });
+}
+
+async function loadBillingInfo() {
+  // TODO: Replace with logic to get the user's Stripe customer ID from Supabase/session
+  const customerId = window.gmt_stripe_customer_id || '';
+  if (!customerId) {
+    document.getElementById('billingInfo').textContent = 'Billing info unavailable.';
+    return;
+  }
+  try {
+    const res = await fetch(`/api/billing-info?customerId=${customerId}`);
+    const data = await res.json();
+    if (data.error) {
+      document.getElementById('billingInfo').textContent = 'Unable to load billing info.';
+      return;
+    }
+    document.getElementById('billingInfo').innerHTML = `
+      <div><b>Next Payment:</b> $${data.amount_due} ${data.currency} on ${data.due_date}</div>
+      <div><b>Status:</b> ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</div>
+    `;
+  } catch (e) {
+    document.getElementById('billingInfo').textContent = 'Unable to load billing info.';
+  }
+}
+window.addEventListener('DOMContentLoaded', loadBillingInfo);
+
+// Add sign out logic
+document.addEventListener('DOMContentLoaded', function() {
+  const signOutBtn = document.getElementById('signOutBtn');
+  const isFileProtocol = window.location.protocol === 'file:';
+  if (signOutBtn) {
+    signOutBtn.addEventListener('click', function() {
+      console.log('Sign out button clicked');
+      const user = JSON.parse(localStorage.getItem('gmt_user')) || JSON.parse(sessionStorage.getItem('gmt_user'));
+      console.log('User object at sign out:', user);
+      try {
+        if (user && user.id && typeof logActivity === 'function') logActivity('Logged out');
+        localStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_logged_in');
+        console.log('Session and local storage cleared. Redirecting...');
+        if (isFileProtocol) {
+          window.location.href = '../login/login.html';
+        } else {
+          window.location.href = '/client/login/login.html';
+        }
+      } catch (err) {
+        console.error('Error during sign out:', err);
+      }
+    });
+  } else {
+    console.error('Sign out button not found in DOM');
+  }
+});
+
+// Robust sign out handler attachment (polling approach)
+(function attachSignOutHandler() {
+  var tries = 0;
+  function tryAttach() {
+    var signOutBtn = document.getElementById('signOutBtn');
+    if (signOutBtn) {
+      signOutBtn.addEventListener('click', function() {
+        const user = JSON.parse(localStorage.getItem('gmt_user')) || JSON.parse(sessionStorage.getItem('gmt_user'));
+        if (user && user.id && typeof logActivity === 'function') logActivity('Logged out');
+        localStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_logged_in');
+        if (window.location.protocol === 'file:') {
+          window.location.href = '../login/login.html';
+        } else {
+          window.location.href = '/client/login/login.html';
+        }
+      });
+      console.log('Sign out handler attached');
+    } else if (tries < 20) {
+      tries++;
+      setTimeout(tryAttach, 100);
+    } else {
+      console.error('Sign out button not found after multiple attempts');
+    }
+  }
+  tryAttach();
+})();
+
+// Robust sidebar sign out handler attachment (polling approach)
+(function attachSidebarSignOutHandler() {
+  var tries = 0;
+  function tryAttach() {
+    var logoutBtn = document.getElementById('userLogout');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function() {
+        const user = JSON.parse(localStorage.getItem('gmt_user')) || JSON.parse(sessionStorage.getItem('gmt_user'));
+        if (user && user.id && typeof logActivity === 'function') logActivity('Logged out');
+        localStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_user');
+        sessionStorage.removeItem('gmt_logged_in');
+        if (window.location.protocol === 'file:') {
+          window.location.href = '../login/login.html';
+        } else {
+          window.location.href = '/client/login/login.html';
+        }
+      });
+      console.log('Sidebar sign out handler attached');
+    } else if (tries < 20) {
+      tries++;
+      setTimeout(tryAttach, 100);
+    } else {
+      console.error('Sidebar sign out button not found after multiple attempts');
+    }
+  }
+  tryAttach();
+})();
+
+function getPasswordStrength(pw) {
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[a-z]/.test(pw)) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  return score;
+}
+function getStrengthLabel(score) {
+  if (score <= 2) return {label: 'Weak', color: '#ef4444'};
+  if (score === 3) return {label: 'Medium', color: '#f59e42'};
+  return {label: 'Strong', color: '#22c55e'};
+}
+document.getElementById('newPassword').addEventListener('input', function() {
+  const pw = this.value;
+  const strengthDiv = document.getElementById('passwordStrength');
+  if (!pw) {
+    strengthDiv.innerHTML = '';
+    return;
+  }
+  const strength = getPasswordStrength(pw);
+  const {label, color} = getStrengthLabel(strength);
+  let msg = `Strength: <span style='color:${color}'>${label}</span>`;
+  if (strength < 4) {
+    msg += "<br><span style='color:#64748b;font-weight:400'>Use at least 8 characters, with capital letters, lowercase, and numbers.</span>";
+  }
+  strengthDiv.innerHTML = msg;
+});
+
+// --- Change Email with OTP logic (client-side demo version) ---
+// The 'Request OTP' button should be visible by default, and only the OTP input/resend/verify buttons are hidden until requested.
+let resendEmailOtpTimer = 60;
+let resendEmailOtpInterval;
+function startResendEmailOtpTimer() {
+  const resendBtn = document.getElementById('resendEmailOtpBtn');
+  resendBtn.disabled = true;
+  resendBtn.style.opacity = '0.6';
+  resendBtn.style.cursor = 'not-allowed';
+  resendBtn.textContent = `Resend Code (${resendEmailOtpTimer}s)`;
+  resendBtn.style.display = '';
+  if (resendEmailOtpInterval) clearInterval(resendEmailOtpInterval);
+  resendEmailOtpInterval = setInterval(() => {
+    resendEmailOtpTimer--;
+    resendBtn.textContent = `Resend Code (${resendEmailOtpTimer}s)`;
+    if (resendEmailOtpTimer <= 0) {
+      clearInterval(resendEmailOtpInterval);
+      resendBtn.disabled = false;
+      resendBtn.style.opacity = '1';
+      resendBtn.style.cursor = 'pointer';
+      resendBtn.textContent = 'Resend Code';
+      resendEmailOtpTimer = 60;
+    }
+  }, 1000);
+}
+document.getElementById('requestEmailOtpBtn').addEventListener('click', async function() {
+  const newEmail = document.getElementById('newEmail').value.trim();
+  const msg = document.getElementById('emailOtpRequestMsg');
+  msg.textContent = '';
+  if (!newEmail || !/^\S+@\S+\.\S+$/.test(newEmail)) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.style.color = 'red';
+    return;
+  }
+  // Generate a random 6-digit OTP and expiry
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expires = new Date(Date.now() + 20 * 60 * 1000).toISOString();
+  // Store OTP and expiry in Supabase users table for this user
+  let user = JSON.parse(localStorage.getItem('gmt_user') || sessionStorage.getItem('gmt_user') || '{}');
+  const { error } = await supabase
+    .from('users')
+    .update({ otp_code: otp, otp_expires: expires, pending_email: newEmail })
+    .eq('id', user.id);
+  if (error) {
+    msg.textContent = 'Failed to generate OTP: ' + error.message;
+    msg.style.color = 'red';
+    return;
+  }
+  msg.innerHTML = 'OTP sent to ' + newEmail + '. <b>Demo OTP: ' + otp + '</b> (In production, this would be emailed.)';
+  msg.style.color = 'green';
+  document.getElementById('otpSection').style.display = '';
+  document.getElementById('resendEmailOtpBtn').style.display = '';
+  resendEmailOtpTimer = 60;
+  startResendEmailOtpTimer();
+});
+document.getElementById('resendEmailOtpBtn').addEventListener('click', async function() {
+  if (this.disabled) return;
+  const newEmail = document.getElementById('newEmail').value.trim();
+  const msg = document.getElementById('emailOtpRequestMsg');
+  if (!newEmail || !/^\S+@\S+\.\S+$/.test(newEmail)) {
+    msg.textContent = 'Please enter a valid email address.';
+    msg.style.color = 'red';
+    return;
+  }
+  // Generate a new OTP and expiry
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expires = new Date(Date.now() + 20 * 60 * 1000).toISOString();
+  let user = JSON.parse(localStorage.getItem('gmt_user') || sessionStorage.getItem('gmt_user') || '{}');
+  const { error } = await supabase
+    .from('users')
+    .update({ otp_code: otp, otp_expires: expires, pending_email: newEmail })
+    .eq('id', user.id);
+  if (error) {
+    msg.textContent = 'Failed to resend OTP: ' + error.message;
+    msg.style.color = 'red';
+    return;
+  }
+  msg.innerHTML = 'OTP resent to ' + newEmail + '. <b>Demo OTP: ' + otp + '</b> (In production, this would be emailed.)';
+  msg.style.color = 'green';
+  resendEmailOtpTimer = 60;
+  startResendEmailOtpTimer();
+});
+document.getElementById('verifyEmailOtpBtn').addEventListener('click', async function() {
+  const newEmail = document.getElementById('newEmail').value.trim();
+  const otp = document.getElementById('emailOtp').value.trim();
+  const msg = document.getElementById('emailOtpVerifyMsg');
+  msg.textContent = '';
+  let user = JSON.parse(localStorage.getItem('gmt_user') || sessionStorage.getItem('gmt_user') || '{}');
+  // Fetch OTP and expiry from Supabase
+  const { data, error } = await supabase
+    .from('users')
+    .select('otp_code, otp_expires, pending_email')
+    .eq('id', user.id)
+    .single();
+  if (error || !data) {
+    msg.textContent = 'Failed to verify OTP.';
+    msg.style.color = 'red';
+    return;
+  }
+  if (!data.otp_code || !data.otp_expires || !data.pending_email) {
+    msg.textContent = 'No OTP request found for this email.';
+    msg.style.color = 'red';
+    return;
+  }
+  if (data.pending_email !== newEmail) {
+    msg.textContent = 'This OTP was not requested for this email.';
+    msg.style.color = 'red';
+    return;
+  }
+  if (!otp || otp.length !== 6 || !/^[0-9]{6}$/.test(otp)) {
+    msg.textContent = 'Please enter the 6-digit OTP code.';
+    msg.style.color = 'red';
+    return;
+  }
+  if (data.otp_code !== otp) {
+    msg.textContent = 'Invalid OTP code.';
+    msg.style.color = 'red';
+    return;
+  }
+  // Check expiry
+  const now = Date.now();
+  let expiresStr = data.otp_expires;
+  if (expiresStr && !expiresStr.endsWith('Z')) expiresStr += 'Z';
+  const expires = new Date(expiresStr).getTime();
+  if (expires < now) {
+    msg.textContent = 'OTP code expired.';
+    msg.style.color = 'red';
+    return;
+  }
+  // Success: update the profile email field in the UI and in Supabase
+  document.getElementById('profileEmail').value = newEmail;
+  if (user) {
+    user.email = newEmail;
+    if (localStorage.getItem('gmt_user')) localStorage.setItem('gmt_user', JSON.stringify(user));
+    if (sessionStorage.getItem('gmt_user')) sessionStorage.setItem('gmt_user', JSON.stringify(user));
+  }
+  // Update email in Supabase users table and clear OTP fields
+  try {
+    const { error: updateError } = await supabase
+      .from('users')
+      .update({ email: newEmail, otp_code: null, otp_expires: null, pending_email: null })
+      .eq('id', user.id);
+    if (updateError) {
+      msg.textContent = 'Email changed locally, but failed to update in database: ' + updateError.message;
+      msg.style.color = 'red';
+    } else {
+      msg.textContent = 'Email changed successfully!';
+      msg.style.color = 'green';
+    }
+  } catch (e) {
+    msg.textContent = 'Email changed locally, but error updating database.';
+    msg.style.color = 'red';
+  }
+  setTimeout(() => {
+    document.getElementById('otpSection').style.display = 'none';
+    document.getElementById('newEmail').value = '';
+    msg.textContent = '';
+    document.getElementById('emailOtpRequestMsg').textContent = '';
+    // Reset resend button
+    document.getElementById('resendEmailOtpBtn').disabled = true;
+    document.getElementById('resendEmailOtpBtn').style.opacity = '0.6';
+    document.getElementById('resendEmailOtpBtn').style.cursor = 'not-allowed';
+    document.getElementById('resendEmailOtpBtn').textContent = 'Resend Code (60s)';
+    resendEmailOtpTimer = 60;
+    if (resendEmailOtpInterval) clearInterval(resendEmailOtpInterval);
+  }, 2000);
+});
 
 </script>
 </body>
