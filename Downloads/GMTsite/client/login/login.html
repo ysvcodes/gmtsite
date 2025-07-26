@@ -218,6 +218,39 @@
       );
     }
 
+    // Utility: Save login form data for "Remember Me"
+    function saveLoginData(email, remember) {
+      if (remember) {
+        localStorage.setItem('gmt_login_email', email);
+        localStorage.setItem('gmt_login_password', document.querySelector('input[type="password"]').value);
+        localStorage.setItem('gmt_remember_me', 'true');
+      } else {
+        localStorage.removeItem('gmt_login_email');
+        localStorage.removeItem('gmt_login_password');
+        localStorage.removeItem('gmt_remember_me');
+      }
+    }
+
+    // Utility: Restore login form data
+    function restoreLoginData() {
+      const savedEmail = localStorage.getItem('gmt_login_email');
+      const savedPassword = localStorage.getItem('gmt_login_password');
+      const rememberMe = localStorage.getItem('gmt_remember_me') === 'true';
+      
+      if (savedEmail && rememberMe) {
+        document.querySelector('input[type="email"]').value = savedEmail;
+        if (savedPassword) {
+          document.querySelector('input[type="password"]').value = savedPassword;
+        }
+        document.getElementById('rememberMe').checked = true;
+      }
+    }
+
+    // Restore form data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      restoreLoginData();
+    });
+
     const loginBtn = document.querySelector('button[type="submit"]');
     const form = document.querySelector('form');
     // Add Enter key visual feedback
@@ -236,6 +269,11 @@
       const errorMsg = document.getElementById('loginErrorMsg');
       errorMsg.style.display = 'none';
 
+      // Always clear previous user session/local storage before saving new user info
+      localStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_logged_in');
+
       const isFileProtocol = window.location.protocol === 'file:';
       // 1. Try admin login
       const { data: admin, error: adminError } = await supabase
@@ -245,6 +283,7 @@
         .single();
       if (admin && admin.password_hash === password) {
         setSession({ email, type: 'admin' }, remember);
+        saveLoginData(email, remember);
         if (isFileProtocol) {
           window.location.href = '../admin/panel.html';
         } else {
@@ -260,7 +299,27 @@
         .eq('email', email)
         .single();
       if (user && user.password_hash === password) {
-        setSession({ email, type: 'user' }, remember);
+        if (user.deletion_requested) {
+          // Show modal and block login
+          const modalHtml = `
+            <div id="pausedModalOverlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(30,41,59,0.45);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeInModal 0.25s;">
+              <div style="background:white;padding:2.2rem 2rem 2rem 2rem;border-radius:1.2rem;box-shadow:0 8px 32px rgba(30,41,59,0.18);min-width:320px;max-width:90vw;text-align:center;animation:fadeInModal 0.25s;">
+                <h2 style='color:#ef4444;font-size:1.1rem;font-weight:700;margin-bottom:1rem;'>Account Paused</h2>
+                <p style='color:#374151;font-size:1rem;margin-bottom:1.5rem;'>This account has been paused and is under review.<br>Any further questions contact us at <a href='mailto:support@gmtacquisition.com' style='color:#2563eb;text-decoration:underline;'>support@gmtacquisition.com</a></p>
+                <button id="pausedModalCloseBtn" style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);color:white;padding:0.7rem 1.5rem;border:none;border-radius:0.75rem;font-weight:600;cursor:pointer;">Close</button>
+              </div>
+            </div>
+            <style>@keyframes fadeInModal{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}</style>
+          `;
+          document.body.insertAdjacentHTML('beforeend', modalHtml);
+          document.getElementById('pausedModalCloseBtn').onclick = function() {
+            const overlay = document.getElementById('pausedModalOverlay');
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          };
+          return;
+        }
+        setSession({ email, id: user.id, type: 'user', tier: user.tier }, remember);
+        saveLoginData(email, remember);
         if (isFileProtocol) {
           window.location.href = '../user/dashboard.html';
         } else {

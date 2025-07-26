@@ -1,0 +1,1697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team - GMT</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { min-height: 100vh; margin: 0; background: repeating-linear-gradient(135deg, #172554 0%, #1e293b 30%, #3b82f6 60%, #0f172a 100%); background-size: 300% 300%; animation: moveGradientLoop 40s linear infinite; position: relative; overflow: hidden; }
+    body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; background: rgba(30,41,59,0.25) 0 0 no-repeat; backdrop-filter: blur(60px); -webkit-backdrop-filter: blur(60px); }
+    @keyframes moveGradientLoop { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+    .dashboard-content { position: relative; z-index: 1; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; min-height: 100vh; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.25); gap: 16px; }
+    .dashboard-panel { background: rgba(255,255,255,0.92); border-radius: 1.25rem; box-shadow: 0 8px 32px rgba(30,41,59,0.18); padding: 2.5rem 3.5rem; display: flex; flex-direction: column; align-items: center; min-width: 320px; max-width: 95vw; margin: 0 auto; }
+    .dashboard-title { color: #172554; text-shadow: none; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
+    /* Sidebar styles copied from dashboard.html */
+    .dashboard-nav-placeholder { min-width: 56px; max-width: 56px; width: 56px; transition: max-width 0.3s, min-width 0.3s, width 0.3s, background 0.3s, box-shadow 0.3s, border-radius 0.3s, backdrop-filter 0.3s; position: fixed; left: 0; top: 0; z-index: 2; background: rgba(255,255,255,0.85); box-shadow: 0 8px 32px 0 rgba(30,41,59,0.18), 2px 0 8px 0 rgba(37,99,235,0.08), 0 1.5px 0 0 rgba(30,41,59,0.04) inset; border-top-right-radius: 2rem; border-bottom-right-radius: 2rem; border-top-left-radius: 0; border-bottom-left-radius: 0; border: 1.5px solid rgba(30,41,59,0.10); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .dashboard-nav-placeholder:hover { background: #fff; min-width: 100px; max-width: 100px; width: 100px; box-shadow: 0 8px 32px rgba(30,41,59,0.14), 2px 0 0 0 rgba(30,41,59,0.08); border-top-right-radius: 2rem; border-bottom-right-radius: 2rem; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+    .dashboard-nav-placeholder nav { width: 100%; transition: width 0.3s; }
+    .dashboard-nav-placeholder nav span { opacity: 0; max-width: 0; transition: opacity 0.2s, max-width 0.2s; white-space: nowrap; overflow: hidden; }
+    .dashboard-nav-placeholder:hover nav span { opacity: 1; max-width: 120px; }
+    .dashboard-nav-placeholder nav a, .dashboard-nav-placeholder nav button { border-radius: 1.2rem; transition: background 0.2s, color 0.2s, box-shadow 0.2s; padding: 0.5rem 0.7rem; margin: 0 0.2rem; }
+    .dashboard-nav-placeholder nav a:not(.active):hover, .dashboard-nav-placeholder nav button:not(.active):hover { background: #e0e7ef; color: #2563eb; box-shadow: 0 6px 24px 0 rgba(37,99,235,0.13), 0 1.5px 0 0 rgba(30,41,59,0.04) inset; border: 1.5px solid rgba(37,99,235,0.10); transition: background 0.18s, box-shadow 0.18s, border 0.18s; }
+    .dashboard-nav-placeholder nav button#userLogout:hover { background: #ef4444 !important; color: #fff !important; border-radius: 1.2rem; box-shadow: 0 2px 8px rgba(239,68,68,0.10); }
+    .dashboard-nav-placeholder nav button#userLogout:hover svg { stroke: #fff !important; }
+    .dashboard-nav-placeholder nav button#userLogout:hover svg rect { stroke: #fff !important; fill: none !important; }
+    .dashboard-nav-placeholder nav button#userLogout:hover svg path { stroke: #fff !important; fill: none !important; }
+    .dashboard-nav-placeholder nav button#userLogout:hover span { color: #fff !important; }
+    .dashboard-nav-placeholder:not(:hover) nav button#userLogout svg { background: none; border-radius: 0; box-shadow: none; width: 28px; height: 28px; padding: 0; margin-bottom: 0; stroke: #ef4444; }
+    .dashboard-nav-placeholder:hover nav button#userLogout, .dashboard-nav-placeholder nav button#userLogout:hover { background: #fef2f2; border-radius: 1.2rem; transition: background 0.2s, color 0.2s, box-shadow 0.2s; }
+    .dashboard-nav-placeholder nav .active { position: relative; }
+    .dashboard-nav-placeholder nav .active svg { stroke: #2563eb !important; }
+    .dashboard-nav-placeholder:hover nav .active { box-shadow: 0 6px 24px 0 rgba(37,99,235,0.13), 0 1.5px 0 0 rgba(30,41,59,0.04) inset; border: 1.5px solid rgba(37,99,235,0.13); transition: background 0.18s, box-shadow 0.18s, border 0.18s; }
+    .dashboard-nav-placeholder nav .active span { color: #2563eb !important; font-weight: 700 !important; }
+    .dashboard-nav-placeholder nav a:not(.active):hover svg, .dashboard-nav-placeholder nav button:not(.active):hover svg { stroke: #2563eb !important; }
+    @media (max-width: 1000px) { .dashboard-content { flex-direction: column !important; align-items: center !important; } .dashboard-nav-placeholder, .dashboard-panel { min-width: unset; max-width: 98vw; margin-left: 0; margin-right: 0; } .dashboard-nav-placeholder { margin-top: 2rem; min-height: 120px; max-width: 95vw; } }
+    /* Remove align-items and color/text-shadow for .team-panel to match .support-panel */
+    .team-panel {
+      background: rgba(255,255,255,0.92);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 32px rgba(30,41,59,0.18);
+      padding: 2.5rem;
+      min-height: calc(100vh - 40px);
+      margin-left: 72px;
+      margin-right: 20px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      width: calc(100vw - 72px - 20px - 8px);
+      max-width: unset;
+      transition: width 0.3s, margin 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      /* Remove color and text-shadow so h1/p use Tailwind classes */
+      color: unset;
+      text-shadow: unset;
+    }
+    /* Modal animations */
+    .modal-overlay {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-content {
+      transform: scale(0.9) translateY(-20px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .modal-overlay.show .modal-content {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+    /* Ensure form fields are clickable */
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 1;
+    }
+    .modal-content label {
+      pointer-events: auto !important;
+      cursor: pointer;
+    }
+    /* Force modal content to be above everything */
+    .modal-overlay.show {
+      z-index: 9998 !important;
+    }
+    .modal-content {
+      z-index: 9999 !important;
+      position: relative;
+    }
+    /* Ensure form elements are always clickable */
+    #addMemberForm input,
+    #addMemberForm select,
+    #addMemberForm textarea {
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 10000 !important;
+      background: white !important;
+      color: #374151 !important;
+    }
+    #addMemberForm label {
+      pointer-events: auto !important;
+      cursor: pointer;
+    }
+    @media (max-width: 600px) {
+      .team-panel {
+        padding: 1.5rem;
+        min-width: unset;
+        margin-left: 44px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="dashboard-content" style="max-height:100vh; overflow-y:auto;">
+    <div class="dashboard-nav-placeholder fade-in-quick">
+      <nav class="flex flex-col items-center w-full gap-6 justify-center flex-1" style="height: 100%;">
+        <a href="dashboard.html" class="flex flex-col items-center group" title="Overview">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/></svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Overview</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Automations">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 28 28">
+            <rect x="6" y="9" width="16" height="10" rx="5"/>
+            <circle cx="10" cy="14" r="1.5"/>
+            <circle cx="18" cy="14" r="1.5"/>
+            <path d="M14 9V4"/>
+            <circle cx="14" cy="3" r="1.2"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Automations</span>
+        </a>
+        <a href="#" class="flex flex-col items-center group" title="Insights">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="13" width="3" height="7" rx="1.5"/><rect x="10" y="9" width="3" height="11" rx="1.5"/><rect x="16" y="5" width="3" height="15" rx="1.5"/></svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Insights</span>
+        </a>
+        <a href="team.html" class="flex flex-col items-center group active" title="Team">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="8" cy="13" r="3"/>
+            <circle cx="16" cy="13" r="3"/>
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M2 21c0-2.5 4-4.5 10-4.5s10 2 10 4.5"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Team</span>
+        </a>
+        <a href="settings.html" id="settingsLink" class="flex flex-col items-center group" title="Settings">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00 .33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01 0-4h.09a1.65 1.65 0 00 1.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 01 2.83-2.83l.06.06a1.65 1.65 0 00 1.82.33h.09a1.65 1.65 0 00 1-1.51V3a2 2 0 01 4 0v.09a1.65 1.65 0 00 1 1.51h.09a1.65 1.65 0 00 1.82-.33l.06-.06a2 2 0 01 2.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v.09a1.65 1.65 0 00 1.51 1H21a2 2 0 01 0 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Settings</span>
+        </a>
+        <a href="support.html" class="flex flex-col items-center group" title="Support">
+          <svg width="28" height="28" fill="none" stroke="#172554" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <span class="text-xs mt-1 text-gray-700 group-hover:text-blue-700 font-semibold">Support</span>
+        </a>
+        <button id="userLogout" class="flex flex-col items-center group focus:outline-none" title="Sign Out">
+          <svg width="28" height="28" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12H4"/><path d="M11 8l4 4-4 4"/><rect x="2" y="2" width="20" height="20" rx="6" stroke="#ef4444" stroke-width="2" fill="none"/></svg>
+          <span class="text-xs mt-1 text-red-600 group-hover:text-red-800 font-semibold">Sign Out</span>
+        </button>
+      </nav>
+    </div>
+    <div class="dashboard-panel overview-panel analytics-overview-panel fade-in-quick team-panel">
+      <h1 class="text-2xl font-bold mb-4" style="color:#172554 !important; text-shadow:none !important;">Team Center</h1>
+      <p class="mb-6 text-lg text-gray-700" style="text-shadow:none;">View and manage all members of your organization. See names, roles, and status at a glance.</p>
+      <p class="mb-6 text-sm text-gray-600" style="text-shadow:none;">This feature is for <span class="font-bold" style="color:#FFD700; text-shadow:0 0 10px #FFD700;">Pro</span> and <span class="font-bold" style="color:#8B5CF6; text-shadow:0 0 10px #8B5CF6;">Core</span> members only.</p>
+      <!-- Team Member List (left 1/3 panel) -->
+      <div class="w-full flex flex-col lg:flex-row gap-8">
+        <!-- Left Column: Team Members -->
+        <div class="w-full lg:w-1/3">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-semibold" style="color:#172554; text-shadow:none;">Team Member List</h2>
+            <button id="addMemberBtn" class="flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg shadow transition text-sm transform hover:-translate-y-1 hover:shadow-lg focus:outline-none">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
+              Add Member
+            </button>
+          </div>
+          <div class="bg-white rounded-2xl border-2 border-blue-100 shadow-lg overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
+            <ul id="teamMembersList" class="divide-y divide-gray-200">
+              <!-- Team members will be dynamically populated here -->
+            </ul>
+            <!-- No Team Members Message -->
+            <div id="noTeamMembersMessage" class="flex flex-col items-center justify-center py-12 text-center">
+              <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-gray-700 mb-2" style="text-shadow:none;">No Team Members</h3>
+              <p class="text-gray-500 mb-4 text-sm" style="text-shadow:none;">Start building your team by adding the first member.</p>
+              <button id="addFirstMemberBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Add First Member
+              </button>
+            </div>
+          </div>
+          
+          <!-- Team Announcement Section -->
+          <div class="w-full mt-6">
+            <div class="bg-gray-50 rounded-3xl shadow-xl border border-gray-200 p-6 relative overflow-hidden">
+              <div class="relative z-10">
+                <div class="mb-4">
+                  <h3 class="text-lg font-bold" style="color:#172554; text-shadow:none;">Team Announcement</h3>
+                  <p class="text-sm text-gray-600 mt-1" style="text-shadow:none;">Share important updates with your team</p>
+                </div>
+                
+                <div class="bg-orange-50 rounded-2xl p-4 shadow-sm border border-orange-200">
+                  <div id="announcementDisplay" class="hidden">
+                    <div class="flex items-start gap-3 p-3 rounded-xl bg-orange-50 border border-orange-200">
+                      <div class="w-8 h-8 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0" style="text-shadow:none;">📢</div>
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm text-gray-700 font-medium" id="announcementText" style="text-shadow:none;"></p>
+                        <p class="text-xs text-gray-500 mt-1" id="announcementTime" style="text-shadow:none;"></p>
+                      </div>
+                      <button id="editAnnouncementBtn" class="text-orange-600 hover:text-orange-800 text-sm font-medium">Edit</button>
+                    </div>
+                  </div>
+                  
+                  <div id="announcementForm" class="hidden">
+                    <textarea id="announcementInput" class="w-full border-2 border-orange-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-orange-400 text-gray-700 placeholder-gray-400 transition-all duration-200 bg-white hover:bg-orange-50 resize-none" placeholder="Type your team announcement here..." rows="3"></textarea>
+                    <div class="flex justify-end gap-2 mt-3">
+                      <button id="cancelAnnouncementBtn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition-colors font-medium">Cancel</button>
+                      <button id="postAnnouncementBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">Post Announcement</button>
+                    </div>
+                  </div>
+                  
+                  <div id="announcementPlaceholder" class="text-center py-8">
+                    <p class="text-gray-500 text-sm" style="text-shadow:none;">Click "Announce" to share an update with your team</p>
+                  </div>
+                  
+                  <div class="flex justify-center mt-4">
+                    <button id="announceBtn" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                      📢 Announce
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Middle Column: Department Management -->
+        <div class="w-full lg:w-1/3">
+          <div id="departmentManagementSection" class="bg-gray-50 rounded-3xl shadow-xl border border-gray-200 p-8 relative overflow-hidden">
+            
+            <div class="relative z-10">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="text-xl font-bold" style="color:#172554; text-shadow:none;">Department Management</h2>
+                  <p class="text-sm text-gray-600 mt-1" style="text-shadow:none;">Create and organize your teams</p>
+                </div>
+              </div>
+              
+              <form id="addDepartmentForm" class="space-y-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-blue-100">
+                  <label class="block text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2" style="color:#172554; text-shadow:none;">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                    Department Name
+                  </label>
+                  <input type="text" id="departmentNameInput" name="departmentName" class="w-full border-2 border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-gray-700 placeholder-gray-400 transition-all duration-200 bg-gray-50 hover:bg-white" placeholder="Enter department name" required>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-blue-100">
+                  <label class="block text-sm font-semibold mb-4 text-gray-700 flex items-center gap-2" style="color:#172554; text-shadow:none;">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Permissions & Access
+                  </label>
+                  <div class="space-y-3">
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="Start Automation" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">Start Automation</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="Raise a Ticket" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">Raise a Ticket</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="View Activity Log" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">View Activity Log</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="View Detailed Insights" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">View Detailed Insights</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="See Activity" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">See Activity</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="Manage Team Members" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">Manage Team Members</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="Export Reports" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">Export Reports</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors cursor-pointer">
+                      <input type="checkbox" name="permissions" value="Access Support Features" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                      <span class="text-sm text-gray-700" style="text-shadow:none;">Access Support Features</span>
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="flex justify-center pt-4 gap-4">
+                  <button type="submit" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold hover:from-blue-700 hover:to-blue-800 transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg shadow-md">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Add Department
+                  </button>
+                  <button id="viewDepartmentsBtn" class="flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 font-semibold transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-lg shadow-md border-2 border-dashed border-blue-300 hover:border-blue-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                    View Departments
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column: Activity Feed and Calendar -->
+        <div class="w-full lg:w-1/3">
+          <!-- Team Activity Feed Section -->
+          <div class="mb-8">
+            <div class="bg-gray-50 rounded-3xl shadow-xl border border-gray-200 p-8 relative overflow-hidden">
+              
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-6">
+                  <div class="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 class="text-xl font-bold" style="color:#172554; text-shadow:none;">Team Activity Feed</h2>
+                    <p class="text-sm text-gray-600 mt-1" style="text-shadow:none;">Transparent history of who did what and when</p>
+                  </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-green-100">
+                  <div class="space-y-4 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-300">
+                    <div id="activityFeedList" class="space-y-3 hidden">
+                      <!-- Activity items will be dynamically populated here -->
+                    </div>
+                    
+                    <!-- No Activity Message -->
+                    <div id="noActivityMessage" class="flex flex-col items-center justify-center py-8 text-center">
+                      <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                      </div>
+                      <h3 class="text-sm font-semibold text-gray-700 mb-1" style="text-shadow:none;">No Recent Activity</h3>
+                      <p class="text-xs text-gray-500" style="text-shadow:none;">Team activity will appear here</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Team Calendar Section -->
+            <div class="bg-gray-50 rounded-3xl shadow-xl border border-gray-200 p-6 relative overflow-hidden mt-2">
+              <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-8 h-8 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center shadow-md">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                      <line x1="16" y1="2" x2="16" y2="6"/>
+                      <line x1="8" y1="2" x2="8" y2="6"/>
+                      <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold" style="color:#172554; text-shadow:none;">Team Calendar</h3>
+                    <p class="text-sm text-gray-600 mt-1" style="text-shadow:none;">View upcoming events and deadlines</p>
+                  </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+                  <div class="text-center mb-4">
+                    <div class="text-2xl font-bold text-gray-800" id="currentMonth" style="text-shadow:none;">December</div>
+                    <div class="text-sm text-gray-600" id="currentYear" style="text-shadow:none;">2024</div>
+                  </div>
+                  
+                  <div class="grid grid-cols-7 gap-1 text-xs mb-3">
+                    <div class="text-center font-semibold text-gray-600">S</div>
+                    <div class="text-center font-semibold text-gray-600">M</div>
+                    <div class="text-center font-semibold text-gray-600">T</div>
+                    <div class="text-center font-semibold text-gray-600">W</div>
+                    <div class="text-center font-semibold text-gray-600">T</div>
+                    <div class="text-center font-semibold text-gray-600">F</div>
+                    <div class="text-center font-semibold text-gray-600">S</div>
+                  </div>
+                  
+                  <div id="calendarGrid" class="grid grid-cols-7 gap-1">
+                    <!-- Calendar days will be dynamically populated here -->
+                  </div>
+                  
+                  <div class="mt-4 pt-3 border-t border-gray-200">
+                    <h4 class="text-sm font-semibold text-gray-700 mb-2" style="text-shadow:none;">Upcoming Events</h4>
+                    <div id="upcomingEvents" class="space-y-2">
+                      <div class="text-xs text-gray-500" style="text-shadow:none;">No upcoming events</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+      <!-- Add Member Modal -->
+      <div id="addMemberModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative text-gray-700" style="z-index: 9999;">
+          <button id="closeAddMemberModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+          <h3 class="text-xl font-bold mb-4" style="color:#172554; text-shadow:none;">Add Team Member</h3>
+          <form id="addMemberForm" class="space-y-4" style="position: relative; z-index: 10000;">
+            <div>
+              <label class="block text-sm font-semibold mb-1 text-gray-700" style="color:#172554;">Full Name</label>
+              <input type="text" name="fullName" id="fullNameInput" style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; background: white; color: #374151; font-size: 14px; outline: none; cursor: text;" placeholder="Enter full name" required>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1 text-gray-700" style="color:#172554;">Email Address</label>
+              <input type="email" name="email" id="emailInput" style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; background: white; color: #374151; font-size: 14px; outline: none; cursor: text;" placeholder="Enter email address" required>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1 text-gray-700" style="color:#172554;">Role</label>
+              <select name="role" id="roleSelect" style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; background: white; color: #374151; font-size: 14px; outline: none; cursor: pointer;" required>
+                <option value="">Select role</option>
+                <option value="Sales">Sales</option>
+                <option value="Support">Support</option>
+                <option value="Developer">Developer</option>
+                <option value="Admin">Admin</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Operations">Operations</option>
+                <option value="Fulfillment">Fulfillment</option>
+                <option value="Consultant">Consultant</option>
+                <option value="International">International</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1 text-gray-700" style="color:#172554;">Department/Team</label>
+              <select name="department" id="departmentDropdown" style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; background: white; color: #374151; font-size: 14px; outline: none; cursor: pointer;" required>
+                <option value="">Select department</option>
+                <!-- Department options should be dynamically populated here based on user's created departments -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-1 text-gray-700" style="color:#172554;">Status</label>
+              <select name="status" id="statusSelect" style="width: 100%; border: 1px solid #d1d5db; border-radius: 8px; padding: 8px 12px; background: white; color: #374151; font-size: 14px; outline: none; cursor: pointer;" required>
+                <option value="">Select status</option>
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+              </select>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" id="cancelAddMember" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300">Cancel</button>
+              <button type="submit" class="px-4 py-2 rounded-lg bg-blue-700 text-white font-semibold hover:bg-blue-800">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- View Departments Modal -->
+      <div id="viewDepartmentsModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl p-8 w-full max-w-4xl relative max-h-[90vh] overflow-hidden">
+          <button id="closeViewDepartmentsModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl font-bold">&times;</button>
+          <h3 class="text-xl font-bold mb-4" style="color:#172554; text-shadow:none;">Existing Departments</h3>
+            <div class="overflow-y-auto max-h-[calc(90vh-120px)]">
+              <ul id="departmentsList" class="space-y-3">
+                <!-- Departments will be dynamically populated here -->
+              </ul>
+              <!-- No Departments Message -->
+              <div id="noDepartmentsMessage" class="flex flex-col items-center justify-center py-12 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                  <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                  </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-700 mb-2">No Departments Created</h3>
+                <p class="text-gray-500 mb-4">Get started by creating your first department to organize your team.</p>
+                <button id="createFirstDepartmentBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  Create First Department
+                </button>
+              </div>
+            </div>
+        </div>
+      </div>
+      
+      <!-- Delete Confirmation Modal -->
+      <div id="deleteConfirmModal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-bold mb-2" style="color:#172554; text-shadow:none;">Confirm Deletion</h3>
+            <p class="text-gray-600 mb-6" id="deleteConfirmMessage">Are you sure you want to delete this item?</p>
+            <div class="flex justify-center gap-3">
+              <button id="cancelDeleteBtn" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium">
+                Cancel
+              </button>
+              <button id="confirmDeleteBtn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// Initialize Supabase client
+const supabaseUrl = 'https://mdxcytltlftuqxmlczam.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1keGN5dGx0bGZ0dXF4bWxjemFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMzg0MzMsImV4cCI6MjA2ODYxNDQzM30.wRVqK3H1lptqWsSzQy0yuYaggRA584Jbf6Bq-5MDLWQ';
+let supabase;
+
+// Global state
+let currentUser = null;
+let departments = [];
+let teamMembers = [];
+let currentAnnouncement = null;
+let activityLog = [];
+let teamEvents = [];
+
+// Initialize the page
+async function initializePage() {
+  try {
+    // Get current user from session (same as other files)
+    function getSession() {
+      return (
+        JSON.parse(localStorage.getItem('gmt_user')) ||
+        JSON.parse(sessionStorage.getItem('gmt_user'))
+      );
+    }
+    currentUser = getSession();
+    
+    // Check if user is logged in
+    if (!currentUser || currentUser.type !== 'user') {
+      const isFileProtocol = window.location.protocol === 'file:';
+      if (isFileProtocol) {
+          window.location.href = '../login/login.html';
+        } else {
+          window.location.href = '/client/login/login.html';
+        }
+      return;
+    }
+    
+    // Load all data
+    await Promise.all([
+      loadDepartments(),
+      loadTeamMembers(),
+      loadAnnouncement(),
+      loadActivityLog(),
+      loadTeamEvents()
+    ]);
+    
+    // Update UI
+    updateUI();
+  } catch (error) {
+    console.error('Error initializing page:', error);
+  }
+}
+
+// Load departments
+async function loadDepartments() {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('departments')
+      .select(`
+        *,
+        department_permissions(permission_name)
+      `)
+      .eq('team_id', teamId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    departments = data || [];
+  } catch (error) {
+    console.error('Error loading departments:', error);
+  }
+}
+
+// Load team members
+async function loadTeamMembers() {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('team_members')
+      .select(`
+        *,
+        departments(name)
+      `)
+      .eq('team_id', teamId)
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    teamMembers = data || [];
+  } catch (error) {
+    console.error('Error loading team members:', error);
+  }
+}
+
+// Load current announcement
+async function loadAnnouncement() {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('team_announcements')
+      .select('*')
+      .eq('is_active', true)
+      .eq('team_id', teamId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single();
+    
+    if (error) throw error;
+    // Ensure we have valid data
+    if (data) {
+      currentAnnouncement = data;
+    } else {
+      currentAnnouncement = null;
+    }
+  } catch (error) {
+    console.error('Error loading announcement:', error);
+    currentAnnouncement = null;
+  }
+}
+
+// Load activity log
+async function loadActivityLog() {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('team_activity_log')
+      .select('*')
+      .eq('team_id', teamId)
+      .order('created_at', { ascending: false })
+      .limit(15);
+    
+    if (error) throw error;
+    activityLog = data || [];
+  } catch (error) {
+    console.error('Error loading activity log:', error);
+  }
+}
+
+// Load team events
+async function loadTeamEvents() {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('team_events')
+      .select('*')
+      .gte('event_date', new Date().toISOString().split('T')[0])
+      .eq('team_id', teamId)
+      .order('event_date', { ascending: true })
+      .limit(10);
+    
+    if (error) throw error;
+    teamEvents = data || [];
+  } catch (error) {
+    console.error('Error loading team events:', error);
+  }
+}
+
+// Update UI with loaded data
+function updateUI() {
+  updateTeamMembersList();
+  updateDepartmentsList();
+  updateAnnouncementDisplay();
+  updateActivityFeed();
+  updateCalendar();
+  updateDepartmentDropdown();
+}
+
+// Update team members list
+function updateTeamMembersList() {
+  const teamMembersList = document.getElementById('teamMembersList');
+  const noTeamMembersMessage = document.getElementById('noTeamMembersMessage');
+  
+  if (teamMembers.length === 0) {
+    teamMembersList.innerHTML = '';
+    noTeamMembersMessage.style.display = 'flex';
+  } else {
+    noTeamMembersMessage.style.display = 'none';
+    teamMembersList.innerHTML = teamMembers.map(member => `
+      <li class="flex items-center justify-between px-6 py-4 hover:bg-blue-50 transition group border-b last:border-b-0 border-blue-100">
+        <div class="flex items-center gap-4">
+          <div class="bg-blue-100 text-blue-700 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">
+            ${getInitials(member.full_name)}
+          </div>
+          <div>
+            <div class="font-semibold" style="color:#172554; text-shadow:none;">${member.full_name}</div>
+            <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-700">${member.role}</span>
+            ${member.departments ? `<span class="inline-block mt-1 ml-2 px-2 py-0.5 rounded text-xs font-medium bg-gray-50 text-gray-700">${member.departments.name}</span>` : ''}
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button onclick="editTeamMember('${member.id}')" class="flex items-center gap-1 px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-blue-700 rounded-lg text-sm font-medium transition shadow-sm border border-transparent hover:border-blue-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+            Edit
+          </button>
+          <button onclick="deleteTeamMember('${member.id}')" class="flex items-center gap-1 px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg text-sm font-medium transition shadow-sm border border-transparent hover:border-red-300">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+            Delete
+          </button>
+        </div>
+      </li>
+    `).join('');
+  }
+}
+
+// Update departments list in modal
+function updateDepartmentsList() {
+  const departmentsList = document.getElementById('departmentsList');
+  const noDepartmentsMessage = document.getElementById('noDepartmentsMessage');
+  
+  if (departments.length === 0) {
+    departmentsList.innerHTML = '';
+    if (noDepartmentsMessage) {
+      noDepartmentsMessage.style.display = 'flex';
+      noDepartmentsMessage.style.visibility = 'visible';
+    }
+  } else {
+    if (noDepartmentsMessage) {
+      noDepartmentsMessage.style.display = 'none';
+      noDepartmentsMessage.style.visibility = 'hidden';
+    }
+    departmentsList.innerHTML = departments.map(dept => `
+      <li class="bg-blue-50 rounded-lg px-4 py-3 flex flex-col border border-blue-200">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-4 h-4 rounded-full" style="background:${dept.color};"></span>
+            <span class="font-semibold text-blue-900">${dept.name}</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="deleteDepartment('${dept.id}')" class="text-xs px-2 py-1 rounded bg-red-100 hover:bg-red-200 text-red-700 font-semibold">Delete</button>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-1 text-xs">
+          ${dept.department_permissions?.map(perm => 
+            `<span class="bg-blue-200 text-blue-800 rounded px-2 py-0.5">${perm.permission_name}</span>`
+          ).join('') || ''}
+        </div>
+      </li>
+    `).join('');
+  }
+}
+
+// Update announcement display
+function updateAnnouncementDisplay() {
+  const announcementDisplay = document.getElementById('announcementDisplay');
+  const announcementForm = document.getElementById('announcementForm');
+  const announcementPlaceholder = document.getElementById('announcementPlaceholder');
+  
+  if (currentAnnouncement && currentAnnouncement.message) {
+    document.getElementById('announcementText').textContent = currentAnnouncement.message;
+    if (currentAnnouncement.created_at) {
+      document.getElementById('announcementTime').textContent = new Date(currentAnnouncement.created_at).toLocaleString();
+    } else {
+      document.getElementById('announcementTime').textContent = 'Just now';
+    }
+    announcementDisplay.classList.remove('hidden');
+    announcementForm.classList.add('hidden');
+    announcementPlaceholder.style.display = 'none';
+  } else {
+    announcementDisplay.classList.add('hidden');
+    announcementForm.classList.add('hidden');
+    announcementPlaceholder.style.display = 'block';
+  }
+}
+
+// Update activity feed
+function updateActivityFeed() {
+  const activityFeedList = document.getElementById('activityFeedList');
+  const noActivityMessage = document.getElementById('noActivityMessage');
+  
+  if (activityLog.length === 0) {
+    activityFeedList.classList.add('hidden');
+    noActivityMessage.classList.remove('hidden');
+        } else {
+    activityFeedList.classList.remove('hidden');
+    noActivityMessage.classList.add('hidden');
+    activityFeedList.innerHTML = activityLog.map(activity => {
+      // Determine color based on action type
+      let bgColor = 'bg-gray-100';
+      let borderColor = 'border-gray-200';
+      let iconBgColor = 'bg-blue-100';
+      let iconTextColor = 'text-blue-700';
+      
+      // Check if it's a creation action
+      if (activity.action.toLowerCase().includes('created') || 
+          activity.action.toLowerCase().includes('added') ||
+          activity.action.toLowerCase().includes('posted')) {
+        bgColor = 'bg-green-50';
+        borderColor = 'border-green-200';
+        iconBgColor = 'bg-green-100';
+        iconTextColor = 'text-green-700';
+      }
+      // Check if it's a deletion action
+      else if (activity.action.toLowerCase().includes('deleted') || 
+               activity.action.toLowerCase().includes('removed')) {
+        bgColor = 'bg-red-50';
+        borderColor = 'border-red-200';
+        iconBgColor = 'bg-red-100';
+        iconTextColor = 'text-red-700';
+      }
+      // Check if it's an announcement replacement
+      else if (activity.action.toLowerCase().includes('replaced') ||
+               activity.action.toLowerCase().includes('updated announcement')) {
+        bgColor = 'bg-blue-50';
+        borderColor = 'border-blue-200';
+        iconBgColor = 'bg-blue-100';
+        iconTextColor = 'text-blue-700';
+      }
+      
+      // Get user initials from current user session
+      let userInitials = 'U'; // Default fallback
+      if (currentUser && currentUser.full_name) {
+        userInitials = getInitials(currentUser.full_name);
+      } else if (currentUser && currentUser.email) {
+        // Use first letter of email if no full name
+        userInitials = currentUser.email.charAt(0).toUpperCase();
+      }
+      
+      return `
+        <div class="flex items-start gap-3 p-3 rounded-xl ${bgColor} border ${borderColor}">
+          <div class="w-8 h-8 ${iconBgColor} ${iconTextColor} rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+            ${userInitials}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm text-gray-700 font-medium">${activity.action}</p>
+            <p class="text-xs text-gray-500 mt-1">${new Date(activity.created_at).toLocaleString()}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+// Update calendar
+function updateCalendar() {
+  generateCalendar();
+  updateUpcomingEvents();
+}
+
+// Generate calendar grid
+function generateCalendar() {
+  const calendarGrid = document.getElementById('calendarGrid');
+  const currentMonth = document.getElementById('currentMonth');
+  const currentYear = document.getElementById('currentYear');
+  
+  if (!calendarGrid) return;
+  
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  
+  // Update month and year display
+  if (currentMonth) {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                       'July', 'August', 'September', 'October', 'November', 'December'];
+    currentMonth.textContent = monthNames[month];
+  }
+  if (currentYear) {
+    currentYear.textContent = year;
+  }
+  
+  // Get first day of month and number of days
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const startingDay = firstDay.getDay(); // 0 = Sunday, 1 = Monday, etc.
+  
+  let calendarHTML = '';
+  
+  // Add empty cells for days before the first day of the month
+  for (let i = 0; i < startingDay; i++) {
+    calendarHTML += '<div class="text-center text-gray-300 text-xs py-1"></div>';
+  }
+  
+  // Add cells for each day of the month
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = day === now.getDate();
+    const isPast = day < now.getDate();
+    const isFuture = day > now.getDate();
+    
+    let dayClass = 'text-center text-xs py-1';
+    
+    if (isToday) {
+      dayClass += ' font-bold bg-blue-100 text-blue-700 rounded-full';
+    } else if (isPast) {
+      dayClass += ' text-gray-400 cursor-default'; // Past dates are faded
+    } else {
+      dayClass += ' text-gray-700 hover:bg-gray-100 rounded cursor-pointer'; // Future dates are interactive
+    }
+    
+    calendarHTML += `<div class="${dayClass}" style="text-shadow:none;">${day}</div>`;
+  }
+  
+  // Fill remaining cells to complete the grid (6 rows max)
+  const totalCells = startingDay + daysInMonth;
+  const remainingCells = 42 - totalCells; // 6 rows * 7 days = 42
+  
+  for (let i = 0; i < remainingCells; i++) {
+    calendarHTML += '<div class="text-center text-gray-300 text-xs py-1"></div>';
+  }
+  
+  calendarGrid.innerHTML = calendarHTML;
+}
+
+// Update upcoming events
+function updateUpcomingEvents() {
+  const upcomingEvents = document.getElementById('upcomingEvents');
+  
+  if (teamEvents.length === 0) {
+    upcomingEvents.innerHTML = '<div class="text-xs text-gray-500" style="text-shadow:none;">No upcoming events</div>';
+  } else {
+    upcomingEvents.innerHTML = teamEvents.map(event => `
+      <div class="text-xs text-gray-700 mb-1">
+        <div class="font-medium">${event.title}</div>
+        <div class="text-gray-500">${new Date(event.event_date).toLocaleDateString()}</div>
+      </div>
+    `).join('');
+  }
+}
+
+// Update department dropdown
+function updateDepartmentDropdown() {
+  const departmentDropdown = document.getElementById('departmentDropdown');
+  if (departmentDropdown) {
+    // Clear existing options except the first one
+    const firstOption = departmentDropdown.querySelector('option[value=""]');
+    departmentDropdown.innerHTML = '';
+    if (firstOption) {
+      departmentDropdown.appendChild(firstOption);
+    }
+    
+    // Add department options
+    departments.forEach(dept => {
+      const option = document.createElement('option');
+      option.value = dept.id;
+      option.textContent = dept.name;
+      departmentDropdown.appendChild(option);
+    });
+  }
+}
+
+// Helper functions
+function getInitials(name) {
+  return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+}
+
+function getInitialsFromId(userId) {
+  return userId.substring(0, 2).toUpperCase();
+}
+
+// Team member operations
+async function addTeamMember(formData) {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    const { data, error } = await supabase
+      .from('team_members')
+      .insert([{
+        full_name: formData.fullName,
+        email: formData.email,
+        role: formData.role,
+        department_id: formData.departmentId || null,
+        status: formData.status,
+        created_by: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    // Log activity
+    await supabase
+      .from('team_activity_log')
+      .insert([{
+        action: 'Added team member',
+        description: `Added ${formData.fullName} as ${formData.role}`,
+        entity_type: 'team_member',
+        entity_id: data.id,
+        user_id: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }]);
+    
+    await loadTeamMembers();
+    updateTeamMembersList();
+    await loadActivityLog();
+    updateActivityFeed();
+    
+    // Show success banner
+    showBanner(`${formData.fullName} was successfully added`, 'success');
+    
+    return data;
+  } catch (error) {
+    console.error('Error adding team member:', error);
+    showBanner('Failed to add team member', 'error');
+    throw error;
+  }
+}
+
+// Edit team member function
+async function editTeamMember(memberId) {
+  const member = teamMembers.find(m => m.id === memberId);
+  if (!member) return;
+  
+  // For now, just open the add member modal with pre-filled data
+  // In a full implementation, you'd want a separate edit modal
+  openAddMemberModal();
+  
+  // Pre-fill the form
+  const form = document.getElementById('addMemberForm');
+  if (form) {
+    form.querySelector('#fullNameInput').value = member.full_name;
+    form.querySelector('#emailInput').value = member.email;
+    form.querySelector('#roleSelect').value = member.role;
+    form.querySelector('#departmentDropdown').value = member.department_id || '';
+    form.querySelector('#statusSelect').value = member.status;
+  }
+}
+
+// Delete team member function
+async function deleteTeamMember(memberId) {
+  const member = teamMembers.find(m => m.id === memberId);
+  if (!member) return;
+  
+  showDeleteConfirmModal(
+    `Are you sure you want to delete team member "${member.full_name}"?`,
+    async () => {
+      try {
+        const teamId = currentUser?.team_id || currentUser?.email || 'default';
+        const { error } = await supabase
+          .from('team_members')
+          .delete()
+          .eq('id', memberId);
+        
+        if (error) throw error;
+        
+        // Log the deletion activity
+        await supabase
+          .from('team_activity_log')
+          .insert([{
+            action: 'Deleted team member',
+            description: `Deleted team member: ${member.full_name} (${member.role})`,
+            entity_type: 'team_member',
+            entity_id: memberId,
+            user_id: null,
+            team_id: teamId
+          }]);
+        
+        await loadTeamMembers();
+        updateTeamMembersList();
+        await loadActivityLog();
+        updateActivityFeed();
+        
+        // Show success banner
+        showBanner(`${member.full_name} was successfully deleted`, 'success');
+        
+      } catch (error) {
+        console.error('Error deleting team member:', error);
+        showBanner('Failed to delete team member', 'error');
+      }
+    }
+  );
+}
+
+// Department operations
+async function addDepartment(formData) {
+  try {
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    // Insert department
+    const { data: dept, error: deptError } = await supabase
+      .from('departments')
+      .insert([{
+        name: formData.name,
+        color: formData.color || '#3b82f6',
+        created_by: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }])
+      .select()
+      .single();
+    
+    if (deptError) throw deptError;
+    
+    // Insert permissions
+    if (formData.permissions && formData.permissions.length > 0) {
+      const permissions = formData.permissions.map(perm => ({
+        department_id: dept.id,
+        permission_name: perm
+      }));
+      
+      const { error: permError } = await supabase
+        .from('department_permissions')
+        .insert(permissions);
+      
+      if (permError) throw permError;
+    }
+    
+    // Log activity
+    await supabase
+      .from('team_activity_log')
+      .insert([{
+        action: 'Created department',
+        description: `Created department: ${formData.name}`,
+        entity_type: 'department',
+        entity_id: dept.id,
+        user_id: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }]);
+    
+    await loadDepartments();
+    updateDepartmentsList();
+    updateDepartmentDropdown();
+    await loadActivityLog();
+    updateActivityFeed();
+    
+    // Show success banner
+    showBanner(`${formData.name} was successfully created`, 'success');
+    
+    return dept;
+  } catch (error) {
+    console.error('Error adding department:', error);
+    showBanner('Failed to create department', 'error');
+    throw error;
+  }
+}
+
+// Edit department function
+async function editDepartment(deptId) {
+  const dept = departments.find(d => d.id === deptId);
+  if (!dept) return;
+  
+  // For now, just show an alert
+  // In a full implementation, you'd want a separate edit modal
+  alert('Edit department functionality would open a modal to edit: ' + dept.name);
+}
+
+// Delete department function
+async function deleteDepartment(deptId) {
+  const dept = departments.find(d => d.id === deptId);
+  if (!dept) return;
+  
+  showDeleteConfirmModal(
+    `Are you sure you want to delete department "${dept.name}"?`,
+    async () => {
+      try {
+        const teamId = currentUser?.team_id || currentUser?.email || 'default';
+        const { error } = await supabase
+          .from('departments')
+          .delete()
+          .eq('id', deptId);
+        
+        if (error) throw error;
+        
+        // Log the deletion activity
+        await supabase
+          .from('team_activity_log')
+          .insert([{
+            action: 'Deleted department',
+            description: `Deleted department: ${dept.name}`,
+            entity_type: 'department',
+            entity_id: deptId,
+            user_id: null,
+            team_id: teamId
+          }]);
+        
+        await loadDepartments();
+        updateDepartmentsList();
+        updateDepartmentDropdown();
+        await loadActivityLog();
+        updateActivityFeed();
+        
+        // Show success banner
+        showBanner(`${dept.name} was successfully deleted`, 'success');
+        
+      } catch (error) {
+        console.error('Error deleting department:', error);
+        showBanner('Failed to delete department', 'error');
+      }
+    }
+  );
+}
+
+// Announcement operations
+async function createAnnouncement(message) {
+  try {
+    if (!message || message.trim() === '') {
+      throw new Error('Announcement message cannot be empty');
+    }
+
+    const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    // Check if there's already an active announcement
+    const hasExistingAnnouncement = currentAnnouncement && currentAnnouncement.is_active;
+    
+    // First, deactivate any existing announcements
+    await supabase
+      .from('team_announcements')
+      .update({ is_active: false })
+      .eq('is_active', true)
+      .eq('team_id', teamId);
+    
+    // Then create the new announcement
+    const { data, error } = await supabase
+      .from('team_announcements')
+      .insert([{
+        message: message,
+        is_active: true,
+        created_by: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    await loadAnnouncement();
+    updateAnnouncementDisplay();
+    // Log activity
+    await supabase
+      .from('team_activity_log')
+      .insert([{
+        action: hasExistingAnnouncement ? 'Replaced announcement' : 'Created announcement',
+        description: `Created team announcement: ${message.substring(0, 50)}${message.length > 50 ? '...' : ''}`,
+        entity_type: 'announcement',
+        entity_id: data.id,
+        user_id: null, // Set to null to avoid foreign key constraint issues
+        team_id: teamId
+      }]);
+    await loadActivityLog();
+    updateActivityFeed();
+    
+    // Show blue info banner
+    showBanner('A new announcement alert has been posted', 'info');
+    
+    return data;
+  } catch (error) {
+    console.error('Error creating announcement:', error);
+    // Show user-friendly error message
+    if (error.message) {
+      showBanner('Failed to create announcement', 'error');
+    } else {
+      showBanner('Failed to create announcement', 'error');
+    }
+    throw error;
+  }
+}
+
+// Function to show the announcement form
+function showAnnouncementForm() {
+  const announcementDisplay = document.getElementById('announcementDisplay');
+  const announcementForm = document.getElementById('announcementForm');
+  const announcementPlaceholder = document.getElementById('announcementPlaceholder');
+  
+  announcementDisplay.classList.add('hidden');
+  announcementForm.classList.remove('hidden');
+  announcementPlaceholder.style.display = 'none';
+}
+
+// Function to show the announcement placeholder
+function showAnnouncementPlaceholder() {
+  const announcementDisplay = document.getElementById('announcementDisplay');
+  const announcementForm = document.getElementById('announcementForm');
+  const announcementPlaceholder = document.getElementById('announcementPlaceholder');
+  
+  announcementDisplay.classList.add('hidden');
+  announcementForm.classList.add('hidden');
+  announcementPlaceholder.style.display = 'block';
+}
+
+// Function to open the Add Member Modal
+function openAddMemberModal() {
+  const addMemberModal = document.getElementById('addMemberModal');
+  const closeAddMemberModal = document.getElementById('closeAddMemberModal');
+  const addMemberForm = document.getElementById('addMemberForm');
+  const cancelAddMember = document.getElementById('cancelAddMember');
+
+  if (addMemberModal) {
+    addMemberModal.classList.add('show');
+    // Focus on first input after animation
+    setTimeout(() => {
+      const firstInput = addMemberForm?.querySelector('input[type="text"]');
+      if (firstInput) firstInput.focus();
+    }, 300);
+  }
+  if (addMemberForm) addMemberForm.reset();
+  if (cancelAddMember) cancelAddMember.classList.remove('hidden');
+}
+
+// Function to close the Add Member Modal
+function closeAddMemberModalFn() {
+  const addMemberModal = document.getElementById('addMemberModal');
+  const closeAddMemberModal = document.getElementById('closeAddMemberModal');
+  const addMemberForm = document.getElementById('addMemberForm');
+  const cancelAddMember = document.getElementById('cancelAddMember');
+
+  if (addMemberModal) addMemberModal.classList.remove('show');
+  if (addMemberForm) addMemberForm.reset();
+  if (cancelAddMember) cancelAddMember.classList.add('hidden');
+}
+
+// Function to open the View Departments Modal
+function openViewDepartmentsModal() {
+  const viewDepartmentsModal = document.getElementById('viewDepartmentsModal');
+  const closeViewDepartmentsModal = document.getElementById('closeViewDepartmentsModal');
+  const departmentsList = document.getElementById('departmentsList');
+  const noDepartmentsMessage = document.getElementById('noDepartmentsMessage');
+
+  if (viewDepartmentsModal) {
+    viewDepartmentsModal.classList.add('show');
+    // Update departments list after modal opens
+    setTimeout(() => {
+      updateDepartmentsList();
+    }, 300);
+  }
+  if (closeViewDepartmentsModal) closeViewDepartmentsModal.classList.remove('hidden');
+}
+
+// Function to close the View Departments Modal
+function closeViewDepartmentsModalFn() {
+  const viewDepartmentsModal = document.getElementById('viewDepartmentsModal');
+  const closeViewDepartmentsModal = document.getElementById('closeViewDepartmentsModal');
+  const departmentsList = document.getElementById('departmentsList');
+  const noDepartmentsMessage = document.getElementById('noDepartmentsMessage');
+
+  if (viewDepartmentsModal) viewDepartmentsModal.classList.remove('show');
+  if (closeViewDepartmentsModal) closeViewDepartmentsModal.classList.add('hidden');
+  if (departmentsList) departmentsList.innerHTML = ''; // Clear list in modal
+  if (noDepartmentsMessage) noDepartmentsMessage.style.display = 'flex';
+}
+
+// Initialize page when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize Supabase client
+  supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  // Initialize Supabase and load data
+  initializePage();
+  
+  // Attach all event listeners after DOM is loaded
+  attachEventListeners();
+});
+
+// Function to toggle checkbox state
+function toggleCheckbox(checkboxId) {
+  const checkbox = document.getElementById(checkboxId);
+  if (checkbox) {
+    checkbox.checked = !checkbox.checked;
+  }
+}
+
+// Function to attach all event listeners
+function attachEventListeners() {
+  // Add Member Modal logic
+  const addMemberBtn = document.getElementById('addMemberBtn');
+  const addMemberModal = document.getElementById('addMemberModal');
+  const closeAddMemberModal = document.getElementById('closeAddMemberModal');
+  const cancelAddMember = document.getElementById('cancelAddMember');
+
+  if (addMemberBtn) addMemberBtn.addEventListener('click', openAddMemberModal);
+  if (closeAddMemberModal) closeAddMemberModal.addEventListener('click', closeAddMemberModalFn);
+  if (cancelAddMember) cancelAddMember.addEventListener('click', closeAddMemberModalFn);
+  
+  // Optional: close modal on outside click
+  if (addMemberModal) {
+    addMemberModal.addEventListener('mousedown', function(e) {
+      if (e.target === addMemberModal) {
+        closeAddMemberModalFn();
+      }
+    });
+  }
+
+  // View Departments Modal logic
+  const viewDepartmentsBtn = document.getElementById('viewDepartmentsBtn');
+  const viewDepartmentsModal = document.getElementById('viewDepartmentsModal');
+  const closeViewDepartmentsModal = document.getElementById('closeViewDepartmentsModal');
+
+  if (viewDepartmentsBtn) viewDepartmentsBtn.addEventListener('click', openViewDepartmentsModal);
+  if (closeViewDepartmentsModal) closeViewDepartmentsModal.addEventListener('click', closeViewDepartmentsModalFn);
+  
+  // Optional: close modal on outside click
+  if (viewDepartmentsModal) {
+    viewDepartmentsModal.addEventListener('mousedown', function(e) {
+      if (e.target === viewDepartmentsModal) {
+        closeViewDepartmentsModalFn();
+      }
+    });
+  }
+
+  // Create First Department button functionality
+  const createFirstDepartmentBtn = document.getElementById('createFirstDepartmentBtn');
+  if (createFirstDepartmentBtn) {
+    createFirstDepartmentBtn.addEventListener('click', function() {
+      // Close the departments modal
+      closeViewDepartmentsModalFn();
+      
+      // Find the Department Management section and scroll to it
+      const departmentSection = document.getElementById('departmentManagementSection');
+      if (departmentSection) {
+        // Add a highlight effect
+        departmentSection.style.transition = 'all 0.3s ease';
+        departmentSection.style.transform = 'scale(1.02)';
+        departmentSection.style.boxShadow = '0 20px 40px rgba(59, 130, 246, 0.3)';
+        departmentSection.style.border = '2px solid #3b82f6';
+        
+        // Scroll to the section
+        departmentSection.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center' 
+        });
+        
+        // Remove highlight after 3 seconds
+        setTimeout(() => {
+          departmentSection.style.transform = 'scale(1)';
+          departmentSection.style.boxShadow = '';
+          departmentSection.style.border = '';
+        }, 3000);
+      }
+    });
+  }
+
+  // Announcement form handler
+  const postAnnouncementBtn = document.getElementById('postAnnouncementBtn');
+  if (postAnnouncementBtn) {
+    postAnnouncementBtn.addEventListener('click', async function() {
+      const announcementInput = document.getElementById('announcementInput');
+      const text = announcementInput.value.trim();
+      if (text) {
+        try {
+          await createAnnouncement(text);
+          announcementInput.value = '';
+        } catch (error) {
+          // Error is already handled in createAnnouncement function
+          console.log('Announcement creation failed:', error);
+        }
+      }
+    });
+  }
+
+  // Edit announcement handler
+  const editAnnouncementBtn = document.getElementById('editAnnouncementBtn');
+  if (editAnnouncementBtn) {
+    editAnnouncementBtn.addEventListener('click', function() {
+      const announcementText = document.getElementById('announcementText');
+      showAnnouncementForm();
+      document.getElementById('announcementInput').value = announcementText.textContent;
+    });
+  }
+
+  // Cancel announcement handler
+  const cancelAnnouncementBtn = document.getElementById('cancelAnnouncementBtn');
+  if (cancelAnnouncementBtn) {
+    cancelAnnouncementBtn.addEventListener('click', showAnnouncementPlaceholder);
+  }
+
+  // Announce button handler
+  const announceBtn = document.getElementById('announceBtn');
+  if (announceBtn) {
+    announceBtn.addEventListener('click', showAnnouncementForm);
+  }
+
+  // Add First Member button handler
+  const addFirstMemberBtn = document.getElementById('addFirstMemberBtn');
+  if (addFirstMemberBtn) {
+    addFirstMemberBtn.addEventListener('click', function() {
+      openAddMemberModal();
+    });
+  }
+
+  // Form handlers
+  const addMemberForm = document.getElementById('addMemberForm');
+  if (addMemberForm) {
+    addMemberForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        fullName: this.querySelector('#fullNameInput').value,
+        email: this.querySelector('#emailInput').value,
+        role: this.querySelector('#roleSelect').value,
+        departmentId: this.querySelector('#departmentDropdown').value || null,
+        status: this.querySelector('#statusSelect').value
+      };
+      
+      try {
+        await addTeamMember(formData);
+        closeAddMemberModalFn();
+        this.reset();
+      } catch (error) {
+        alert('Error adding team member: ' + error.message);
+      }
+    });
+  }
+
+  const addDepartmentForm = document.getElementById('addDepartmentForm');
+  if (addDepartmentForm) {
+    addDepartmentForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        name: this.querySelector('#departmentNameInput').value,
+        permissions: Array.from(this.querySelectorAll('input[name="permissions"]:checked'))
+          .map(cb => cb.value)
+      };
+      
+      try {
+        await addDepartment(formData);
+        this.reset();
+        this.querySelectorAll('input[name="permissions"]').forEach(cb => cb.checked = false);
+      } catch (error) {
+        alert('Error adding department: ' + error.message);
+      }
+    });
+  }
+
+  // Delete confirmation modal event listeners
+  const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+  
+  if (cancelDeleteBtn) {
+    cancelDeleteBtn.addEventListener('click', hideDeleteConfirmModal);
+  }
+  
+  if (confirmDeleteBtn) {
+    confirmDeleteBtn.addEventListener('click', async () => {
+      if (deleteCallback) {
+        await deleteCallback();
+        hideDeleteConfirmModal();
+      }
+    });
+  }
+  
+  // Close delete modal on outside click
+  if (deleteConfirmModal) {
+    deleteConfirmModal.addEventListener('mousedown', function(e) {
+      if (e.target === deleteConfirmModal) {
+        hideDeleteConfirmModal();
+      }
+    });
+  }
+}
+
+// Notification system
+function showNotification(type, title, message) {
+  const banner = document.getElementById('notificationBanner');
+  const icon = document.getElementById('notificationIcon');
+  const titleEl = document.getElementById('notificationTitle');
+  const messageEl = document.getElementById('notificationMessage');
+  
+  // Set colors and icon based on type
+  let borderColor = '';
+  let iconBgColor = '';
+  let iconColor = '';
+  let iconSvg = '';
+  
+  switch(type) {
+    case 'success':
+      borderColor = 'border-green-500';
+      iconBgColor = 'bg-green-100';
+      iconColor = 'text-green-600';
+      iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>';
+      break;
+    case 'error':
+      borderColor = 'border-red-500';
+      iconBgColor = 'bg-red-100';
+      iconColor = 'text-red-600';
+      iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>';
+      break;
+    case 'info':
+      borderColor = 'border-blue-500';
+      iconBgColor = 'bg-blue-100';
+      iconColor = 'text-blue-600';
+      iconSvg = '<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+      break;
+  }
+  
+  // Update banner content
+  banner.className = `fixed top-4 right-4 z-[9999] transform translate-x-full transition-transform duration-300 ease-in-out`;
+  banner.querySelector('.border-l-4').className = `border-l-4 ${borderColor}`;
+  icon.className = `w-8 h-8 rounded-full flex items-center justify-center ${iconBgColor} ${iconColor}`;
+  icon.innerHTML = iconSvg;
+  titleEl.textContent = title;
+  messageEl.textContent = message;
+  
+  // Show banner
+  setTimeout(() => {
+    banner.classList.remove('translate-x-full');
+  }, 100);
+  
+  // Auto hide after 5 seconds
+  setTimeout(() => {
+    hideNotification();
+  }, 5000);
+}
+
+function hideNotification() {
+  const banner = document.getElementById('notificationBanner');
+  banner.classList.add('translate-x-full');
+}
+
+// Delete confirmation modal
+let deleteCallback = null;
+let deleteItemName = '';
+
+function showDeleteConfirmModal(message, callback) {
+  const modal = document.getElementById('deleteConfirmModal');
+  const messageEl = document.getElementById('deleteConfirmMessage');
+  
+  deleteCallback = callback;
+  messageEl.textContent = message;
+  
+  modal.classList.add('show');
+}
+
+function hideDeleteConfirmModal() {
+  const modal = document.getElementById('deleteConfirmModal');
+  modal.classList.remove('show');
+  deleteCallback = null;
+}
+
+// Banner notification system (settings style)
+function showBanner(message, type = 'success') {
+  if (document.getElementById('teamBanner')) return;
+  
+  const banner = document.createElement('div');
+  banner.id = 'teamBanner';
+  banner.textContent = message;
+  banner.style.position = 'fixed';
+  banner.style.top = '0';
+  banner.style.left = '0';
+  banner.style.width = '100vw';
+  banner.style.color = 'white';
+  banner.style.fontWeight = '600';
+  banner.style.fontSize = '1.1rem';
+  banner.style.textAlign = 'center';
+  banner.style.padding = '1rem 0';
+  banner.style.zIndex = '99999';
+  banner.style.opacity = '0';
+  banner.style.transition = 'opacity 0.3s';
+  
+  // Set background based on type
+  switch(type) {
+    case 'success':
+      banner.style.background = 'linear-gradient(90deg,#22c55e 0%,#16a34a 100%)';
+      banner.style.boxShadow = '0 2px 8px rgba(34,197,94,0.15)';
+      break;
+    case 'error':
+      banner.style.background = 'linear-gradient(90deg,#ef4444 0%,#dc2626 100%)';
+      banner.style.boxShadow = '0 2px 8px rgba(239,68,68,0.15)';
+      break;
+    case 'info':
+      banner.style.background = 'linear-gradient(90deg,#3b82f6 0%,#2563eb 100%)';
+      banner.style.boxShadow = '0 2px 8px rgba(59,130,246,0.15)';
+      break;
+  }
+  
+  document.body.appendChild(banner);
+  setTimeout(() => { banner.style.opacity = '1'; }, 10);
+  
+  // Auto hide after 3 seconds
+  setTimeout(() => {
+    banner.style.opacity = '0';
+    setTimeout(() => { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 400);
+  }, 3000);
+}
+</script>
+</html> 

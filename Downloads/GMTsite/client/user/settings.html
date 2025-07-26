@@ -1052,15 +1052,15 @@ async function loadUserSettings() {
   if (userData.tier === 'pro') {
     tierInput.style.color = '#FFD700';
     tierInput.style.fontWeight = 'bold';
-    tierInput.style.textShadow = '0 0 8px #FFD700, 0 0 4px #fff, 0 0 12px #FFD700';
+    tierInput.style.textShadow = 'none';
   } else if (userData.tier === 'core') {
     tierInput.style.color = '#a259ff';
     tierInput.style.fontWeight = 'bold';
-    tierInput.style.textShadow = '0 0 8px #a259ff, 0 0 4px #fff, 0 0 12px #a259ff';
+    tierInput.style.textShadow = 'none';
   } else if (userData.tier === 'lite') {
     tierInput.style.color = '#6b7280';
     tierInput.style.fontWeight = 'bold';
-    tierInput.style.textShadow = '0 0 8px #6b7280, 0 0 4px #fff, 0 0 12px #6b7280';
+    tierInput.style.textShadow = 'none';
   } else {
     tierInput.style.color = '#172554';
     tierInput.style.fontWeight = 'bold';
