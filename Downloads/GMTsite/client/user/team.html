@@ -9,8 +9,8 @@
     body { min-height: 100vh; margin: 0; background: repeating-linear-gradient(135deg, #172554 0%, #1e293b 30%, #3b82f6 60%, #0f172a 100%); background-size: 300% 300%; animation: moveGradientLoop 40s linear infinite; position: relative; overflow: hidden; }
     body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; background: rgba(30,41,59,0.25) 0 0 no-repeat; backdrop-filter: blur(60px); -webkit-backdrop-filter: blur(60px); }
     @keyframes moveGradientLoop { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
-    .dashboard-content { position: relative; z-index: 1; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; min-height: 100vh; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.25); gap: 16px; }
-    .dashboard-panel { background: rgba(255,255,255,0.92); border-radius: 1.25rem; box-shadow: 0 8px 32px rgba(30,41,59,0.18); padding: 2.5rem 3.5rem; display: flex; flex-direction: column; align-items: center; min-width: 320px; max-width: 95vw; margin: 0 auto; }
+    .dashboard-content { position: relative; z-index: 1; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; min-height: 100vh; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.25); gap: 16px; will-change: scroll-position; }
+    .dashboard-panel { background: rgba(255,255,255,0.92); border-radius: 1.25rem; box-shadow: 0 8px 32px rgba(30,41,59,0.18); padding: 2.5rem 3.5rem; display: flex; flex-direction: column; align-items: center; min-width: 320px; max-width: 95vw; margin: 0 auto; will-change: transform; transform: translateZ(0); }
     .dashboard-title { color: #172554; text-shadow: none; font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; }
     /* Sidebar styles copied from dashboard.html */
     .dashboard-nav-placeholder { min-width: 56px; max-width: 56px; width: 56px; transition: max-width 0.3s, min-width 0.3s, width 0.3s, background 0.3s, box-shadow 0.3s, border-radius 0.3s, backdrop-filter 0.3s; position: fixed; left: 0; top: 0; z-index: 2; background: rgba(255,255,255,0.85); box-shadow: 0 8px 32px 0 rgba(30,41,59,0.18), 2px 0 8px 0 rgba(37,99,235,0.08), 0 1.5px 0 0 rgba(30,41,59,0.04) inset; border-top-right-radius: 2rem; border-bottom-right-radius: 2rem; border-top-left-radius: 0; border-bottom-left-radius: 0; border: 1.5px solid rgba(30,41,59,0.10); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -59,6 +59,7 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
+      will-change: transform, opacity;
     }
     .modal-overlay.show {
       opacity: 1;
@@ -68,6 +69,7 @@
       transform: scale(0.9) translateY(-20px);
       opacity: 0;
       transition: transform 0.3s ease, opacity 0.3s ease;
+      will-change: transform, opacity;
     }
     .modal-overlay.show .modal-content {
       transform: scale(1) translateY(0);
@@ -79,7 +81,9 @@
     .modal-content textarea {
       pointer-events: auto !important;
       position: relative;
-      z-index: 1;
+      z-index: 10000 !important;
+      background: white !important;
+      color: #374151 !important;
     }
     .modal-content label {
       pointer-events: auto !important;
@@ -114,7 +118,69 @@
         margin-left: 44px;
       }
     }
-
+    /* Performance optimizations */
+    .team-panel {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    /* Reduce repaints for smooth scrolling */
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: #6b7280 #e5e7eb;
+    }
+    /* Optimize animations */
+    .modal-content,
+    .modal-overlay {
+      will-change: transform, opacity;
+    }
+    /* Hardware acceleration for better performance */
+    .dashboard-panel,
+    .team-panel {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+    
+    /* Lite user modal styles */
+    .team-panel.lite-user-blur {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+    
+    /* Ensure modal is completely isolated from blur effects */
+    #liteUserModal,
+    #liteUserModal *,
+    #liteUserModal .modal-content,
+    #liteUserModal .modal-content * {
+      filter: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      z-index: 99999 !important;
+    }
+    
+    /* Force modal to be above everything */
+    #liteUserModal {
+      position: fixed !important;
+      z-index: 999999 !important;
+    }
+    
+    /* Additional protection against blur inheritance */
+    .lite-user-blur ~ #liteUserModal,
+    .lite-user-blur + #liteUserModal,
+    .lite-user-blur #liteUserModal {
+      filter: none !important;
+    }
+    
+    /* Ensure all modal content is sharp */
+    #liteUserModal,
+    #liteUserModal *,
+    #liteUserModal .modal-overlay,
+    #liteUserModal .modal-content,
+    #liteUserModal .modal-content * {
+      filter: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
   </style>
 </head>
 <body>
@@ -182,7 +248,7 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"/></svg>
               Add Member
             </button>
-          </div>
+      </div>
           <div class="bg-white rounded-2xl border-2 border-blue-100 shadow-lg overflow-y-auto h-96 scrollbar-thin scrollbar-thumb-blue-200 scrollbar-track-blue-50">
             <ul id="teamMembersList" class="divide-y divide-gray-200">
               <!-- Team members will be dynamically populated here -->
@@ -528,6 +594,60 @@
           </div>
         </div>
       </div>
+      
+
+    </div>
+  </div>
+  
+  <!-- Lite User Upgrade Modal - Outside team panel structure -->
+  <div id="liteUserModal" class="fixed inset-0 z-[999999] flex items-center justify-center bg-black bg-opacity-60" style="filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; display: none;">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg relative mx-4" style="filter: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold mb-4" style="color:#172554; text-shadow:none;">Premium Feature</h3>
+        <p class="text-gray-600 mb-6 text-lg" style="text-shadow:none;">Team management is available for <span class="font-bold" style="color:#FFD700; text-shadow:0 0 10px #FFD700;">Pro</span> and <span class="font-bold" style="color:#8B5CF6; text-shadow:0 0 10px #8B5CF6;">Core</span> members only.</p>
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 mb-6 border border-blue-200">
+          <h4 class="font-semibold text-gray-800 mb-2" style="text-shadow:none;">Upgrade to unlock:</h4>
+          <ul class="text-sm text-gray-600 space-y-1 text-left" style="text-shadow:none;">
+            <li class="flex items-center gap-2" style="text-shadow:none;">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7"/>
+              </svg>
+              <span style="text-shadow:none;">Team member management</span>
+            </li>
+            <li class="flex items-center gap-2" style="text-shadow:none;">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7"/>
+              </svg>
+              <span style="text-shadow:none;">Department organization</span>
+            </li>
+            <li class="flex items-center gap-2" style="text-shadow:none;">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7"/>
+              </svg>
+              <span style="text-shadow:none;">Team announcements</span>
+            </li>
+            <li class="flex items-center gap-2" style="text-shadow:none;">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M5 13l4 4L19 7"/>
+              </svg>
+              <span style="text-shadow:none;">Activity tracking</span>
+            </li>
+          </ul>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button id="contactSupportBtn" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold shadow-lg transform hover:-translate-y-1">
+            Contact Us to Upgrade
+          </button>
+          <button id="goBackBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-semibold">
+            Go Back
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </body>
@@ -547,6 +667,10 @@ let teamMembers = [];
 let currentAnnouncement = null;
 let activityLog = [];
 let teamEvents = [];
+// Performance optimization variables
+let updateTimeout = null;
+let lastUpdateTime = 0;
+const UPDATE_THROTTLE = 300; // ms between updates
 
 // Initialize the page
 async function initializePage() {
@@ -571,17 +695,56 @@ async function initializePage() {
       return;
     }
     
-    // Load all data
+    // Check if user is lite tier and show upgrade modal
+    if (currentUser.tier === 'lite') {
+      showLiteUserModal();
+      return;
+    }
+    
+    // Sign out logic
+    document.getElementById('userLogout').addEventListener('click', function() {
+      if (currentUser && currentUser.id) {
+        // Log the logout activity
+        supabase.from('activity_log').insert({
+          user_id: currentUser.id,
+          event: 'Logged out',
+          device: navigator.userAgent,
+          created_at: new Date().toISOString()
+        });
+      }
+      localStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_user');
+      sessionStorage.removeItem('gmt_logged_in');
+      const isFileProtocol = window.location.protocol === 'file:';
+      if (isFileProtocol) {
+        window.location.href = '../login/login.html';
+      } else {
+        window.location.href = '/client/login/login.html';
+      }
+    });
+    
+    // Load critical data first for better perceived performance
     await Promise.all([
       loadDepartments(),
-      loadTeamMembers(),
+      loadTeamMembers()
+    ]);
+    
+    // Update UI with critical data immediately
+    updateTeamMembersList();
+    updateDepartmentsList();
+    updateDepartmentDropdown();
+    
+    // Load secondary data in background
+    Promise.all([
       loadAnnouncement(),
       loadActivityLog(),
       loadTeamEvents()
-    ]);
-    
-    // Update UI
-    updateUI();
+    ]).then(() => {
+      // Update remaining UI components
+      updateAnnouncementDisplay();
+      updateActivityFeed();
+      updateCalendar();
+    });
   } catch (error) {
     console.error('Error initializing page:', error);
   }
@@ -692,12 +855,25 @@ async function loadTeamEvents() {
 
 // Update UI with loaded data
 function updateUI() {
-  updateTeamMembersList();
-  updateDepartmentsList();
-  updateAnnouncementDisplay();
-  updateActivityFeed();
-  updateCalendar();
-  updateDepartmentDropdown();
+  // Debounce UI updates to prevent excessive re-renders
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+  }
+  
+  updateTimeout = setTimeout(() => {
+    const now = Date.now();
+    if (now - lastUpdateTime < UPDATE_THROTTLE) {
+      return;
+    }
+    lastUpdateTime = now;
+    
+    updateTeamMembersList();
+    updateDepartmentsList();
+    updateAnnouncementDisplay();
+    updateActivityFeed();
+    updateCalendar();
+    updateDepartmentDropdown();
+  }, 100);
 }
 
 // Update team members list
@@ -710,8 +886,13 @@ function updateTeamMembersList() {
     noTeamMembersMessage.style.display = 'flex';
   } else {
     noTeamMembersMessage.style.display = 'none';
-    teamMembersList.innerHTML = teamMembers.map(member => `
-      <li class="flex items-center justify-between px-6 py-4 hover:bg-blue-50 transition group border-b last:border-b-0 border-blue-100">
+    // Use document fragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    teamMembers.forEach(member => {
+      const li = document.createElement('li');
+      li.className = 'flex items-center justify-between px-6 py-4 hover:bg-blue-50 transition group border-b last:border-b-0 border-blue-100';
+      li.innerHTML = `
         <div class="flex items-center gap-4">
           <div class="bg-blue-100 text-blue-700 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg">
             ${getInitials(member.full_name)}
@@ -732,8 +913,12 @@ function updateTeamMembersList() {
             Delete
           </button>
         </div>
-      </li>
-    `).join('');
+      `;
+      fragment.appendChild(li);
+    });
+    
+    teamMembersList.innerHTML = '';
+    teamMembersList.appendChild(fragment);
   }
 }
 
@@ -753,8 +938,13 @@ function updateDepartmentsList() {
       noDepartmentsMessage.style.display = 'none';
       noDepartmentsMessage.style.visibility = 'hidden';
     }
-    departmentsList.innerHTML = departments.map(dept => `
-      <li class="bg-blue-50 rounded-lg px-4 py-3 flex flex-col border border-blue-200">
+    // Use document fragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    departments.forEach(dept => {
+      const li = document.createElement('li');
+      li.className = 'bg-blue-50 rounded-lg px-4 py-3 flex flex-col border border-blue-200';
+      li.innerHTML = `
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="inline-block w-4 h-4 rounded-full" style="background:${dept.color};"></span>
@@ -769,8 +959,12 @@ function updateDepartmentsList() {
             `<span class="bg-blue-200 text-blue-800 rounded px-2 py-0.5">${perm.permission_name}</span>`
           ).join('') || ''}
         </div>
-      </li>
-    `).join('');
+      `;
+      fragment.appendChild(li);
+    });
+    
+    departmentsList.innerHTML = '';
+    departmentsList.appendChild(fragment);
   }
 }
 
@@ -808,7 +1002,10 @@ function updateActivityFeed() {
         } else {
     activityFeedList.classList.remove('hidden');
     noActivityMessage.classList.add('hidden');
-    activityFeedList.innerHTML = activityLog.map(activity => {
+    // Use document fragment for better performance
+    const fragment = document.createDocumentFragment();
+    
+    activityLog.forEach(activity => {
       // Determine color based on action type
       let bgColor = 'bg-gray-100';
       let borderColor = 'border-gray-200';
@@ -850,25 +1047,32 @@ function updateActivityFeed() {
         userInitials = currentUser.email.charAt(0).toUpperCase();
       }
       
-      return `
-        <div class="flex items-start gap-3 p-3 rounded-xl ${bgColor} border ${borderColor}">
-          <div class="w-8 h-8 ${iconBgColor} ${iconTextColor} rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
-            ${userInitials}
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm text-gray-700 font-medium">${activity.action}</p>
-            <p class="text-xs text-gray-500 mt-1">${new Date(activity.created_at).toLocaleString()}</p>
-          </div>
+      const div = document.createElement('div');
+      div.className = `flex items-start gap-3 p-3 rounded-xl ${bgColor} border ${borderColor}`;
+      div.innerHTML = `
+        <div class="w-8 h-8 ${iconBgColor} ${iconTextColor} rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0">
+          ${userInitials}
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm text-gray-700 font-medium">${activity.action}</p>
+          <p class="text-xs text-gray-500 mt-1">${new Date(activity.created_at).toLocaleString()}</p>
         </div>
       `;
-    }).join('');
+      fragment.appendChild(div);
+    });
+    
+    activityFeedList.innerHTML = '';
+    activityFeedList.appendChild(fragment);
   }
 }
 
 // Update calendar
 function updateCalendar() {
-  generateCalendar();
-  updateUpcomingEvents();
+  // Lazy load calendar to improve initial performance
+  requestAnimationFrame(() => {
+    generateCalendar();
+    updateUpcomingEvents();
+  });
 }
 
 // Generate calendar grid
@@ -986,6 +1190,20 @@ function getInitialsFromId(userId) {
 async function addTeamMember(formData) {
   try {
     const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    
+    // Check team member limit for Core users
+    if (currentUser.tier === 'core') {
+      const { data: existingMembers, error: memberError } = await supabase
+        .from('team_members')
+        .select('id')
+        .eq('team_id', teamId);
+      
+      if (!memberError && existingMembers && existingMembers.length >= 6) {
+        showBanner('You have reached your team member limit. Upgrade to Pro for unlimited team members and advanced collaboration features.', 'info');
+        return;
+      }
+    }
+    
     const { data, error } = await supabase
       .from('team_members')
       .insert([{
@@ -1099,6 +1317,20 @@ async function deleteTeamMember(memberId) {
 async function addDepartment(formData) {
   try {
     const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    
+    // Check department limit for Core users
+    if (currentUser.tier === 'core') {
+      const { data: existingDepartments, error: deptError } = await supabase
+        .from('departments')
+        .select('id')
+        .eq('team_id', teamId);
+      
+      if (!deptError && existingDepartments && existingDepartments.length >= 3) {
+        showBanner('You have reached your department limit. Upgrade to Pro for unlimited departments and advanced team management features.', 'info');
+        return;
+      }
+    }
+    
     // Insert department
     const { data: dept, error: deptError } = await supabase
       .from('departments')
@@ -1220,6 +1452,25 @@ async function createAnnouncement(message) {
     }
 
     const teamId = currentUser?.team_id || currentUser?.email || 'default';
+    
+    // Check monthly announcement limit for Core users
+    if (currentUser.tier === 'core') {
+      const now = new Date();
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+      
+      const { data: monthlyAnnouncements, error: countError } = await supabase
+        .from('team_announcements')
+        .select('id')
+        .eq('team_id', teamId)
+        .gte('created_at', startOfMonth.toISOString())
+        .lte('created_at', endOfMonth.toISOString());
+      
+      if (!countError && monthlyAnnouncements && monthlyAnnouncements.length >= 10) {
+        showBanner('You have reached your monthly announcement limit (10). Upgrade to Pro for unlimited announcements and advanced team communication features.', 'info');
+        return;
+      }
+    }
     // Check if there's already an active announcement
     const hasExistingAnnouncement = currentAnnouncement && currentAnnouncement.is_active;
     
@@ -1646,6 +1897,61 @@ function hideDeleteConfirmModal() {
   const modal = document.getElementById('deleteConfirmModal');
   modal.classList.remove('show');
   deleteCallback = null;
+}
+
+// Lite user modal functions
+function showLiteUserModal() {
+  const modal = document.getElementById('liteUserModal');
+  const teamPanel = document.querySelector('.team-panel');
+  
+  if (modal && teamPanel) {
+    // Add blur effect to team panel only
+    teamPanel.classList.add('lite-user-blur');
+    
+    // Show modal by changing display style
+    modal.style.display = 'flex';
+    
+    // Add event listeners for modal buttons
+    const contactSupportBtn = document.getElementById('contactSupportBtn');
+    const goBackBtn = document.getElementById('goBackBtn');
+    
+    if (contactSupportBtn) {
+      contactSupportBtn.addEventListener('click', function() {
+        // Redirect to support page
+        const isFileProtocol = window.location.protocol === 'file:';
+        if (isFileProtocol) {
+          window.location.href = 'support.html';
+        } else {
+          window.location.href = '/client/user/support.html';
+        }
+      });
+    }
+    
+    if (goBackBtn) {
+      goBackBtn.addEventListener('click', function() {
+        // Go back to dashboard
+        const isFileProtocol = window.location.protocol === 'file:';
+        if (isFileProtocol) {
+          window.location.href = 'dashboard.html';
+        } else {
+          window.location.href = '/client/user/dashboard.html';
+        }
+      });
+    }
+  }
+}
+
+function hideLiteUserModal() {
+  const modal = document.getElementById('liteUserModal');
+  const teamPanel = document.querySelector('.team-panel');
+  
+  if (modal && teamPanel) {
+    // Remove blur effect from team panel
+    teamPanel.classList.remove('lite-user-blur');
+    
+    // Hide modal
+    modal.style.display = 'none';
+  }
 }
 
 // Banner notification system (settings style)

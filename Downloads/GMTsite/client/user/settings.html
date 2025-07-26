@@ -43,6 +43,7 @@
       min-height: 100vh;
       color: #fff;
       text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      will-change: scroll-position;
     }
     .settings-nav-placeholder {
       min-width: 56px;
@@ -191,6 +192,8 @@
       margin-bottom: 20px;
       width: calc(100vw - 72px - 20px - 8px);
       transition: width 0.3s, margin 0.3s;
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
     .settings-panel {
       background: rgba(255,255,255,0.92);
@@ -200,6 +203,9 @@
       min-height: calc(100vh - 40px);
       color: #172554;
       text-shadow: none;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
     }
     .settings-header {
       margin-bottom: 2rem;
@@ -250,6 +256,8 @@
       color: #172554;
       font-size: 1rem;
       transition: border-color 0.2s, box-shadow 0.2s;
+      will-change: transform;
+      transform: translateZ(0);
     }
     .form-input:focus {
       outline: none;
@@ -266,6 +274,8 @@
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(37,99,235,0.2);
+      will-change: transform;
+      transform: translateZ(0);
     }
     .btn-primary:hover {
       transform: translateY(-1px);
@@ -280,6 +290,8 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      will-change: transform;
+      transform: translateZ(0);
     }
     .btn-secondary:hover {
       background: rgba(30,41,59,0.15);
@@ -345,6 +357,8 @@
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(239,68,68,0.2);
+      will-change: transform;
+      transform: translateZ(0);
     }
     .btn-danger:hover {
       background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
@@ -384,6 +398,8 @@
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(34,197,94,0.18);
+      will-change: transform;
+      transform: translateZ(0);
     }
     .btn-billing:hover {
       background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
@@ -398,6 +414,28 @@
     .btn-billing:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 6px 16px rgba(34,197,94,0.28);
+    }
+    /* Performance optimizations */
+    .scrollbar-thin {
+      scrollbar-width: thin;
+      scrollbar-color: #6b7280 #e5e7eb;
+    }
+    /* Optimize animations */
+    .fade-in-quick {
+      will-change: transform, opacity;
+    }
+    /* Optimize form inputs */
+    .form-input {
+      will-change: transform;
+      transform: translateZ(0);
+    }
+    /* Optimize buttons */
+    .btn-primary,
+    .btn-secondary,
+    .btn-danger,
+    .btn-billing {
+      will-change: transform;
+      transform: translateZ(0);
     }
   </style>
 </head>
@@ -991,12 +1029,27 @@ function detectBrowserTimezoneGMT() {
 // --- Define loadUserSettings to fetch and prefill all fields from Supabase ---
 async function loadUserSettings() {
   populateTimezoneDropdown();
-  // Fetch user profile and settings from user_profiles and user_settings
-  let { data: profile, error: profileError } = await supabase
-    .from('user_profiles')
-    .select('full_name, company, phone')
-    .eq('user_id', user.id)
-    .maybeSingle();
+  
+  // Load critical data first for better perceived performance
+  const criticalDataPromise = Promise.all([
+    // Fetch user profile and settings from user_profiles and user_settings
+    supabase
+      .from('user_profiles')
+      .select('full_name, company, phone')
+      .eq('user_id', user.id)
+      .maybeSingle(),
+    // Always get email and tier from users table
+    supabase
+      .from('users')
+      .select('email, tier')
+      .eq('id', user.id)
+      .single()
+  ]);
+  
+  const [profileResult, userDataResult] = await criticalDataPromise;
+  let { data: profile, error: profileError } = profileResult;
+  let { data: userData, error: userError } = userDataResult;
+  
   if (!profile) {
     // Insert a blank profile row if missing
     await supabase.from('user_profiles').insert({ user_id: user.id });
@@ -1008,36 +1061,25 @@ async function loadUserSettings() {
       .maybeSingle();
     profile = res.data;
   }
-  let { data: settings, error: settingsError } = await supabase
+  
+  // Load settings data in background
+  const settingsPromise = supabase
     .from('user_settings')
     .select('timezone, language, dark_mode, font_size, notify_weekly, notify_automation, notify_features, notify_billing, notify_downtime')
     .eq('user_id', user.id)
     .maybeSingle();
-  if (!settings) {
-    // Insert a blank settings row if missing
-    await supabase.from('user_settings').insert({ user_id: user.id });
-    // Refetch
-    const res = await supabase
-      .from('user_settings')
-      .select('timezone, language, dark_mode, font_size, notify_weekly, notify_automation, notify_features, notify_billing, notify_downtime')
-      .eq('user_id', user.id)
-      .maybeSingle();
-    settings = res.data;
-  }
-  // Always get email and tier from users table
-  const { data: userData, error: userError } = await supabase
-    .from('users')
-    .select('email, tier')
-    .eq('id', user.id)
-    .single();
-  if (profileError || settingsError || userError || !userData) {
-    console.error('Failed to load user settings:', profileError || settingsError || userError);
+  
+  if (profileError || userError || !userData) {
+    console.error('Failed to load user settings:', profileError || userError);
     return;
   }
+  
+  // Update critical UI elements immediately
   document.getElementById('profileFullName').value = (profile && profile.full_name) || '';
   document.getElementById('profileEmail').value = userData.email || '';
   document.getElementById('profileCompany').value = (profile && profile.company) || '';
   document.getElementById('profilePhone').value = (profile && profile.phone) || '';
+  
   // Set tier display value and style
   let tierDisplay = 'Unknown';
   if (userData.tier === 'pro') {
@@ -1066,41 +1108,64 @@ async function loadUserSettings() {
     tierInput.style.fontWeight = 'bold';
     tierInput.style.textShadow = 'none';
   }
-  let tz = settings && settings.timezone;
-  if (!tz) {
-    tz = detectBrowserTimezoneGMT();
-    document.getElementById('timezoneSelect').value = tz;
-    // Save detected timezone to DB for future loads
-    await supabase.from('user_settings').update({ timezone: tz }).eq('user_id', user.id);
-  } else {
-    document.getElementById('timezoneSelect').value = tz;
-  }
-  document.getElementById('languageSelect').value = (settings && settings.language) || 'en';
-  let fontSize = settings && settings.font_size;
-  if (!fontSize || !['Small','Normal','Large','Extra Large'].includes(fontSize)) {
-    fontSize = 'Normal';
-  }
-  document.getElementById('fontSizeSelect').value = fontSize;
-  applyFontSize(fontSize);
-  document.getElementById('darkModeToggle').checked = !!(settings && settings.dark_mode);
-  // Set notification preferences from Supabase
-  const notifPrefs = {
-    weekly: settings && settings.notify_weekly !== undefined ? settings.notify_weekly : true,
-    automation: settings && settings.notify_automation !== undefined ? settings.notify_automation : true,
-    features: settings && settings.notify_features !== undefined ? settings.notify_features : true,
-    billing: settings && settings.notify_billing !== undefined ? settings.notify_billing : true,
-    downtime: settings && settings.notify_downtime !== undefined ? settings.notify_downtime : true
-  };
-  document.querySelectorAll('#notificationPrefs input[type="checkbox"]').forEach(input => {
-    const key = input.getAttribute('data-pref');
-    input.checked = !!notifPrefs[key];
-    const label = input.parentElement.querySelector('.pref-label');
-    label.textContent = input.checked ? 'ON' : 'OFF';
-    input.disabled = false;
-    // Add unsaved state trigger
-    input.addEventListener('change', () => setUnsaved(true));
+  
+  // Load settings data in background
+  settingsPromise.then(async ({ data: settings, error: settingsError }) => {
+    if (!settings) {
+      // Insert a blank settings row if missing
+      await supabase.from('user_settings').insert({ user_id: user.id });
+      // Refetch
+      const res = await supabase
+        .from('user_settings')
+        .select('timezone, language, dark_mode, font_size, notify_weekly, notify_automation, notify_features, notify_billing, notify_downtime')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      settings = res.data;
+    }
+    
+    if (settingsError) {
+      console.error('Failed to load user settings:', settingsError);
+      return;
+    }
+    
+    // Update settings UI elements
+    let tz = settings && settings.timezone;
+    if (!tz) {
+      tz = detectBrowserTimezoneGMT();
+      document.getElementById('timezoneSelect').value = tz;
+      // Save detected timezone to DB for future loads
+      await supabase.from('user_settings').update({ timezone: tz }).eq('user_id', user.id);
+    } else {
+      document.getElementById('timezoneSelect').value = tz;
+    }
+    document.getElementById('languageSelect').value = (settings && settings.language) || 'en';
+    let fontSize = settings && settings.font_size;
+    if (!fontSize || !['Small','Normal','Large','Extra Large'].includes(fontSize)) {
+      fontSize = 'Normal';
+    }
+    document.getElementById('fontSizeSelect').value = fontSize;
+    applyFontSize(fontSize);
+    document.getElementById('darkModeToggle').checked = !!(settings && settings.dark_mode);
+    
+    // Set notification preferences from Supabase
+    const notifPrefs = {
+      weekly: settings && settings.notify_weekly !== undefined ? settings.notify_weekly : true,
+      automation: settings && settings.notify_automation !== undefined ? settings.notify_automation : true,
+      features: settings && settings.notify_features !== undefined ? settings.notify_features : true,
+      billing: settings && settings.notify_billing !== undefined ? settings.notify_billing : true,
+      downtime: settings && settings.notify_downtime !== undefined ? settings.notify_downtime : true
+    };
+    document.querySelectorAll('#notificationPrefs input[type="checkbox"]').forEach(input => {
+      const key = input.getAttribute('data-pref');
+      input.checked = !!notifPrefs[key];
+      const label = input.parentElement.querySelector('.pref-label');
+      label.textContent = input.checked ? 'ON' : 'OFF';
+      input.disabled = false;
+      // Add unsaved state trigger
+      input.addEventListener('change', () => setUnsaved(true));
+    });
+    updateSaveBtnState(); // Ensure Save button state is correct after loading
   });
-  updateSaveBtnState(); // Ensure Save button state is correct after loading
 }
 
 // On page load, always call loadUserSettings to prefill fields
@@ -1128,12 +1193,15 @@ function populateTimezoneDropdown() {
     { value: 'HST', label: 'HST (Hawaii Standard Time)' },
     { value: 'AKST', label: 'AKST (Alaska Standard Time)' }
   ];
+  // Use document fragment for better performance
+  const fragment = document.createDocumentFragment();
   timezoneOptions.forEach(opt => {
     const option = document.createElement('option');
     option.value = opt.value;
     option.textContent = opt.label;
-    tzSelect.appendChild(option);
+    fragment.appendChild(option);
   });
+  tzSelect.appendChild(fragment);
 }
 
 // --- Only save timezone to DB when Save All Changes is clicked (not on change) ---
@@ -1220,6 +1288,11 @@ document.getElementById('saveAllBtn').addEventListener('click', async function(e
   });
 });
 
+// Performance optimization variables
+let updateTimeout = null;
+let lastUpdateTime = 0;
+const UPDATE_THROTTLE = 300; // ms between updates
+
 // --- Load Activity Log ---
 async function loadActivityLog() {
   const { data, error } = await supabase
@@ -1234,11 +1307,14 @@ async function loadActivityLog() {
     logList.innerHTML = '<li class="text-gray-400">No recent activity found.</li>';
     return;
   }
+  // Use document fragment for better performance
+  const fragment = document.createDocumentFragment();
   data.forEach(item => {
     const li = document.createElement('li');
     li.innerHTML = `${getDeviceIcon(item.device)} <span>${item.event}</span> <span class="text-gray-400 ml-1">(${parseDeviceInfo(item.device)})</span> <span class="text-gray-400 ml-1">- ${new Date(item.created_at).toLocaleString()}</span>`;
-    logList.appendChild(li);
+    fragment.appendChild(li);
   });
+  logList.appendChild(fragment);
 }
 // --- Load Sessions ---
 async function loadSessions() {
@@ -1263,12 +1339,15 @@ async function loadSessions() {
       deduped.push(session);
     }
   }
+  // Use document fragment for better performance
+  const fragment = document.createDocumentFragment();
   // Limit to latest 30 deduped sessions
   deduped.slice(0, 30).forEach(session => {
     const li = document.createElement('li');
     li.innerHTML = `${getDeviceIcon(session.device)} <span>${parseDeviceInfo(session.device)}</span> <span class="text-gray-400 ml-2">${session.is_current ? 'Current' : ''}</span> <button class="btn-secondary ml-2" onclick="logoutSession('${session.id}')">Log Out</button>`;
-    sessionList.appendChild(li);
+    fragment.appendChild(li);
   });
+  sessionList.appendChild(fragment);
 }
 // --- Device icon and info helpers ---
 function getDeviceIcon(deviceStr) {
@@ -1540,9 +1619,14 @@ async function ensureSessionAndActivity() {
     created_at: new Date().toISOString()
   });
   if (logErr) console.error('Activity log insert error:', logErr);
-  // After ensuring, reload lists
+  
+  // Load critical data first for better perceived performance
   await loadSessions();
-  await loadActivityLog();
+  
+  // Load secondary data in background
+  requestAnimationFrame(() => {
+    loadActivityLog();
+  });
 }
 // On page load, ensure session/activity and reload lists
 ensureSessionAndActivity();
@@ -1697,9 +1781,22 @@ document.querySelectorAll('a').forEach(link => {
 // --- Unsaved state tracking ---
 let unsaved = false;
 function setUnsaved(val) {
-  unsaved = val;
-  const msg = document.getElementById('unsavedMsg');
-  if (msg) msg.style.display = val ? '' : 'none';
+  // Debounce unsaved state updates to prevent excessive re-renders
+  if (updateTimeout) {
+    clearTimeout(updateTimeout);
+  }
+  
+  updateTimeout = setTimeout(() => {
+    const now = Date.now();
+    if (now - lastUpdateTime < UPDATE_THROTTLE) {
+      return;
+    }
+    lastUpdateTime = now;
+    
+    unsaved = val;
+    const msg = document.getElementById('unsavedMsg');
+    if (msg) msg.style.display = val ? '' : 'none';
+  }, 100);
 }
 
 // --- Remove beforeunload alert when saving ---
@@ -1730,8 +1827,10 @@ function showSaveBanner() {
   banner.style.boxShadow = '0 2px 8px rgba(34,197,94,0.15)';
   banner.style.opacity = '0';
   banner.style.transition = 'opacity 0.3s';
+  banner.style.willChange = 'opacity';
+  banner.style.transform = 'translateZ(0)';
   document.body.appendChild(banner);
-  setTimeout(() => { banner.style.opacity = '1'; }, 10);
+  requestAnimationFrame(() => { banner.style.opacity = '1'; });
   setTimeout(() => {
     banner.style.opacity = '0';
     setTimeout(() => { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 400);
@@ -1824,12 +1923,15 @@ window.addEventListener('DOMContentLoaded', updateSaveBtnState);
 
 // --- Font size logic: apply live on change ---
 function applyFontSize(size) {
-  let px = '16px';
-  if (size === 'Small') px = '13px';
-  else if (size === 'Normal') px = '16px';
-  else if (size === 'Large') px = '19px';
-  else if (size === 'Extra Large') px = '22px';
-  document.documentElement.style.fontSize = px;
+  // Use requestAnimationFrame for better performance
+  requestAnimationFrame(() => {
+    let px = '16px';
+    if (size === 'Small') px = '13px';
+    else if (size === 'Normal') px = '16px';
+    else if (size === 'Large') px = '19px';
+    else if (size === 'Extra Large') px = '22px';
+    document.documentElement.style.fontSize = px;
+  });
 }
 
 document.getElementById('fontSizeSelect').addEventListener('change', function() {
